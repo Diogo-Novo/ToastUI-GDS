@@ -311,7 +311,7 @@ function initUI(editor, presetColors, options = {}) {
       name,
       className,
       event: 'colorButtonClicked',
-      tooltip: i18n.get('Text color')
+      tooltip: i18n.get('Change font colour'),
     }
   });
 
