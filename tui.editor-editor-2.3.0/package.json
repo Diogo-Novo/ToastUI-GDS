@@ -6,7 +6,8 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
     "lerna": "^3.20.2",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "rimraf": "^6.0.1"
   },
   "scripts": {
     "build:editor": "lerna run --scope @toast-ui/editor build",
@@ -20,6 +21,7 @@
     "build:uml": "lerna run --scope @toast-ui/editor-plugin-uml build",
     "build:toastmark": "lerna run --scope @toast-ui/toastmark build",
     "build:squire": "lerna run --scope @toast-ui/squire build",
-    "build:to-mark": "lerna run --scope @toast-ui/to-mark build"
+    "build:to-mark": "lerna run --scope @toast-ui/to-mark build",
+    "clean-and-reinstall": "rimraf node_modules **/node_modules **/package-lock.json && npm cache clean --force && npm install && lerna bootstrap"
   }
 }
