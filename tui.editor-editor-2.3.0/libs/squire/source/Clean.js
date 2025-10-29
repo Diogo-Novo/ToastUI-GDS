@@ -13,8 +13,8 @@ var fontSizes = {
 var styleToSemantic = {
     backgroundColor: {
         regexp: notWS,
-        replace: function ( doc, classNames, colour ) {
-            return createElement( doc, 'SPAN', {
+        replace: function(doc, classNames, colour) {
+            return createElement(doc, 'SPAN', {
                 'class': classNames.highlight,
                 style: 'background-color:' + colour
             });
@@ -22,8 +22,8 @@ var styleToSemantic = {
     },
     color: {
         regexp: notWS,
-        replace: function ( doc, classNames, colour ) {
-            return createElement( doc, 'SPAN', {
+        replace: function(doc, classNames, colour) {
+            return createElement(doc, 'SPAN', {
                 'class': classNames.colour,
                 style: 'color:' + colour
             });
@@ -31,20 +31,20 @@ var styleToSemantic = {
     },
     fontWeight: {
         regexp: /^bold|^700/i,
-        replace: function ( doc ) {
-            return createElement( doc, 'B' );
+        replace: function(doc) {
+            return createElement(doc, 'B');
         }
     },
     fontStyle: {
         regexp: /^italic/i,
-        replace: function ( doc ) {
-            return createElement( doc, 'I' );
+        replace: function(doc) {
+            return createElement(doc, 'I');
         }
     },
     fontFamily: {
         regexp: notWS,
-        replace: function ( doc, classNames, family ) {
-            return createElement( doc, 'SPAN', {
+        replace: function(doc, classNames, family) {
+            return createElement(doc, 'SPAN', {
                 'class': classNames.fontFamily,
                 style: 'font-family:' + family
             });
@@ -52,8 +52,8 @@ var styleToSemantic = {
     },
     fontSize: {
         regexp: notWS,
-        replace: function ( doc, classNames, size ) {
-            return createElement( doc, 'SPAN', {
+        replace: function(doc, classNames, size) {
+            return createElement(doc, 'SPAN', {
                 'class': classNames.fontSize,
                 style: 'font-size:' + size
             });
@@ -61,48 +61,48 @@ var styleToSemantic = {
     },
     textDecoration: {
         regexp: /^underline/i,
-        replace: function ( doc ) {
-            return createElement( doc, 'U' );
+        replace: function(doc) {
+            return createElement(doc, 'U');
         }
     }
 };
 
-var replaceWithTag = function ( tag ) {
-    return function ( node, parent ) {
-        var el = createElement( node.ownerDocument, tag );
-        parent.replaceChild( el, node );
-        el.appendChild( empty( node ) );
+var replaceWithTag = function(tag) {
+    return function(node, parent) {
+        var el = createElement(node.ownerDocument, tag);
+        parent.replaceChild(el, node);
+        el.appendChild(empty(node));
         return el;
     };
 };
 
-var replaceStyles = function ( node, parent, config ) {
+var replaceStyles = function(node, parent, config) {
     var style = node.style;
     var doc = node.ownerDocument;
     var attr, converter, css, newTreeBottom, newTreeTop, el;
 
-    for ( attr in styleToSemantic ) {
-        converter = styleToSemantic[ attr ];
-        css = style[ attr ];
-        if ( css && converter.regexp.test( css ) ) {
-            el = converter.replace( doc, config.classNames, css );
-            if ( !newTreeTop ) {
+    for (attr in styleToSemantic) {
+        converter = styleToSemantic[attr];
+        css = style[attr];
+        if (css && converter.regexp.test(css)) {
+            el = converter.replace(doc, config.classNames, css);
+            if (!newTreeTop) {
                 newTreeTop = el;
             }
-            if ( newTreeBottom ) {
-                newTreeBottom.appendChild( el );
+            if (newTreeBottom) {
+                newTreeBottom.appendChild(el);
             }
             newTreeBottom = el;
-            node.style[ attr ] = '';
+            node.style[attr] = '';
         }
     }
 
-    if ( newTreeTop ) {
-        newTreeBottom.appendChild( empty( node ) );
-        if ( node.nodeName === 'SPAN' ) {
-            parent.replaceChild( newTreeTop, node );
+    if (newTreeTop) {
+        newTreeBottom.appendChild(empty(node));
+        if (node.nodeName === 'SPAN') {
+            parent.replaceChild(newTreeTop, node);
         } else {
-            node.appendChild( newTreeTop );
+            node.appendChild(newTreeTop);
         }
     }
 
@@ -112,11 +112,11 @@ var replaceStyles = function ( node, parent, config ) {
 var stylesRewriters = {
     P: replaceStyles,
     SPAN: replaceStyles,
-    STRONG: replaceWithTag( 'B' ),
-    EM: replaceWithTag( 'I' ),
-    INS: replaceWithTag( 'U' ),
-    STRIKE: replaceWithTag( 'S' ),
-    FONT: function ( node, parent, config ) {
+    STRONG: replaceWithTag('B'),
+    EM: replaceWithTag('I'),
+    INS: replaceWithTag('U'),
+    STRIKE: replaceWithTag('S'),
+    FONT: function(node, parent, config) {
         var face = node.face;
         var size = node.size;
         var colour = node.color;
@@ -124,57 +124,57 @@ var stylesRewriters = {
         var classNames = config.classNames;
         var fontSpan, sizeSpan, colourSpan;
         var newTreeBottom, newTreeTop;
-        if ( face ) {
-            fontSpan = createElement( doc, 'SPAN', {
+        if (face) {
+            fontSpan = createElement(doc, 'SPAN', {
                 'class': classNames.fontFamily,
                 style: 'font-family:' + face
             });
             newTreeTop = fontSpan;
             newTreeBottom = fontSpan;
         }
-        if ( size ) {
-            sizeSpan = createElement( doc, 'SPAN', {
+        if (size) {
+            sizeSpan = createElement(doc, 'SPAN', {
                 'class': classNames.fontSize,
-                style: 'font-size:' + fontSizes[ size ] + 'px'
+                style: 'font-size:' + fontSizes[size] + 'px'
             });
-            if ( !newTreeTop ) {
+            if (!newTreeTop) {
                 newTreeTop = sizeSpan;
             }
-            if ( newTreeBottom ) {
-                newTreeBottom.appendChild( sizeSpan );
+            if (newTreeBottom) {
+                newTreeBottom.appendChild(sizeSpan);
             }
             newTreeBottom = sizeSpan;
         }
-        if ( colour && /^#?([\dA-F]{3}){1,2}$/i.test( colour ) ) {
-            if ( colour.charAt( 0 ) !== '#' ) {
+        if (colour && /^#?([\dA-F]{3}){1,2}$/i.test(colour)) {
+            if (colour.charAt(0) !== '#') {
                 colour = '#' + colour;
             }
-            colourSpan = createElement( doc, 'SPAN', {
+            colourSpan = createElement(doc, 'SPAN', {
                 'class': classNames.colour,
                 style: 'color:' + colour
             });
-            if ( !newTreeTop ) {
+            if (!newTreeTop) {
                 newTreeTop = colourSpan;
             }
-            if ( newTreeBottom ) {
-                newTreeBottom.appendChild( colourSpan );
+            if (newTreeBottom) {
+                newTreeBottom.appendChild(colourSpan);
             }
             newTreeBottom = colourSpan;
         }
-        if ( !newTreeTop ) {
-            newTreeTop = newTreeBottom = createElement( doc, 'SPAN' );
+        if (!newTreeTop) {
+            newTreeTop = newTreeBottom = createElement(doc, 'SPAN');
         }
-        parent.replaceChild( newTreeTop, node );
-        newTreeBottom.appendChild( empty( node ) );
+        parent.replaceChild(newTreeTop, node);
+        newTreeBottom.appendChild(empty(node));
         return newTreeBottom;
     },
-    TT: function ( node, parent, config ) {
-        var el = createElement( node.ownerDocument, 'SPAN', {
+    TT: function(node, parent, config) {
+        var el = createElement(node.ownerDocument, 'SPAN', {
             'class': config.classNames.fontFamily,
             style: 'font-family:menlo,consolas,"courier new",monospace'
         });
-        parent.replaceChild( el, node );
-        el.appendChild( empty( node ) );
+        parent.replaceChild(el, node);
+        el.appendChild(empty(node));
         return el;
     }
 };
@@ -183,23 +183,23 @@ var allowedBlock = /^(?:A(?:DDRESS|RTICLE|SIDE|UDIO)|BLOCKQUOTE|CAPTION|D(?:[DLT
 
 var blacklist = /^(?:HEAD|META|STYLE)/;
 
-var walker = new TreeWalker( null, SHOW_TEXT|SHOW_ELEMENT );
+var walker = new TreeWalker(null, SHOW_TEXT | SHOW_ELEMENT);
 
-var isAllowedBlock = function( nodeName, config ) {	
-    var allowedBlocks = config.allowedBlocks;	
-    var allowedBlockExtended = false;	
-    var len = allowedBlocks.length;	
-    var i;	
+var isAllowedBlock = function(nodeName, config) {
+    var allowedBlocks = config.allowedBlocks;
+    var allowedBlockExtended = false;
+    var len = allowedBlocks.length;
+    var i;
 
-    if ( len ) {	
-        for ( i = 0; i < len; i += 1 ) {	
-            allowedBlocks[i] = allowedBlocks[i].toUpperCase();	
-        }	
+    if (len) {
+        for (i = 0; i < len; i += 1) {
+            allowedBlocks[i] = allowedBlocks[i].toUpperCase();
+        }
 
-        allowedBlockExtended = new RegExp( allowedBlocks.join('|') ).test( nodeName );	
-    }	
+        allowedBlockExtended = new RegExp(allowedBlocks.join('|')).test(nodeName);
+    }
 
-    return allowedBlock.test( nodeName ) || allowedBlockExtended;	
+    return allowedBlock.test(nodeName) || allowedBlockExtended;
 };
 
 /*
@@ -209,88 +209,91 @@ var isAllowedBlock = function( nodeName, config ) {
        and whitespace nodes.
     2. Convert inline tags into our preferred format.
 */
-var cleanTree = function cleanTree ( node, config, preserveWS ) {
+var cleanTree = function cleanTree(node, config, preserveWS) {
     var children = node.childNodes,
         nonInlineParent, i, l, child, nodeName, nodeType, rewriter, childLength,
         startsWithWS, endsWithWS, data, sibling;
 
     nonInlineParent = node;
-    while ( isInline( nonInlineParent ) ) {
+    while (isInline(nonInlineParent)) {
         nonInlineParent = nonInlineParent.parentNode;
     }
     walker.root = nonInlineParent;
 
-    for ( i = 0, l = children.length; i < l; i += 1 ) {
+    for (i = 0, l = children.length; i < l; i += 1) {
         child = children[i];
         nodeName = child.nodeName;
         nodeType = child.nodeType;
-        rewriter = stylesRewriters[ nodeName ];
-        if ( nodeType === ELEMENT_NODE ) {
+        rewriter = stylesRewriters[nodeName];
+        if (nodeType === ELEMENT_NODE) {
             childLength = child.childNodes.length;
-            if ( rewriter ) {
-                child = rewriter( child, node, config );
-            } else if ( blacklist.test( nodeName ) ) {
-                node.removeChild( child );
+            if (rewriter) {
+                child = rewriter(child, node, config);
+            } else if (blacklist.test(nodeName)) {
+                node.removeChild(child);
                 i -= 1;
                 l -= 1;
                 continue;
-            } else if ( !isAllowedBlock( nodeName, config ) && !isInline( child ) ) {
+            } else if (!isAllowedBlock(nodeName, config) && !isInline(child)) {
                 i -= 1;
                 l += childLength - 1;
-                node.replaceChild( empty( child ), child );
+                node.replaceChild(empty(child), child);
                 continue;
             }
-            if ( childLength ) {
-                cleanTree( child, config,
-                    preserveWS || ( nodeName === 'PRE' ) );
+            if (childLength) {
+                cleanTree(child, config,
+                    preserveWS || (nodeName === 'PRE'));
             }
         } else {
-            if ( nodeType === TEXT_NODE ) {
+            if (nodeType === TEXT_NODE) {
                 data = child.data;
-                startsWithWS = !notWS.test( data.charAt( 0 ) );
-                endsWithWS = !notWS.test( data.charAt( data.length - 1 ) );
-                if ( preserveWS || ( !startsWithWS && !endsWithWS ) ) {
+                if (config.preserveWhitespace) {
+                    continue;
+                }
+                startsWithWS = !notWS.test(data.charAt(0));
+                endsWithWS = !notWS.test(data.charAt(data.length - 1));
+                if (preserveWS || (!startsWithWS && !endsWithWS)) {
                     continue;
                 }
                 // Iterate through the nodes; if we hit some other content
                 // before the start of a new block we don't trim
-                if ( startsWithWS ) {
+                if (startsWithWS) {
                     walker.currentNode = child;
-                    while ( sibling = walker.previousPONode() ) {
+                    while (sibling = walker.previousPONode()) {
                         nodeName = sibling.nodeName;
-                        if ( nodeName === 'IMG' ||
-                                ( nodeName === '#text' &&
-                                    notWS.test( sibling.data ) ) ) {
+                        if (nodeName === 'IMG' ||
+                            (nodeName === '#text' &&
+                                notWS.test(sibling.data))) {
                             break;
                         }
-                        if ( !isInline( sibling ) ) {
+                        if (!isInline(sibling)) {
                             sibling = null;
                             break;
                         }
                     }
-                    data = data.replace( /^[ \t\r\n]+/g, sibling ? ' ' : '' );
+                    data = data.replace(/^[ \t\r\n]+/g, sibling ? ' ' : '');
                 }
-                if ( endsWithWS ) {
+                if (endsWithWS) {
                     walker.currentNode = child;
-                    while ( sibling = walker.nextNode() ) {
-                        if ( nodeName === 'IMG' ||
-                                ( nodeName === '#text' &&
-                                    notWS.test( sibling.data ) ) ) {
+                    while (sibling = walker.nextNode()) {
+                        if (nodeName === 'IMG' ||
+                            (nodeName === '#text' &&
+                                notWS.test(sibling.data))) {
                             break;
                         }
-                        if ( !isInline( sibling ) ) {
+                        if (!isInline(sibling)) {
                             sibling = null;
                             break;
                         }
                     }
-                    data = data.replace( /[ \t\r\n]+$/g, sibling ? ' ' : '' );
+                    data = data.replace(/[ \t\r\n]+$/g, sibling ? ' ' : '');
                 }
-                if ( data ) {
+                if (data) {
                     child.data = data;
                     continue;
                 }
             }
-            node.removeChild( child );
+            node.removeChild(child);
             i -= 1;
             l -= 1;
         }
@@ -300,45 +303,45 @@ var cleanTree = function cleanTree ( node, config, preserveWS ) {
 
 // ---
 
-var removeEmptyInlines = function removeEmptyInlines ( node ) {
+var removeEmptyInlines = function removeEmptyInlines(node) {
     var children = node.childNodes,
         l = children.length,
         child;
-    while ( l-- ) {
+    while (l--) {
         child = children[l];
-        if ( child.nodeType === ELEMENT_NODE && !isLeaf( child ) ) {
-            removeEmptyInlines( child );
+        if (child.nodeType === ELEMENT_NODE && !isLeaf(child)) {
+            removeEmptyInlines(child);
 
             // TOAST-UI Editor: remove empty blocks (only consider 'figure' tag currently)
             var invalidEmptyBlock = child.tagName === 'FIGURE';
 
-            if ( (isInline( child ) || invalidEmptyBlock) && !child.firstChild ) {
-                node.removeChild( child );
+            if ((isInline(child) || invalidEmptyBlock) && !child.firstChild) {
+                node.removeChild(child);
             }
-        } else if ( child.nodeType === TEXT_NODE && !child.data ) {
-            node.removeChild( child );
+        } else if (child.nodeType === TEXT_NODE && !child.data) {
+            node.removeChild(child);
         }
     }
 };
 
 // ---
 
-var notWSTextNode = function ( node ) {
+var notWSTextNode = function(node) {
     return node.nodeType === ELEMENT_NODE ?
         node.nodeName === 'BR' || node.nodeName === 'IMG' :
-        notWS.test( node.data );
+        notWS.test(node.data);
 };
-var isLineBreak = function ( br, isLBIfEmptyBlock ) {
+var isLineBreak = function(br, isLBIfEmptyBlock) {
     var block = br.parentNode;
     var walker;
-    while ( isInline( block ) ) {
+    while (isInline(block)) {
         block = block.parentNode;
     }
     walker = new TreeWalker(
-        block, SHOW_ELEMENT|SHOW_TEXT, notWSTextNode );
+        block, SHOW_ELEMENT | SHOW_TEXT, notWSTextNode);
     walker.currentNode = br;
     return !!walker.nextNode() ||
-        ( isLBIfEmptyBlock && !walker.previousNode() );
+        (isLBIfEmptyBlock && !walker.previousNode());
 };
 
 // <br> elements are treated specially, and differently depending on the
@@ -347,8 +350,11 @@ var isLineBreak = function ( br, isLBIfEmptyBlock ) {
 // line breaks by wrapping the inline text in a <div>. Browsers that want <br>
 // elements at the end of each block will then have them added back in a later
 // fixCursor method call.
-var cleanupBRs = function ( node, root, keepForBlankLine ) {
-    var brs = node.querySelectorAll( 'BR' );
+var cleanupBRs = function(node, root, keepForBlankLine) {
+    if (root.__squire__.config.preserveStructure) {
+        return;
+    }
+    var brs = node.querySelectorAll('BR');
     var brBreaksLine = [];
     var l = brs.length;
     var i, br, parent;
@@ -358,22 +364,22 @@ var cleanupBRs = function ( node, root, keepForBlankLine ) {
     // to a block split, the second will be at the end of a block and
     // therefore seem to not be a line break. But in its original context it
     // was, so we should also convert it to a block split.
-    for ( i = 0; i < l; i += 1 ) {
-        brBreaksLine[i] = isLineBreak( brs[i], keepForBlankLine );
+    for (i = 0; i < l; i += 1) {
+        brBreaksLine[i] = isLineBreak(brs[i], keepForBlankLine);
     }
-    while ( l-- ) {
+    while (l--) {
         br = brs[l];
         // Cleanup may have removed it
         parent = br.parentNode;
-        if ( !parent ) { continue; }
+        if (!parent) { continue; }
         // If it doesn't break a line, just remove it; it's not doing
         // anything useful. We'll add it back later if required by the
         // browser. If it breaks a line, wrap the content in div tags
         // and replace the brs.
-        if ( !brBreaksLine[l] ) {
-            detach( br );
-        } else if ( !isInline( parent ) ) {
-            fixContainer( parent, root );
+        if (!brBreaksLine[l]) {
+            detach(br);
+        } else if (!isInline(parent)) {
+            fixContainer(parent, root);
         }
     }
 };

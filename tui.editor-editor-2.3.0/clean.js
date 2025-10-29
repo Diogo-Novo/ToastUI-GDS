@@ -13,7 +13,7 @@ const paths = [
 
 async function main() {
     try {
-        console.log("🧹 Removing node_modules and package-lock.json...");
+        console.log("🧹 Removing node_modules...");
 
         for (const p of paths) {
             console.log(`Deleting: ${p}`);
