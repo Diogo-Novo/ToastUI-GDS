@@ -93,9 +93,6 @@ class ToolbarButton extends ToolbarItem {
     if (this._style) {
       this.el.setAttribute('style', this._style);
     }
-    if (this._tooltip) {
-      this.el.setAttribute('aria-label', this._tooltip);
-    }
   }
 
   _onClick() {
@@ -107,11 +104,6 @@ class ToolbarButton extends ToolbarItem {
       this.trigger('command', this._command);
     } else if (this._event) {
       this.trigger('event', this._event);
-    }
-
-    if (this._state) {
-      const pressed = this.el.getAttribute('aria-pressed') === 'true';
-      this.el.setAttribute('aria-pressed', !pressed);
     }
 
     this.trigger('clicked');

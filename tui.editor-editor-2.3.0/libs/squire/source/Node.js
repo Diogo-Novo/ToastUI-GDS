@@ -96,9 +96,24 @@ function areAlike ( node, node2 ) {
         node.nodeName !== 'A' &&
         node.className === node2.className &&
         ( ( !node.style && !node2.style ) ||
-          node.style.cssText === node2.style.cssText )
+            node.style.cssText === node2.style.cssText ) &&
+        !hasDataAttributes( node ) &&
+        !hasDataAttributes( node2 )
     );
 }
+
+function hasDataAttributes( element ) {
+    if ( !element.attributes ) {
+        return false;
+    }
+    for ( var i = 0; i < element.attributes.length; i++ ) {
+        if ( element.attributes[i].name.indexOf('data-') === 0 ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function hasTagAttributes ( node, tag, attributes ) {
     if ( node.nodeName !== tag ) {
         return false;

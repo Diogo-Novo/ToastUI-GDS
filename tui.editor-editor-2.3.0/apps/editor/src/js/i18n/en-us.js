@@ -48,5 +48,6 @@ Editor.setLanguage(['en', 'en-US'], {
   'Text color': 'Text color',
   'Auto scroll enabled': 'Auto scroll enabled',
   'Auto scroll disabled': 'Auto scroll disabled',
-  'Choose language': 'Choose language'
+  'Choose language': 'Choose language',
+  'Change font colour': 'Change font colour'
 });

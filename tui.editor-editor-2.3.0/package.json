@@ -5,6 +5,9 @@
     "@babel/core": "^7.8.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
+    "axios": "^1.13.1",
+    "form-data": "^4.0.4",
+    "glob": "^11.0.3",
     "lerna": "^3.20.2",
     "prettier": "^1.19.1",
     "rimraf": "^6.0.1"
@@ -22,6 +25,7 @@
     "build:toastmark": "lerna run --scope @toast-ui/toastmark build",
     "build:squire": "lerna run --scope @toast-ui/squire build",
     "build:to-mark": "lerna run --scope @toast-ui/to-mark build",
-    "clean-and-reinstall": "node clean.js && npm cache clean --force && npm install && lerna bootstrap"
+    "clean-and-reinstall": "node clean.js && npm cache clean --force && npm install && lerna bootstrap",
+    "upload:editor": "node upload.js"
   }
 }
