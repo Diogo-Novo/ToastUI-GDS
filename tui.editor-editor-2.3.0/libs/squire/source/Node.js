@@ -246,17 +246,14 @@ function createElement ( doc, tag, props, children ) {
     }
     return el;
 }
-
+// NEW VERSION
 function fixCursor ( node, root ) {
-    // In Webkit and Gecko, block level elements are collapsed and
-    // unfocussable if they have no content. To remedy this, a <BR> must be
-    // inserted. In Opera and IE, we just need a textnode in order for the
-    // cursor to appear.
     var self = root.__squire__;
     var doc = node.ownerDocument;
     var originalNode = node;
     var fixer, child;
 
+    // Handle root-level empty nodes
     if ( node === root ) {
         if ( !( child = node.firstChild ) || child.nodeName === 'BR' ) {
             fixer = self.createDefaultBlock();
@@ -275,6 +272,7 @@ function fixCursor ( node, root ) {
         return originalNode;
     }
 
+    // Only add BR to completely empty block elements
     if ( isInline( node ) ) {
         child = node.firstChild;
         while ( cantFocusEmptyTextNodes && child &&
@@ -291,38 +289,21 @@ function fixCursor ( node, root ) {
             }
         }
     } else {
-        if ( useTextFixer ) {
-            while ( node.nodeType !== TEXT_NODE && !isLeaf( node ) ) {
-                child = node.firstChild;
-                if ( !child ) {
-                    fixer = doc.createTextNode( '' );
-                    break;
-                }
-                node = child;
-            }
-            if ( node.nodeType === TEXT_NODE ) {
-                // Opera will collapse the block element if it contains
-                // just spaces (but not if it contains no data at all).
-                if ( /^ +$/.test( node.data ) ) {
-                    node.data = '';
-                }
-            } else if ( isLeaf( node ) ) {
-                node.parentNode.insertBefore( doc.createTextNode( '' ), node );
-            }
-        }
-        else if ( node.nodeName !== 'HR' && !node.querySelector( 'BR' ) ) {
+        // For block elements, only add BR if completely empty
+        if ( !node.textContent && !node.querySelector( 'BR' ) && !node.querySelector( 'IMG' ) ) {
             fixer = createElement( doc, 'BR' );
             while ( ( child = node.lastElementChild ) && !isInline( child ) ) {
                 node = child;
             }
         }
     }
+    
     if ( fixer ) {
         try {
             node.appendChild( fixer );
         } catch ( error ) {
             self.didError({
-                name: 'Squire: fixCursor – ' + error,
+                name: 'Squire: fixCursor – ' + error,
                 message: 'Parent: ' + node.nodeName + '/' + node.innerHTML +
                     ' appendChild: ' + fixer.nodeName
             });
@@ -332,7 +313,115 @@ function fixCursor ( node, root ) {
     return originalNode;
 }
 
-// Recursively examine container nodes and wrap any inline children.
+// function fixCursor ( node, root ) {
+//     var self = root.__squire__;
+//     var doc = node.ownerDocument;
+//     var originalNode = node;
+
+//     // Only handle the case where we need to create a default block at root
+//     if ( node === root ) {
+//         var child = node.firstChild;
+//         if ( !child || child.nodeName === 'BR' ) {
+//             var fixer = self.createDefaultBlock();
+//             if ( child ) {
+//                 node.replaceChild( fixer, child );
+//             } else {
+//                 node.appendChild( fixer );
+//             }
+//             return fixer;  // Return the new node
+//         }
+//     }
+
+//     return originalNode;
+//     // In Webkit and Gecko, block level elements are collapsed and
+//     // unfocussable if they have no content. To remedy this, a <BR> must be
+//     // inserted. In Opera and IE, we just need a textnode in order for the
+//     // cursor to appear.
+//     var self = root.__squire__;
+//     var doc = node.ownerDocument;
+//     var originalNode = node;
+//     var fixer, child;
+
+//     if ( node === root ) {
+//         if ( !( child = node.firstChild ) || child.nodeName === 'BR' ) {
+//             fixer = self.createDefaultBlock();
+//             if ( child ) {
+//                 node.replaceChild( fixer, child );
+//             }
+//             else {
+//                 node.appendChild( fixer );
+//             }
+//             node = fixer;
+//             fixer = null;
+//         }
+//     }
+
+//     if ( node.nodeType === TEXT_NODE ) {
+//         return originalNode;
+//     }
+
+//     if ( isInline( node ) ) {
+//         child = node.firstChild;
+//         while ( cantFocusEmptyTextNodes && child &&
+//                 child.nodeType === TEXT_NODE && !child.data ) {
+//             node.removeChild( child );
+//             child = node.firstChild;
+//         }
+//         if ( !child ) {
+//             if ( cantFocusEmptyTextNodes ) {
+//                 fixer = doc.createTextNode( ZWS );
+//                 self._didAddZWS();
+//             } else {
+//                 fixer = doc.createTextNode( '' );
+//             }
+//         }
+//     } else {
+//         if ( useTextFixer ) {
+//             while ( node.nodeType !== TEXT_NODE && !isLeaf( node ) ) {
+//                 child = node.firstChild;
+//                 if ( !child ) {
+//                     fixer = doc.createTextNode( '' );
+//                     break;
+//                 }
+//                 node = child;
+//             }
+//             if ( node.nodeType === TEXT_NODE ) {
+//                 // Opera will collapse the block element if it contains
+//                 // just spaces (but not if it contains no data at all).
+//                 if ( /^ +$/.test( node.data ) ) {
+//                     node.data = '';
+//                 }
+//             } else if ( isLeaf( node ) ) {
+//                 node.parentNode.insertBefore( doc.createTextNode( '' ), node );
+//             }
+//         }
+//         else if ( node.nodeName !== 'HR' && !node.querySelector( 'BR' ) ) {
+//             fixer = createElement( doc, 'BR' );
+//             while ( ( child = node.lastElementChild ) && !isInline( child ) ) {
+//                 node = child;
+//             }
+//         }
+//     }
+//     if ( fixer ) {
+//         try {
+//             node.appendChild( fixer );
+//         } catch ( error ) {
+//             self.didError({
+//                 name: 'Squire: fixCursor – ' + error,
+//                 message: 'Parent: ' + node.nodeName + '/' + node.innerHTML +
+//                     ' appendChild: ' + fixer.nodeName
+//             });
+//         }
+//     }
+
+//     return originalNode;
+// }
+
+
+
+
+
+//NEW VERSION
 function fixContainer ( container, root ) {
     var children = container.childNodes;
     var doc = container.ownerDocument;
@@ -340,12 +429,30 @@ function fixContainer ( container, root ) {
     var i, l, child, isBR;
     var config = root.__squire__._config;
 
+    // Skip fixing containers that have style attributes (likely layout elements)
+    // or display:flex which indicates intentional layout structure
+    if ( container.hasAttribute && container.hasAttribute('style') ) {
+        var style = container.getAttribute('style');
+        if ( style && (style.indexOf('display') > -1 || style.indexOf('flex') > -1 || style.indexOf('text-align') > -1) ) {
+            // Still recursively fix nested containers, but don't wrap their direct children
+            for ( i = 0, l = children.length; i < l; i += 1 ) {
+                child = children[i];
+                if ( isContainer( child ) ) {
+                    fixContainer( child, root );
+                }
+            }
+            return container;
+        }
+    }
+
     for ( i = 0, l = children.length; i < l; i += 1 ) {
         child = children[i];
         isBR = child.nodeName === 'BR';
+        
+        // Don't wrap if child is already a proper block
         if ( !isBR && isInline( child ) ) {
             if ( !wrapper ) {
-                 wrapper = createElement( doc,
+                wrapper = createElement( doc,
                     config.blockTag, config.blockAttributes );
             }
             wrapper.appendChild( child );
@@ -375,6 +482,51 @@ function fixContainer ( container, root ) {
     }
     return container;
 }
+// Recursively examine container nodes and wrap any inline children.
+// function fixContainer ( container, root ) {
+//     return container;
+    
+//     var children = container.childNodes;
+//     var doc = container.ownerDocument;
+//     var wrapper = null;
+//     var i, l, child, isBR;
+//     var config = root.__squire__._config;
+
+//     for ( i = 0, l = children.length; i < l; i += 1 ) {
+//         child = children[i];
+//         isBR = child.nodeName === 'BR';
+//         if ( !isBR && isInline( child ) ) {
+//             if ( !wrapper ) {
+//                  wrapper = createElement( doc,
+//                     config.blockTag, config.blockAttributes );
+//             }
+//             wrapper.appendChild( child );
+//             i -= 1;
+//             l -= 1;
+//         } else if ( isBR || wrapper ) {
+//             if ( !wrapper ) {
+//                 wrapper = createElement( doc,
+//                     config.blockTag, config.blockAttributes );
+//             }
+//             fixCursor( wrapper, root );
+//             if ( isBR ) {
+//                 container.replaceChild( wrapper, child );
+//             } else {
+//                 container.insertBefore( wrapper, child );
+//                 i += 1;
+//                 l += 1;
+//             }
+//             wrapper = null;
+//         }
+//         if ( isContainer( child ) ) {
+//             fixContainer( child, root );
+//         }
+//     }
+//     if ( wrapper ) {
+//         container.appendChild( fixCursor( wrapper, root ) );
+//     }
+//     return container;
+// }
 
 function split ( node, offset, stopNode, root ) {
     var nodeType = node.nodeType,

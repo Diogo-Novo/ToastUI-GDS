@@ -1,30 +1,19 @@
 /**
- * @fileoverview Custom GDS-compliant color picker implementation
- * Replaces ToastUI Color Picker with dropdown-style interface
+ * @fileoverview Implements color syntax plugin
+ * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
+import ColorPicker from 'tui-color-picker';
 
 import css from 'tui-code-snippet/domUtil/css';
 import on from 'tui-code-snippet/domEvent/on';
 import off from 'tui-code-snippet/domEvent/off';
 
-const RESET_COLOR = '#000000';
+const colorSyntaxRx = /\{color:(.+?)}(.*?)\{color}/g;
+const colorHtmlRx = /<span (?:class="colour" )?style="color:(.+?)"(?: class="colour")?>(.*?)/g;
+const colorHtmlCompleteRx = /<span (?:class="colour" )?style="color:(.+?)"(?: class="colour")?>(.*?)<\/span>/g;
+const decimalColorRx = /rgb\((\d+)[, ]+(\d+)[, ]+(\d+)\)/g;
 
-// Default GDS color palette - used when restrictedMode is true and no preset provided
-const DEFAULT_GDS_COLORS = [
-  { color: '#d4351c', label: 'Red' },
-  { color: '#fd0', label: 'Yellow' },
-  { color: '#00703c', label: 'Green' },
-  { color: '#1d70b8', label: 'Blue' },
-  { color: '#4c2c92', label: 'Purple' },
-  { color: '#f499be', label: 'Pink' },
-  { color: '#ffdd00', label: 'Gold' },
-  { color: '#00a33b', label: 'Light green' },
-  { color: '#003078', label: 'Dark blue' },
-  { color: '#5694ca', label: 'Light blue' },
-  { color: '#0b0c0c', label: 'Black' },
-  { color: '#6f777b', label: 'Grey' },
-  { color: '#ffffff', label: 'White' }
-];
+const RESET_COLOR = '#181818';
 
 let lastScrollTop = 0;
 
@@ -57,251 +46,33 @@ function getScrollTopForReFocus(sq) {
 }
 
 /**
- * Process preset colors and extract label mapping
- * @param {Array} presetColors - Array of color strings or objects with color/label
- * @param {boolean} restrictedMode - Whether to restrict to only preset/default colors
- * @returns {Object} Object with colors array and labelMap
+ * Create button element for applying color
+ * @param {string} text - button's text
+ * @returns {HTMLElement} button element
  * @ignore
  */
-function processPresetColors(presetColors, restrictedMode = false) {
-  let colorsToProcess = presetColors;
+function createApplyButton(text) {
+  const button = document.createElement('button');
 
-  // In restricted mode, use default GDS colors if no preset provided
-  if (restrictedMode && (!presetColors || presetColors.length === 0)) {
-    colorsToProcess = DEFAULT_GDS_COLORS;
-  }
+  button.setAttribute('type', 'button');
+  button.className = 'te-apply-button';
+  button.innerHTML = text;
 
-  if (!colorsToProcess || !Array.isArray(colorsToProcess)) {
-    return { colors: [], labelMap: {} };
-  }
-
-  const colors = [];
-  const labelMap = {};
-
-  colorsToProcess.forEach(item => {
-    if (typeof item === 'string') {
-      colors.push(item);
-      labelMap[item] = item; // Use hex as fallback label
-    } else if (item && typeof item === 'object' && item.color) {
-      colors.push(item.color);
-      labelMap[item.color] = item.label || item.color;
-    }
-  });
-
-  return { colors, labelMap };
+  return button;
 }
 
 /**
- * Create GDS-compliant dropdown color picker
- * @param {HTMLElement} container - Container element
- * @param {Array} colors - Array of color values
- * @param {Object} labelMap - Map of colors to labels
- * @param {Object} options - Configuration options
- * @returns {Object} Color picker API
- * @ignore
- */
-function createGDSColorPicker(container, colors, labelMap, options = {}) {
-  const picker = document.createElement('div');
-
-  picker.className = 'gds-color-picker';
-  picker.setAttribute('role', 'listbox');
-  picker.setAttribute('aria-label', 'Choose a color');
-
-  // Apply GDS styling
-  picker.style.cssText = `
-    background: white;
-    border: 2px solid #0b0c0c;
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    min-width: 220px;
-    max-width: 280px;
-    max-height: 300px;
-    overflow-y: auto;
-    font-family: "GDS Transport", arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.25;
-    z-index: 1000;
-  `;
-
-  let selectedColor = null;
-  const eventListeners = [];
-
-  // Create color options
-  colors.forEach(color => {
-    const option = document.createElement('div');
-
-    option.className = 'gds-color-option';
-    option.setAttribute('role', 'option');
-    option.setAttribute('tabindex', '0');
-    option.setAttribute('aria-selected', 'false');
-    option.dataset.color = color;
-
-    // GDS-compliant styling for options
-    option.style.cssText = `
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      cursor: pointer;
-      border: none;
-      border-bottom: 1px solid #f3f2f1;
-      background: white;
-      transition: background-color 0.15s ease;
-      outline: none;
-    `;
-
-    // Color circle
-    const colorCircle = document.createElement('div');
-
-    colorCircle.className = 'gds-color-circle';
-    colorCircle.style.cssText = `
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background-color: ${color};
-      border: 2px solid ${color === '#ffffff' || color === '#fff' ? '#0b0c0c' : color};
-      margin-right: 12px;
-      flex-shrink: 0;
-    `;
-
-    // Label
-    const label = document.createElement('span');
-
-    label.className = 'gds-color-label';
-    label.textContent = labelMap[color] || color;
-    label.style.cssText = `
-      color: #0b0c0c;
-      font-weight: 400;
-      flex-grow: 1;
-      font-size: 16px;
-    `;
-
-    option.appendChild(colorCircle);
-    option.appendChild(label);
-
-    // Event handlers
-    const handleSelect = () => {
-      // Remove previous selection
-      picker.querySelectorAll('.gds-color-option').forEach(opt => {
-        opt.setAttribute('aria-selected', 'false');
-        opt.style.backgroundColor = 'white';
-      });
-
-      // Mark as selected
-      option.setAttribute('aria-selected', 'true');
-      option.style.backgroundColor = '#f3f2f1';
-      selectedColor = color;
-
-      // Emit custom event
-      const event = new CustomEvent('colorSelected', {
-        detail: { color, label: labelMap[color] || color, origin: 'palette' }
-      });
-
-      picker.dispatchEvent(event);
-    };
-
-    const clickHandler = handleSelect;
-    const keyHandler = e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleSelect();
-      } else if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        const next = option.nextElementSibling;
-
-        if (next) next.focus();
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        const prev = option.previousElementSibling;
-
-        if (prev) prev.focus();
-      }
-    };
-
-    // Focus styling
-    const focusHandler = () => {
-      option.style.outline = '3px solid #fd0';
-      option.style.outlineOffset = '-3px';
-    };
-
-    const blurHandler = () => {
-      option.style.outline = 'none';
-    };
-
-    option.addEventListener('click', clickHandler);
-    option.addEventListener('keydown', keyHandler);
-    option.addEventListener('focus', focusHandler);
-    option.addEventListener('blur', blurHandler);
-
-    // Hover effects
-    option.addEventListener('mouseenter', () => {
-      if (option.getAttribute('aria-selected') !== 'true') {
-        option.style.backgroundColor = '#f8f8f8';
-      }
-    });
-
-    option.addEventListener('mouseleave', () => {
-      if (option.getAttribute('aria-selected') !== 'true') {
-        option.style.backgroundColor = 'white';
-      }
-    });
-
-    eventListeners.push(
-      { element: option, event: 'click', handler: clickHandler },
-      { element: option, event: 'keydown', handler: keyHandler },
-      { element: option, event: 'focus', handler: focusHandler },
-      { element: option, event: 'blur', handler: blurHandler }
-    );
-
-    picker.appendChild(option);
-  });
-
-  // Public API
-  const api = {
-    getColor: () => selectedColor || RESET_COLOR,
-    setColor: color => {
-      const option = picker.querySelector(`[data-color="${color}"]`);
-
-      if (option) {
-        option.click();
-      }
-    },
-    on: (event, callback) => {
-      picker.addEventListener(event, callback);
-    },
-    off: (event, callback) => {
-      picker.removeEventListener(event, callback);
-    },
-    destroy: () => {
-      eventListeners.forEach(({ element, event, handler }) => {
-        element.removeEventListener(event, handler);
-      });
-      if (picker.parentNode) {
-        picker.parentNode.removeChild(picker);
-      }
-    }
-  };
-
-  container.appendChild(picker);
-  return api;
-}
-
-/**
- * Initialize UI with GDS color picker
+ * Initialize UI
  * @param {object} editor - Editor instance
- * @param {Array} presetColors - Preset colors (strings or objects)
- * @param {Object} options - Plugin options
+ * @param {Array.<string>} preset - Preset for color palette
  * @ignore
  */
-function initUI(editor, presetColors, options = {}) {
+function initUI(editor, preset) {
   const name = 'colorSyntax';
   const className = 'tui-color';
   const { i18n } = editor;
   const toolbar = editor.getUI().getToolbar();
-
-  // Process colors and labels
-  const { colors, labelMap } = processPresetColors(presetColors, options.restrictedMode);
+  const { usageStatistics } = editor.options;
 
   editor.eventManager.addEventType('colorButtonClicked');
 
@@ -311,50 +82,42 @@ function initUI(editor, presetColors, options = {}) {
       name,
       className,
       event: 'colorButtonClicked',
-      tooltip: i18n.get('Change font colour'),
+      tooltip: i18n.get('Text color')
     }
   });
-
   const colorSyntaxButtonIndex = toolbar.indexOfItem(name);
   const { el: button } = toolbar.getItem(colorSyntaxButtonIndex);
 
-  // Create container for our custom picker
   const colorPickerContainer = document.createElement('div');
 
-  colorPickerContainer.className = 'gds-color-picker-container';
+  const buttonBar = createApplyButton(`${i18n.get('OK')}`);
+  const cpOptions = {
+    container: colorPickerContainer,
+    usageStatistics
+  };
 
-  // Create custom GDS color picker
-  const colorPicker = createGDSColorPicker(colorPickerContainer, colors, labelMap, options);
+  if (preset) {
+    cpOptions.preset = preset;
+  }
 
-  // Set initial color
-  colorPicker.setColor(RESET_COLOR);
+  const colorPicker = ColorPicker.create(cpOptions);
+
   let selectedColor = colorPicker.getColor();
 
-  // Create popup
+  colorPickerContainer.appendChild(buttonBar);
+
   const popup = editor.getUI().createPopup({
     header: false,
     title: null,
     content: colorPickerContainer,
-    className: 'tui-popup-color gds-popup',
+    className: 'tui-popup-color',
     target: editor.getUI().getToolbar().el,
     css: {
       width: 'auto',
-      position: 'absolute',
-      zIndex: 1000
+      position: 'absolute'
     }
   });
 
-  // Style popup container to remove default styling
-  if (popup.el) {
-    popup.el.style.cssText += `
-      border: none !important;
-      box-shadow: none !important;
-      padding: 0 !important;
-      background: transparent !important;
-    `;
-  }
-
-  // Event listeners
   editor.eventManager.listen('focus', () => {
     popup.hide();
 
@@ -367,6 +130,7 @@ function initUI(editor, presetColors, options = {}) {
   editor.eventManager.listen('colorButtonClicked', () => {
     if (popup.isShow()) {
       popup.hide();
+
       return;
     }
 
@@ -376,16 +140,10 @@ function initUI(editor, presetColors, options = {}) {
       top: `${offsetTop + offsetHeight}px`,
       left: `${offsetLeft}px`
     });
+    colorPicker.slider.toggle(true);
 
     editor.eventManager.emit('closeAllPopup');
     popup.show();
-
-    // Focus first option for accessibility
-    const firstOption = colorPickerContainer.querySelector('.gds-color-option');
-
-    if (firstOption) {
-      setTimeout(() => firstOption.focus(), 50);
-    }
   });
 
   editor.eventManager.listen('closeAllPopup', () => {
@@ -393,37 +151,23 @@ function initUI(editor, presetColors, options = {}) {
   });
 
   editor.eventManager.listen('removeEditor', () => {
-    colorPicker.off('colorSelected');
-    colorPicker.destroy();
+    colorPicker.off('selectColor');
+    off(popup.el.querySelector('.te-apply-button'), 'click');
     popup.remove();
   });
 
-  // Handle color selection
-  colorPicker.on('colorSelected', e => {
-    selectedColor = e.detail.color;
+  colorPicker.on('selectColor', e => {
+    selectedColor = e.color;
 
-    // In restricted mode or when palette is clicked, apply immediately
-    if (options.restrictedMode || e.detail.origin === 'palette') {
+    if (e.origin === 'palette') {
       editor.exec('color', selectedColor);
       popup.hide();
     }
   });
 
-  // Return API for external control (maintaining compatibility)
-  return {
-    getSelectedColor: () => selectedColor,
-    setSelectedColor: color => colorPicker.setColor(color),
-    show: () => {
-      editor.eventManager.emit('colorButtonClicked');
-    },
-    hide: () => {
-      popup.hide();
-    },
-    destroy: () => {
-      colorPicker.destroy();
-      popup.remove();
-    }
-  };
+  on(popup.el.querySelector('.te-apply-button'), 'click', () => {
+    editor.exec('color', selectedColor);
+  });
 }
 
 /**
@@ -471,8 +215,6 @@ function wrapTextAndGetRange(pre, text, post) {
  * @ignore
  */
 function changeDecColorsToHex(color) {
-  const decimalColorRx = /rgb\((\d+)[, ]+(\d+)[, ]+(\d+)\)/g;
-
   return color.replace(decimalColorRx, (colorValue, r, g, b) => {
     const hr = changeDecColorToHex(r);
     const hg = changeDecColorToHex(g);
@@ -510,19 +252,14 @@ function addDoubleZeroPad(numberStr) {
 }
 
 /**
- * Enhanced Color syntax plugin with GDS-compliant UI
+ * Color syntax plugin
  * @param {Editor|Viewer} editor - instance of Editor or Viewer
  * @param {Object} options - options for plugin
- * @param {Array.<string|Object>} [options.preset] - preset colors (ex: ['#181818', '#292929'] or [{color: '#181818', label: 'Dark'}, '#292929'])
+ * @param {Array.<string>} [options.preset] - preset for color palette (ex: ['#181818', '#292929'])
  * @param {boolean} [options.useCustomSyntax=false] - whether use custom syntax or not
- * @param {boolean} [options.restrictedMode=false] - restrict to only preset/default colors, immediate selection
  */
 export default function colorSyntaxPlugin(editor, options = {}) {
-  const { preset, useCustomSyntax = false, restrictedMode = false } = options;
-
-  const colorSyntaxRx = /\{color:(.+?)}(.*?)\{color}/g;
-  const colorHtmlRx = /<span (?:class="colour" )?style="color:(.+?)"(?: class="colour")?>(.*?)/g;
-  const colorHtmlCompleteRx = /<span (?:class="colour" )?style="color:(.+?)"(?: class="colour")?>(.*?)<\/span>/g;
+  const { preset, useCustomSyntax = false } = options;
 
   editor.eventManager.listen('convertorAfterMarkdownToHtmlConverted', html => {
     let replacement;
@@ -545,14 +282,12 @@ export default function colorSyntaxPlugin(editor, options = {}) {
     return markdown.replace(findRx, (founded, color, text) => {
       let replacement;
 
-      if (color.match(/rgb\((\d+)[, ]+(\d+)[, ]+(\d+)\)/)) {
+      if (color.match(decimalColorRx)) {
         color = changeDecColorsToHex(color);
       }
 
       if (!useCustomSyntax) {
-        replacement = founded
-          .replace(/ ?class="colour" ?/g, ' ')
-          .replace(/rgb\((\d+)[, ]+(\d+)[, ]+(\d+)\)/, color);
+        replacement = founded.replace(/ ?class="colour" ?/g, ' ').replace(decimalColorRx, color);
       } else {
         replacement = makeCustomColorSyntaxAndTextRange(text, color).result;
       }
@@ -615,6 +350,8 @@ export default function colorSyntaxPlugin(editor, options = {}) {
         const tableSelectionManager = wwe.componentManager.getManager('tableSelection');
 
         // Cache scrollTop before change text color.
+        // Because scrollTop is set 0 when focus() is called.
+        // focus() is called when change text color.
         lastScrollTop = getScrollTopForReFocus(sq);
 
         if (sq.hasFormat('table') && tableSelectionManager.getSelectedCells().length) {
@@ -630,6 +367,6 @@ export default function colorSyntaxPlugin(editor, options = {}) {
       }
     });
 
-    initUI(editor, preset, Object.assign({}, options, { restrictedMode }));
+    initUI(editor, preset);
   }
 }
