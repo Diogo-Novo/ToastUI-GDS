@@ -92,6 +92,7 @@ const __nedInstance = [];
  * ToastUI Editor
  * @param {Object} options Option object
  *     @param {HTMLElement} options.el - container element
+ *     @param {HTMLElement} options.toolbarEl - toolbar container element
  *     @param {string} [options.height='300px'] - Editor's height style value. Height is applied as border-box ex) '300px', '100%', 'auto'
  *     @param {string} [options.minHeight='200px'] - Editor's min-height style value in pixel ex) '300px'
  *     @param {string} [options.initialValue] - Editor's initial value
@@ -166,7 +167,8 @@ class ToastUIEditor {
         customConvertor: null,
         customHTMLRenderer: null,
         referenceDefinition: false,
-        customHTMLSanitizer: null
+        customHTMLSanitizer: null,
+        toolbarContainer: null
       },
       options
     );

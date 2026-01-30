@@ -35,6 +35,7 @@ const containerTmpl = [
 class Layout {
   constructor(options, eventManager) {
     this.el = options.el;
+    this.toolbarEl = options.toolbarEl;
     this.height = options.height;
     this.type = options.initialEditType;
     this.eventManager = eventManager;

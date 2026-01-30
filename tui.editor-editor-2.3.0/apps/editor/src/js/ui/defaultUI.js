@@ -1,5 +1,5 @@
 /**
- * @fileoverview default UI
+ * @fileoverview default UI with external toolbar support
  * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
 import css from 'tui-code-snippet/domUtil/css';
@@ -25,7 +25,9 @@ const CLASS_TOOLBAR = 'te-toolbar-section';
 const CLASS_MARKDOWN_TAB = 'te-markdown-tab-section';
 const CLASS_EDITOR = 'te-editor-section';
 const CLASS_MODE_SWITCH = 'te-mode-switch-section';
-const CONTAINER_TEMPLATE = [
+
+// Modified: Conditional toolbar section
+const CONTAINER_TEMPLATE_WITH_TOOLBAR = [
   '<div class="tui-editor-defaultUI">',
   `<div class="${CLASS_TOOLBAR}"><div class="${CLASS_MARKDOWN_TAB}"></div></div>`,
   `<div class="${CLASS_EDITOR}"></div>`,
@@ -33,84 +35,48 @@ const CONTAINER_TEMPLATE = [
   '</div>'
 ].join('');
 
-/**
- * Class DefaultUI
- * @param {ToastUIEditor} editor - editor instance
- */
+const CONTAINER_TEMPLATE_WITHOUT_TOOLBAR = [
+  '<div class="tui-editor-defaultUI">',
+  `<div class="${CLASS_EDITOR}"></div>`,
+  `<div class="${CLASS_MODE_SWITCH}"></div>`,
+  '</div>'
+].join('');
+
+// Template for external toolbar container
+const EXTERNAL_TOOLBAR_TEMPLATE = [
+  `<div class="${CLASS_TOOLBAR} te-toolbar-external">`,
+  `<div class="${CLASS_MARKDOWN_TAB}"></div>`,
+  '</div>'
+].join('');
+
 class DefaultUI {
-  /**
-   * UI name
-   * @type {string}
-   */
   name = 'default';
 
-  /**
-   * DefaultToolbar wrapper element
-   * @type {HTMLElement}
-   */
   el;
 
-  /**
-   * DefaultToolbar instance
-   * @type {DefaultToolbar}
-   * @private
-   */
   _toolbar;
 
-  /**
-   * @type {HTMLElement}
-   * @private
-   */
   _container;
 
-  /**
-   * editor section element
-   * @private
-   * @type {HTMLElement}
-   */
   _editorSection;
 
-  /**
-   * editor type ww/md
-   * @private
-   * @type {string}
-   */
   _initialEditType;
 
-  /**
-   * editor instance
-   * @private
-   * @type {ToastUIEditor}
-   */
   _editor;
 
-  /**
-   * markdown tab section element
-   * @private
-   * @type {HTMLElement}
-   */
   _markdownTabSection;
 
-  /**
-   * markdown tab
-   * @private
-   * @type {Tab}
-   */
   _markdownTab;
 
-  /**
-   * mode switch instance
-   * @private
-   * @type {ModeSwitch}
-   */
   _modeSwitch;
 
-  /**
-   * popup instances
-   * @private
-   * @type {Array}
-   */
   _popups = [];
+
+  _externalToolbarContainer = null;
+
+  _toolbarElement = null;
+
+  _isExternalToolbar = false;
 
   constructor(editor) {
     this._editor = editor;
@@ -120,13 +86,27 @@ class DefaultUI {
     this._initEvent();
   }
 
-  _init({ el: container, toolbarItems, hideModeSwitch }) {
-    this.el = domUtils.createElementWith(CONTAINER_TEMPLATE, container);
+  _init({ el: container, toolbarItems, hideModeSwitch, toolbarContainer }) {
+    // Check if external toolbar container is specified
+    this._isExternalToolbar = !!toolbarContainer;
+
+    // Use appropriate template based on toolbar location
+    const template = this._isExternalToolbar
+      ? CONTAINER_TEMPLATE_WITHOUT_TOOLBAR
+      : CONTAINER_TEMPLATE_WITH_TOOLBAR;
+
+    this.el = domUtils.createElementWith(template, container);
     this._container = container;
     this._editorSection = this.el.querySelector(`.${CLASS_EDITOR}`);
     this._editorSection.appendChild(this._editor.layout.getEditorEl());
 
-    this._initToolbar(this._editor.eventManager, toolbarItems);
+    // Initialize toolbar in external or internal container
+    if (this._isExternalToolbar) {
+      this._initExternalToolbar(this._editor.eventManager, toolbarItems, toolbarContainer);
+    } else {
+      this._initToolbar(this._editor.eventManager, toolbarItems);
+    }
+
     this._initModeSwitch(this._editor.eventManager, hideModeSwitch);
 
     this._initPopupAddLink();
@@ -147,11 +127,65 @@ class DefaultUI {
     this._editor.eventManager.listen('changePreviewStyle', this._markdownTabControl.bind(this));
   }
 
+  // Original internal toolbar initialization
   _initToolbar(eventManager, toolbarItems) {
     const toolbar = new DefaultToolbar(eventManager, toolbarItems);
 
     this._toolbar = toolbar;
-    this.el.querySelector(`.${CLASS_TOOLBAR}`).appendChild(toolbar.el);
+    this._toolbarElement = this.el.querySelector(`.${CLASS_TOOLBAR}`);
+    this._toolbarElement.appendChild(toolbar.el);
+  }
+
+  // External toolbar initialization
+  _initExternalToolbar(eventManager, toolbarItems, toolbarContainer) {
+    let externalContainer;
+
+    // Get the external container element
+    if (typeof toolbarContainer === 'string') {
+      externalContainer = document.getElementById(toolbarContainer);
+
+      if (!externalContainer) {
+        // eslint-disable-next-line no-console
+        console.warn(`Toolbar container "${toolbarContainer}" not found. Using default location.`);
+        this._isExternalToolbar = false;
+        this._initToolbar(eventManager, toolbarItems);
+
+        return;
+      }
+    } else if (toolbarContainer instanceof HTMLElement) {
+      externalContainer = toolbarContainer;
+    } else {
+      // eslint-disable-next-line no-console
+      console.warn('Invalid toolbarContainer option. Using default location.');
+      this._isExternalToolbar = false;
+      this._initToolbar(eventManager, toolbarItems);
+
+      return;
+    }
+
+    // Store external container reference
+    this._externalToolbarContainer = externalContainer;
+
+    // Create toolbar structure element but don't append yet
+    const toolbarWrapper = document.createElement('div');
+
+    toolbarWrapper.innerHTML = EXTERNAL_TOOLBAR_TEMPLATE;
+    this._toolbarElement = toolbarWrapper.firstChild;
+
+    // Create and append toolbar to the toolbar element
+    const toolbar = new DefaultToolbar(eventManager, toolbarItems);
+
+    this._toolbar = toolbar;
+    this._toolbarElement.appendChild(toolbar.el);
+
+    // Now append the complete toolbar element to external container
+    externalContainer.appendChild(this._toolbarElement);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        toolbar._popupDropdownToolbar.hide();
+        toolbar._balanceButtons();
+      });
+    });
   }
 
   _initModeSwitch(eventManager, hideModeSwitch) {
@@ -177,7 +211,9 @@ class DefaultUI {
       items: [i18n.get('Write'), i18n.get('Preview')],
       sections: [editor.layout.getMdEditorContainerEl(), editor.layout.getPreviewEl()]
     });
-    this._markdownTabSection = this.el.querySelector(`.${CLASS_MARKDOWN_TAB}`);
+
+    // Get markdown tab section from toolbar element (works for both internal and external)
+    this._markdownTabSection = this._toolbarElement.querySelector(`.${CLASS_MARKDOWN_TAB}`);
     this._markdownTabSection.appendChild(this._markdownTab.el);
 
     this._markdownTab.on('itemClick', itemText => {
@@ -220,11 +256,14 @@ class DefaultUI {
   }
 
   _initPopupAddTable() {
+    // Query from the correct toolbar element
+    const tableButton = this._toolbarElement.querySelector('button.tui-table');
+
     this._popups.push(
       new PopupAddTable({
         target: this._toolbar.el,
         eventManager: this._editor.eventManager,
-        button: this.el.querySelector('button.tui-table'),
+        button: tableButton,
         css: {
           position: 'absolute'
         }
@@ -233,11 +272,14 @@ class DefaultUI {
   }
 
   _initPopupAddHeading() {
+    // Query from the correct toolbar element
+    const headingButton = this._toolbarElement.querySelector('button.tui-heading');
+
     this._popups.push(
       new PopupAddHeading({
         target: this._toolbar.el,
         eventManager: this._editor.eventManager,
-        button: this.el.querySelector('button.tui-heading'),
+        button: headingButton,
         css: {
           position: 'absolute'
         }
@@ -284,55 +326,31 @@ class DefaultUI {
     );
   }
 
-  /**
-   * get toolbar instance
-   * @returns {Toolbar} - toolbar instance
-   */
   getToolbar() {
     return this._toolbar;
   }
 
-  /**
-   * set toolbar instance
-   * @param {Toolbar} toolbar - toolbar
-   */
   setToolbar(toolbar) {
     this._toolbar.destroy();
     this._toolbar = toolbar;
   }
 
-  /**
-   * get mode switch instance
-   * @returns {ModeSwitch} - mode switch instance
-   */
   getModeSwitch() {
     return this._modeSwitch;
   }
 
-  /**
-   * get editor section height
-   * @returns {Number} - height of editor section
-   */
   getEditorSectionHeight() {
     const clientRect = this._editorSection.getBoundingClientRect();
 
     return clientRect.bottom - clientRect.top;
   }
 
-  /**
-   * get editor height
-   * @returns {Number} - height of editor
-   */
   getEditorHeight() {
     const clientRect = this._container.getBoundingClientRect();
 
     return clientRect.bottom - clientRect.top;
   }
 
-  /**
-   * get Table Popup
-   * @returns {PopupTableUtils} - PopupTableUtils
-   */
   getPopupTableUtils() {
     let tablePopup;
 
@@ -345,25 +363,32 @@ class DefaultUI {
     return tablePopup;
   }
 
-  /**
-   * hide
-   */
   hide() {
     addClass(this.el, 'te-hide');
+
+    // Also hide external toolbar if present
+    if (this._isExternalToolbar && this._toolbarElement) {
+      addClass(this._toolbarElement, 'te-hide');
+    }
   }
 
-  /**
-   * show
-   */
   show() {
     removeClass(this.el, 'te-hide');
+
+    // Also show external toolbar if present
+    if (this._isExternalToolbar && this._toolbarElement) {
+      removeClass(this._toolbarElement, 'te-hide');
+    }
   }
 
-  /**
-   * remove
-   */
   remove() {
     domUtils.remove(this.el);
+
+    // Remove external toolbar if present
+    if (this._isExternalToolbar && this._toolbarElement) {
+      domUtils.remove(this._toolbarElement);
+    }
+
     this._markdownTab.remove();
     this._modeSwitch.remove();
     this._toolbar.destroy();
@@ -372,11 +397,6 @@ class DefaultUI {
     tooltip.hide();
   }
 
-  /**
-   * creates popup
-   * @param {LayerPopupOption} options - layerPopup options
-   * @returns {LayerPopup} - crated layerPopup
-   */
   createPopup(options) {
     return new LayerPopup(options);
   }

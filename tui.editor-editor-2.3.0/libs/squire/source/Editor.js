@@ -787,8 +787,9 @@ proto._docWasChanged = function () {
     if ( this._isInUndoState ) {
         this._isInUndoState = false;
         this.fireEvent( 'undoStateChange', {
-            canUndo: true,
-            canRedo: false
+            canUndo: this._undoIndex !== 0,
+            canRedo: undoIndex + 2 < undoStackLength,
+            location: 'docWasChanged'
         });
     }
     this.fireEvent( 'input' );
@@ -865,7 +866,8 @@ proto.undo = function () {
         this._isInUndoState = true;
         this.fireEvent( 'undoStateChange', {
             canUndo: this._undoIndex !== 0,
-            canRedo: true
+            canRedo: true,
+            location: 'undo'
         });
         this.fireEvent( 'input' );
     }
@@ -886,7 +888,8 @@ proto.redo = function () {
         }
         this.fireEvent( 'undoStateChange', {
             canUndo: true,
-            canRedo: undoIndex + 2 < undoStackLength
+            canRedo: undoIndex + 2 < undoStackLength,
+            location: 'redo'
         });
         this.fireEvent( 'input' );
     }
