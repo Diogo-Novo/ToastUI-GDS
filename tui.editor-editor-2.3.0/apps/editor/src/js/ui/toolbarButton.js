@@ -30,125 +30,125 @@ import tooltip from './tooltip';
  * @ignore
  */
 class ToolbarButton extends ToolbarItem {
-    /**
-     * item name
-     * @type {String}
-     * @static
-     */
-    static name = 'button';
+  /**
+   * item name
+   * @type {String}
+   * @static
+   */
+  static name = 'button';
 
-    /**
-     * ToolbarItem className
-     * @type {String}
-     * @static
-     */
-    static className = 'tui-toolbar-icons';
+  /**
+   * ToolbarItem className
+   * @type {String}
+   * @static
+   */
+  static className = 'tui-toolbar-icons';
 
-    constructor(
-        options = {
-            tagName: 'button',
-            name: ToolbarButton.name
-        }
-    ) {
-        super({
-            name: options.name,
-            tagName: 'button',
-            className: `${options.className} ${ToolbarButton.className}`,
-            rootElement: options.el
-        });
+  constructor(
+    options = {
+      tagName: 'button',
+      name: ToolbarButton.name
+    }
+  ) {
+    super({
+      name: options.name,
+      tagName: 'button',
+      className: `${options.className} ${ToolbarButton.className}`,
+      rootElement: options.el
+    });
 
-        this._setOptions(options);
+    this._setOptions(options);
 
-        this._render();
-        this.on('click', this._onClick.bind(this));
-        if (options.tooltip) {
-            this.on('mouseover', this._onOver.bind(this));
-            this.on('mouseout', this._onOut.bind(this));
-        }
+    this._render();
+    this.on('click', this._onClick.bind(this));
+    if (options.tooltip) {
+      this.on('mouseover', this._onOver.bind(this));
+      this.on('mouseout', this._onOut.bind(this));
+    }
+  }
+
+  /**
+   * set tooltip text
+   * @param {string} text - tooltip text to show
+   */
+  setTooltip(text) {
+    this._tooltip = text;
+  }
+
+  _setOptions(options) {
+    this._command = options.command;
+    this._event = options.event;
+    this._text = options.text;
+    this._tooltip = options.tooltip;
+    this._style = options.style;
+    this._state = options.state;
+  }
+
+  _render() {
+    const text = document.createTextNode(this._text || '');
+
+    this.el.appendChild(text);
+    this.el.setAttribute('type', 'button');
+
+    // Hidden text for screenreader
+    const descriptor = document.createElement('span');
+
+    descriptor.innerText = this._tooltip || '';
+    descriptor.classList.add('govuk-visually-hidden');
+    this.el.appendChild(descriptor);
+
+    if (this._style) {
+      this.el.setAttribute('style', this._style);
+    }
+  }
+
+  _onClick() {
+    if (!this.isEnabled()) {
+      return;
     }
 
-    /**
-     * set tooltip text
-     * @param {string} text - tooltip text to show
-     */
-    setTooltip(text) {
-        this._tooltip = text;
+    if (this._command) {
+      this.trigger('command', this._command);
+    } else if (this._event) {
+      this.trigger('event', this._event);
     }
 
-    _setOptions(options) {
-        this._name = options.name;
-        this._command = options.command;
-        this._event = options.event;
-        this._text = options.text;
-        this._tooltip = options.tooltip;
-        this._style = options.style;
-        this._state = options.state;
+    this.trigger('clicked');
+  }
+
+  _onOver() {
+    if (!this.isEnabled()) {
+      return;
     }
 
-    _render() {
-        const text = document.createTextNode(this._text || '');
+    tooltip.show(this.el, this._tooltip);
+  }
 
-        this.el.appendChild(text);
-        this.el.setAttribute('type', 'button');
+  _onOut() {
+    tooltip.hide();
+  }
 
-        // Hidden text for screenreader
-        const descriptor = document.createElement('span')
-        descriptor.innerText = this._name || '';
-        descriptor.classList.add("govuk-visually-hidden");
-        this.el.appendChild(descriptor);
+  /**
+   * enable button
+   */
+  enable() {
+    this.el.disabled = false;
+  }
 
-        if (this._style) {
-            this.el.setAttribute('style', this._style);
-        }
-    }
+  /**
+   * disable button
+   */
+  disable() {
+    this.el.disabled = true;
+  }
 
-    _onClick() {
-        if (!this.isEnabled()) {
-            return;
-        }
-
-        if (this._command) {
-            this.trigger('command', this._command);
-        } else if (this._event) {
-            this.trigger('event', this._event);
-        }
-
-        this.trigger('clicked');
-    }
-
-    _onOver() {
-        if (!this.isEnabled()) {
-            return;
-        }
-
-        tooltip.show(this.el, this._tooltip);
-    }
-
-    _onOut() {
-        tooltip.hide();
-    }
-
-    /**
-     * enable button
-     */
-    enable() {
-        this.el.disabled = false;
-    }
-
-    /**
-     * disable button
-     */
-    disable() {
-        this.el.disabled = true;
-    }
-
-    /**
-     * check whether this button is enabled
-     * @returns {Boolean} - true for enabled
-     */
-    isEnabled() {
-        return !this.el.disabled;
-    }
+  /**
+   * check whether this button is enabled
+   * @returns {Boolean} - true for enabled
+   */
+  isEnabled() {
+    return !this.el.disabled;
+  }
 }
 
 export default ToolbarButton;

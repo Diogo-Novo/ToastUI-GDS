@@ -788,7 +788,7 @@ proto._docWasChanged = function () {
         this._isInUndoState = false;
         this.fireEvent( 'undoStateChange', {
             canUndo: this._undoIndex !== 0,
-            canRedo: undoIndex + 2 < undoStackLength,
+            canRedo: this._undoIndex + 2 < this._undoStackLength,
             location: 'docWasChanged'
         });
     }
