@@ -76,6 +76,7 @@ class ToolbarButton extends ToolbarItem {
     }
 
     _setOptions(options) {
+        this._name = options.name;
         this._command = options.command;
         this._event = options.event;
         this._text = options.text;
@@ -92,7 +93,7 @@ class ToolbarButton extends ToolbarItem {
 
         // Hidden text for screenreader
         const descriptor = document.createElement('span')
-        descriptor.innerText = this.name || '';
+        descriptor.innerText = this._name || '';
         descriptor.classList.add("govuk-visually-hidden");
         this.el.appendChild(descriptor);
 
