@@ -1,5 +1,5 @@
 {
-  "name": "@toast-ui/editor",
+  "name": "editor",
   "version": "2.3.0",
   "description": "GFM  Markdown Wysiwyg Editor - Productive and Extensible",
   "keywords": [
@@ -55,9 +55,6 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
     "@toast-ui/release-notes": "^2.0.1",
-    "@toast-ui/squire": "file:../../libs/squire",
-    "@toast-ui/to-mark": "file:../../libs/to-mark",
-    "@toast-ui/toastmark": "file:../../libs/toastmark",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-istanbul": "^6.0.0",
