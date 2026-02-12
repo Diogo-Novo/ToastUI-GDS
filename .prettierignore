@@ -1,0 +1,11 @@
+# Ignore artifacts:
+build
+coverage
+
+# Not being used currently
+tui.color-picker-*
+tui.editor-editor-2.3.0/plugins
+
+# Ignore all markup files:
+**/*.md
+**/*.yml

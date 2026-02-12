@@ -15,5 +15,7 @@
     harper # Comment Grammer
   ];
 
+  git-hooks.hooks.prettier.enable = true;
+
   scripts.build.exec = "clear && npm run build";
 }
