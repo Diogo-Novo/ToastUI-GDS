@@ -12,9 +12,14 @@
     "build:editor": "npm run build -workspace tui.editor-editor-2.3.0/apps/editor/",
     "build:squire": "npm run build -workspace tui.editor-editor-2.3.0/libs/squire",
     "build:to-mark": "npm run build -workspace tui.editor-editor-2.3.0/libs/to-mark",
-    "build:toastmark": "npm run build -workspace tui.editor-editor-2.3.0/libs/toastmark"
+    "build:toastmark": "npm run build -workspace tui.editor-editor-2.3.0/libs/toastmark",
+    "lint": "prettier . --fix && eslint . --fix"
   },
   "devDependencies": {
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.0.0",
+    "globals": "^17.3.0",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage-istanbul-reporter": "^2.1.1",

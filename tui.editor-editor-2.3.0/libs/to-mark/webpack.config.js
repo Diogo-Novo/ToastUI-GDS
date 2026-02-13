@@ -39,15 +39,15 @@ module.exports = (_, { mode, minify }) => {
     },
     module: {
       rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules|dist/,
-          loader: 'eslint-loader',
-          enforce: 'pre',
-          options: {
-            failOnError: isProduction
-          }
-        },
+        // {
+        //   test: /\.js$/,
+        //   exclude: /node_modules|dist/,
+        //   loader: 'eslint-loader',
+        //   enforce: 'pre',
+        //   options: {
+        //     failOnError: isProduction
+        //   }
+        // },
         {
           test: /\.js$/,
           exclude: /node_modules|dist/,

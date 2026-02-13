@@ -35,17 +35,17 @@ const defaultConfigs = Array(isProduction ? 2 : 1)
       },
       module: {
         rules: [
-          {
-            test: /\.js$/,
-            exclude: /node_modules|dist|build/,
-            loader: 'eslint-loader',
-            enforce: 'pre',
-            options: {
-              configFile: './.eslintrc.js',
-              failOnWarning: false,
-              failOnError: false
-            }
-          },
+          // {
+          //   test: /\.js$/,
+          //   exclude: /node_modules|dist|build/,
+          //   loader: 'eslint-loader',
+          //   enforce: 'pre',
+          //   options: {
+          //     configFile: './.eslintrc.js',
+          //     failOnWarning: false,
+          //     failOnError: false
+          //   }
+          // },
           {
             test: /\.js$/,
             exclude: /node_modules|dist|build/,

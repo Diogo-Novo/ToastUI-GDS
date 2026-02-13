@@ -15,7 +15,11 @@
     harper # Comment Grammer
   ];
 
-  git-hooks.hooks.prettier.enable = true;
+  git-hooks.hooks = {
+    prettier.enable = true;
+    eslint.enable = true;
+  };
 
   scripts.build.exec = "clear && npm run build";
+  scripts.lint.exec = "npm run lint";
 }
