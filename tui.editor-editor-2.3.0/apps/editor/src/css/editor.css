@@ -275,7 +275,8 @@
 
 .tui-editor-defaultUI-toolbar button:hover,
 .tui-editor-defaultUI-toolbar button:active,
-.tui-editor-defaultUI-toolbar button.active {
+.tui-editor-defaultUI-toolbar button.active,
+.tui-editor-defaultUI-toolbar button:focus {
   border: 1px solid #aaa;
   background-color: #fff;
 }
