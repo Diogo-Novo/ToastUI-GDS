@@ -1,16 +1,66 @@
+<!doctype html>
 <html>
-  <head>
-    <script type="text/javascript" src="../tui.editor-editor-2.3.0/apps/editor/dist/cdn/toastui-editor-all.js"></script>
-  <link rel="stylesheet" href="../tui.editor-editor-2.3.0/apps/editor/dist/cdn/toastui-editor.css">
-</head>
+  <head lang="en">
+    <meta charset="UTF-8" />
+    <title>Demo</title>
+    <!-- Editor's Dependencies -->
+    <link rel="stylesheet" href="../node_modules/codemirror/libcodemirror.css" />
+    <!-- Editor -->
+    <link rel="stylesheet" href="../tui.editor-editor-2.3.0/apps/editor/dist/toastui-editor.css" />
+    <style>
+      .tui-popup-header .tui-popup-close-button {
+        background-image: url('../icons/.tui-popup-header.tui-popup-close-button.svg');
+      }
+      .te-popup-add-table .te-table-body {
+        background-image: url('../icons/.te-popup-add-table.te-table-body.png');
+      }
+
+      .te-popup-add-table .te-table-header {
+        background-image: url('../icons/.te-popup-add-table.te-table-header.png');
+      }
+      .tui-toolbar-icons {
+        background: url('../icons/.tui-toolbar-icons.png');
+        background-size: 218px 188px;
+        display: inline-block;
+      }
+      @media only screen and (-o-min-device-pixel-ratio: 2/1),
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (min--moz-device-pixel-ratio: 2),
+        only screen and (min-device-pixel-ratio: 2),
+        only screen and (min-resolution: 2dppx),
+        only screen and (min-resolution: 192dpi) {
+        .tui-toolbar-icons {
+          background: url('../icons/.tui-toolbar-icons2.png');
+        }
+      }
+      .te-input-language:after {
+        content: url('../icons/.te-input-language.activeafter.svg');
+      }
+      .te-input-language.active:after {
+        content: url('../icons/.te-input-languageafter.svg');
+      }
+      .tui-popup-code-block-editor .popup-editor-toggle-fit {
+        background-image: url('../icons/.popup-editor-toggle-fit.svg');
+      }
+      .tui-popup-code-block-editor .popup-editor-toggle-fit.active {
+        background-image: url('../icons/.popup-editor-toggle-fit.active.svg');
+      }
+      .govuk-visually-hidden: {
+        display: none;
+      }
+    </style>
+  </head>
   <body>
     <div id="editor"></div>
-    <script>
-      const editor = new toastui.Editor({
-        el: document.querySelector("#editor"),
-        previewStyle: "vertical",
-        height: "500px",
-        initialValue: "Hello",
+    <!-- Editor Dependencies -->
+    <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+    <!-- Editor -->
+    <script src="../tui.editor-editor-2.3.0/apps/editor/dist/toastui-editor.js"></script>
+    <script class="code-js">
+      var editor = new toastui.Editor({
+        el: document.querySelector('#editor'),
+        height: '800px',
+        initialEditType: 'wysiwyg'
       });
     </script>
   </body>
