@@ -18,10 +18,10 @@ const CLASS_OK_BUTTON = 'te-ok-button';
 const CLASS_CLOSE_BUTTON = 'te-close-button';
 const CLASS_POPUP_CLOSE_BUTTON = 'tui-popup-close-button';
 const TEMPLATE_HEADER_BUTTONS = `
-    <button type="button" class="${CLASS_PREFIX}toggle-scroll"></button>
-    <button type="button" class="${CLASS_PREFIX}toggle-preview"></button>
-    <button type="button" class="${CLASS_PREFIX}toggle-fit"></button>
-    <button type="button" class="${CLASS_POPUP_CLOSE_BUTTON}"></button>
+    <button type="button" class="${CLASS_PREFIX}toggle-scroll">Scroll</button>
+    <button type="button" class="${CLASS_PREFIX}toggle-preview">Preview</button>
+    <button type="button" class="${CLASS_PREFIX}toggle-fit">Fit</button>
+    <button type="button" class="${CLASS_POPUP_CLOSE_BUTTON}">Close</button>
 `;
 
 /**
@@ -109,14 +109,14 @@ class PopupCodeBlockEditor extends LayerPopup {
   _initDOMEvent() {
     super._initDOMEvent();
 
-    this.on('scroll', ev => ev.preventDefault());
+    this.on('scroll', (ev) => ev.preventDefault());
     this.on(`click .${CLASS_PREFIX}toggle-fit`, () => this._toggleFitToWindow());
     this.on(`click .${CLASS_PREFIX}toggle-preview`, () => this._togglePreview());
     this.on(`click .${CLASS_PREFIX}toggle-scroll`, () => this._toggleScroll());
     this.on(`click .${CLASS_OK_BUTTON}`, () => this._save());
     this.on(`click .${CLASS_CLOSE_BUTTON}`, () => this.hide());
     this.on(`click .${CLASS_PREFIX}close`, () => this.hide());
-    this.on(`click .${CLASS_PREFIX}editor-wrapper`, ev => {
+    this.on(`click .${CLASS_PREFIX}editor-wrapper`, (ev) => {
       if (ev.target === this._codeMirrorWrapper) {
         this._focusEditor(true);
       }
@@ -131,7 +131,7 @@ class PopupCodeBlockEditor extends LayerPopup {
   _initEditorEvent() {
     super._initEditorEvent();
 
-    this.eventManager.listen('openPopupCodeBlockEditor', codeBlockElement => {
+    this.eventManager.listen('openPopupCodeBlockEditor', (codeBlockElement) => {
       this.eventManager.emit('closeAllPopup');
       this.show(codeBlockElement);
 
@@ -168,7 +168,7 @@ class PopupCodeBlockEditor extends LayerPopup {
     const titleElement = this.getTitleElement();
     const codeBlockLanguagesCombo = new CodeBlockLanguagesCombo(this.eventManager, this.languages);
 
-    codeBlockLanguagesCombo.setOnLanguageSelected(selectedLanguage => {
+    codeBlockLanguagesCombo.setOnLanguageSelected((selectedLanguage) => {
       this._codeBlockEditor.setLanguage(selectedLanguage);
       this._codeBlockEditor.refresh();
       this._focusEditor();
