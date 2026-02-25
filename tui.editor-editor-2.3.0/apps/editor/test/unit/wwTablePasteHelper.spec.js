@@ -172,7 +172,7 @@ describe('WwTablePasteHelper - sanitizer', () => {
     let customSanitizer;
 
     beforeEach(() => {
-      customSanitizer = html => {
+      customSanitizer = (html) => {
         spy();
         return html.replace('<br>', '');
       };

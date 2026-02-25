@@ -100,7 +100,7 @@ export const tableHead: BlockStart = (parser, container) => {
       // to consider the case of merged-column (via plugin)
       !headerCells.length ||
       !delimCells.length ||
-      delimCells.some(cell => !reValidDelimCell.test(cell)) ||
+      delimCells.some((cell) => !reValidDelimCell.test(cell)) ||
       // to prevent to regard setTextHeading as tabel delim cell with 'disallowDeepHeading' option
       (delimCells.length === 1 && delimContent.indexOf('|') !== 0)
     ) {
@@ -150,7 +150,7 @@ export const tableHead: BlockStart = (parser, container) => {
       headerCells,
       firstLineNum,
       firstLineStart + headerOffset
-    ).forEach(cellNode => {
+    ).forEach((cellNode) => {
       tableHeadRow.appendChild(cellNode);
     });
 
@@ -161,7 +161,7 @@ export const tableHead: BlockStart = (parser, container) => {
       parser.nextNonspace + 1 + delimOffset
     );
 
-    delimCellNodes.forEach(cellNode => {
+    delimCellNodes.forEach((cellNode) => {
       tableDelimRow.appendChild(cellNode);
     });
 

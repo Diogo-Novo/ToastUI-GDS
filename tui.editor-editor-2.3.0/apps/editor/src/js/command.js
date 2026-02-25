@@ -80,7 +80,7 @@ class Command {
  * @returns {Command}
  * @static
  */
-Command.factory = function(typeStr, props) {
+Command.factory = function (typeStr, props) {
   let type;
 
   if (typeStr === 'markdown') {

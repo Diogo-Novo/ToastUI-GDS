@@ -58,7 +58,7 @@ class Tab extends UIController {
   _findButtonContained(element, selector, text) {
     return domUtils
       .findAll(element, selector)
-      .filter(node => new RegExp(text).test(node.textContent));
+      .filter((node) => new RegExp(text).test(node.textContent));
   }
 
   /**

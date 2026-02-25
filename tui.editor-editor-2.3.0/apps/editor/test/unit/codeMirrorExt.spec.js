@@ -127,7 +127,7 @@ describe('CodeMirrorExt', () => {
   });
 
   describe('get, set scrollTop', () => {
-    it('get scrollTop', done => {
+    it('get scrollTop', (done) => {
       codeMirrorExt.setHeight(50);
       codeMirrorExt.setValue('1\n2\n3\n4\n5\n1\n2\n3\n4\n5\n');
       codeMirrorExt.scrollTop(10);

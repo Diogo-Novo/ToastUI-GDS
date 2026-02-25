@@ -73,8 +73,8 @@ describe('listen cursorActivity event', () => {
     const { editor, preview } = getEditorAndPreview(highlight);
     const doc = editor.getEditor().getDoc();
 
-    setValue = val => editor.setValue(val);
-    setCursor = pos => doc.setCursor(pos);
+    setValue = (val) => editor.setValue(val);
+    setCursor = (pos) => doc.setCursor(pos);
     getHighlightedCount = () => preview.el.querySelectorAll(`.${CLASS_HIGHLIGHT}`).length;
     assertHighlighted = (tagName, innerHTML) => {
       const el = preview.el.querySelector(`.${CLASS_HIGHLIGHT}`);
@@ -176,7 +176,7 @@ describe('listen blur event', () => {
   function init(highlight) {
     const { editor, preview } = getEditorAndPreview(highlight);
 
-    setValue = val => {
+    setValue = (val) => {
       editor.setValue(val);
       editor.focus();
     };

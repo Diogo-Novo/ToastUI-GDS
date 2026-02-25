@@ -15,7 +15,7 @@ describe('Editor', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       container.parentNode.removeChild(container);
       done();
@@ -24,7 +24,7 @@ describe('Editor', () => {
 
   it('should not scroll body scroller on initializing', () => {
     document.body.style.paddingTop = `${window.innerHeight}px`;
-    // eslint-disable-next-line no-unused-vars
+
     const editor = new Editor({
       el: container,
       height: '300px',
@@ -35,10 +35,10 @@ describe('Editor', () => {
     document.body.style.paddingTop = '0px';
   });
 
-  it('should not throw exception on initializing with long content in case of markdown type vertical scrollSync enabled', done => {
+  it('should not throw exception on initializing with long content in case of markdown type vertical scrollSync enabled', (done) => {
     // the exception will be thrown from async, we can't no.toThrow() here
     // just wait and see if uncaught exception has been thrown or not
-    // eslint-disable-next-line no-unused-vars
+
     const editor = new Editor({
       el: container,
       height: '150px',

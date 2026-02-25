@@ -71,7 +71,7 @@ class WwTableSelectionManager {
      */
     this._isSelectionStarted = false;
 
-    const onMouseover = ev => {
+    const onMouseover = (ev) => {
       selectionEnd = domUtils.closest(ev.data.target, '[contenteditable=true] td,th');
 
       const range = this.wwe.getEditor().getSelection();
@@ -105,7 +105,7 @@ class WwTableSelectionManager {
       }
     };
 
-    const onMouseup = ev => {
+    const onMouseup = (ev) => {
       selectionEnd = domUtils.closest(ev.data.target, '[contenteditable=true] td,th');
 
       let range = this.wwe.getEditor().getSelection();
@@ -144,7 +144,7 @@ class WwTableSelectionManager {
       finishSelection();
     };
 
-    const onMousedown = ev => {
+    const onMousedown = (ev) => {
       const MOUSE_RIGHT_BUTTON = 2;
 
       selectionStart = domUtils.closest(ev.data.target, '[contenteditable=true] td,th');
@@ -199,8 +199,10 @@ class WwTableSelectionManager {
    * @param {HTMLElement} selectionStart Start element
    */
   setTableSelectionTimerIfNeed(selectionStart) {
-    const isTableSelecting = domUtils.parents(selectionStart, '[contenteditable=true] table')
-      .length;
+    const isTableSelecting = domUtils.parents(
+      selectionStart,
+      '[contenteditable=true] table'
+    ).length;
 
     if (isTableSelecting) {
       this._isSelectionStarted = true;
@@ -228,8 +230,10 @@ class WwTableSelectionManager {
    * @private
    */
   _reArrangeSelectionIfneed(selectionStart, selectionEnd) {
-    const isRangeStartInTable = domUtils.parents(selectionStart, '[contenteditable=true] table')
-      .length;
+    const isRangeStartInTable = domUtils.parents(
+      selectionStart,
+      '[contenteditable=true] table'
+    ).length;
     const isRangeEndInTable = domUtils.parents(selectionEnd, '[contenteditable=true] table').length;
     const isStartRangeOut = isRangeEndInTable && !isRangeStartInTable;
     const isEndRangeOut = !isRangeEndInTable && isRangeStartInTable;
@@ -392,7 +396,7 @@ class WwTableSelectionManager {
       `td.${TABLE_CELL_SELECTED_CLASS_NAME},th.${TABLE_CELL_SELECTED_CLASS_NAME}`
     );
 
-    cells.forEach(node => {
+    cells.forEach((node) => {
       removeClass(node, TABLE_CELL_SELECTED_CLASS_NAME);
 
       if (!node.getAttribute('class')) {

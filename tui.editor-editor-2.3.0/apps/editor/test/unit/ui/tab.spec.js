@@ -36,9 +36,7 @@ describe('Tab', () => {
 
       $('body').append(tab.el);
 
-      $('button')
-        .eq(0)
-        .trigger('click');
+      $('button').eq(0).trigger('click');
 
       expect(handler).toHaveBeenCalled();
     });
@@ -53,9 +51,7 @@ describe('Tab', () => {
 
       $('body').append(tab.el);
 
-      $('button')
-        .eq(0)
-        .trigger('click');
+      $('button').eq(0).trigger('click');
 
       expect(spy.calls.mostRecent().args[0]).toEqual('tab1');
     });
@@ -118,11 +114,7 @@ describe('Tab', () => {
     });
 
     it('sets initial active tab section', () => {
-      expect(
-        $('div')
-          .eq(1)
-          .hasClass('te-tab-active')
-      ).toBe(true);
+      expect($('div').eq(1).hasClass('te-tab-active')).toBe(true);
     });
   });
 
@@ -146,19 +138,13 @@ describe('Tab', () => {
     });
 
     it('click on tab button should result corresponding section activated', () => {
-      $('button')
-        .eq(1)
-        .trigger('click');
+      $('button').eq(1).trigger('click');
       expect($(tabSection2).hasClass('te-tab-active')).toBe(true);
     });
 
     it('click on the other tab button should result de-activating previously activated section', () => {
-      $('button')
-        .eq(0)
-        .trigger('click');
-      $('button')
-        .eq(1)
-        .trigger('click');
+      $('button').eq(0).trigger('click');
+      $('button').eq(1).trigger('click');
 
       expect($(tabSection1).hasClass('te-tab-active')).toBe(false);
       expect($(tabSection2).hasClass('te-tab-active')).toBe(true);

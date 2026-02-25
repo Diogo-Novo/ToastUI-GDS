@@ -8,7 +8,7 @@ import isFunction from 'tui-code-snippet/type/isFunction';
  * @param {Editor|Viewer} editor - editor or viewer instance
  */
 export function invokePlugins(plugins, editor) {
-  plugins.forEach(plugin => {
+  plugins.forEach((plugin) => {
     if (isFunction(plugin)) {
       plugin(editor);
     } else if (isArray(plugin)) {

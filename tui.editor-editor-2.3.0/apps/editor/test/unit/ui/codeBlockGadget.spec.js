@@ -52,8 +52,8 @@ describe('code block gadget', () => {
     $wysiwygContainer.remove();
   });
 
-  it('_openPopupCodeBlockEditor() should emit event', done => {
-    em.listen('openPopupCodeBlockEditor', codeBlockElement => {
+  it('_openPopupCodeBlockEditor() should emit event', (done) => {
+    em.listen('openPopupCodeBlockEditor', (codeBlockElement) => {
       expect(codeBlockElement.tagName).toBe('PRE');
       done();
     });

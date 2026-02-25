@@ -5,8 +5,7 @@
  */
 import CodeMirror from 'codemirror';
 
-/* eslint-disable */
-CodeMirror.defineOption('placeholder', '', function(cm, val, old) {
+CodeMirror.defineOption('placeholder', '', function (cm, val, old) {
   var prev = old && old != CodeMirror.Init;
   if (val && !prev) {
     cm.on('blur', onBlur);

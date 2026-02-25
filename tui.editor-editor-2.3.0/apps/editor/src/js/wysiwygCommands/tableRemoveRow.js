@@ -43,7 +43,7 @@ const TableRemoveRow = CommandManager.command(
           focusToFirstTd(sq, range, nextFocus, tableMgr);
         }
 
-        trs.forEach(tr => domUtils.remove(tr));
+        trs.forEach((tr) => domUtils.remove(tr));
       }
       selectionMgr.removeClassAttrbuteFromAllCellsIfNeed();
     }

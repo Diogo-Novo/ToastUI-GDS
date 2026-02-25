@@ -83,18 +83,12 @@ describe('Convertor', () => {
     });
 
     it('should store number of backticks in codeblock to data-backtics attribute', () => {
-      expect(
-        convertor
-          .toHTML('```\ncode block\n```')
-          .replace(/\n/g, '')
-          .trim()
-      ).toBe('<pre><code>code block</code></pre>');
-      expect(
-        convertor
-          .toHTML('````\ncode block\n````')
-          .replace(/\n/g, '')
-          .trim()
-      ).toBe('<pre><code data-backticks="4">code block</code></pre>');
+      expect(convertor.toHTML('```\ncode block\n```').replace(/\n/g, '').trim()).toBe(
+        '<pre><code>code block</code></pre>'
+      );
+      expect(convertor.toHTML('````\ncode block\n````').replace(/\n/g, '').trim()).toBe(
+        '<pre><code data-backticks="4">code block</code></pre>'
+      );
     });
 
     it('should convert blockquote even if there is a line above it (ref #989)', () => {
@@ -623,7 +617,7 @@ describe('Convertor', () => {
     it('convertorAfterMarkdownToHtmlConverted event fired after html convert', () => {
       let param;
 
-      em.listen('convertorAfterMarkdownToHtmlConverted', data => {
+      em.listen('convertorAfterMarkdownToHtmlConverted', (data) => {
         param = data;
       });
 
@@ -635,7 +629,7 @@ describe('Convertor', () => {
     it('convertorAfterHtmlToMarkdownConverted event fired after markdown convert', () => {
       let param;
 
-      em.listen('convertorAfterHtmlToMarkdownConverted', data => {
+      em.listen('convertorAfterHtmlToMarkdownConverted', (data) => {
         param = data;
       });
 

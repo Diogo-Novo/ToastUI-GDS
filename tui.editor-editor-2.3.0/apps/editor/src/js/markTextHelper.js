@@ -28,7 +28,7 @@ const delimSize = {
 };
 
 function cls(...names) {
-  return names.map(className => `${CLS_PREFIX}${className}`).join(' ');
+  return names.map((className) => `${CLS_PREFIX}${className}`).join(' ');
 }
 
 function applyClsToValue(obj) {

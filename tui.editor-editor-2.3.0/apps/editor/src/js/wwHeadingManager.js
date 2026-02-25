@@ -76,7 +76,7 @@ class WwHeadingManager {
   _wrapDefaultBlockToHeadingInner() {
     const headingTags = domUtils.findAll(this.wwe.getBody(), 'h1, h2, h3, h4, h5, h6');
 
-    headingTags.forEach(headingTag => {
+    headingTags.forEach((headingTag) => {
       const exceptedForWrapping = !domUtils.children(headingTag, 'div, p').length;
 
       if (exceptedForWrapping) {
@@ -90,7 +90,7 @@ class WwHeadingManager {
    * @private
    */
   _unwrapHeading() {
-    this.wwe.unwrapBlockTag(node => FIND_HEADING_RX.test(node));
+    this.wwe.unwrapBlockTag((node) => FIND_HEADING_RX.test(node));
   }
 
   /**
@@ -102,7 +102,7 @@ class WwHeadingManager {
   _onEnter(event, range) {
     if (range.startOffset > 0) {
       // I hate this but there's no way
-      this.wwe.defer(wwe => {
+      this.wwe.defer((wwe) => {
         this._unwrapHeading();
         wwe.getEditor().removeLastUndoStack();
       });

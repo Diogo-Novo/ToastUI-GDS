@@ -28,10 +28,7 @@ class WwPasteContentHelper {
    * @param {HTMLElement} container - clipboard container
    */
   preparePaste(container) {
-    const range = this.wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = this.wwe.getEditor().getSelection().cloneRange();
     const wwCodeblockManager = this.wwe.componentManager.getManager('codeblock');
     let firstBlockIsTaken = false;
     const tempContainer = document.createElement('div');
@@ -73,14 +70,14 @@ class WwPasteContentHelper {
     const tempContainer = document.createElement('div');
     let currentDiv;
 
-    toArray(container.childNodes).forEach(node => {
+    toArray(container.childNodes).forEach((node) => {
       const isTextNode = node.nodeType === 3;
-      /* eslint-disable max-len */
-      const isInlineNode = /^(SPAN|A|CODE|EM|I|STRONG|B|S|U|ABBR|ACRONYM|CITE|DFN|KBD|SAMP|VAR|BDO|Q|SUB|SUP)$/gi.test(
-        node.tagName
-      );
+
+      const isInlineNode =
+        /^(SPAN|A|CODE|EM|I|STRONG|B|S|U|ABBR|ACRONYM|CITE|DFN|KBD|SAMP|VAR|BDO|Q|SUB|SUP)$/gi.test(
+          node.tagName
+        );
       const isBR = node.nodeName === 'BR';
-      /* eslint-enable max-len */
 
       if (isTextNode || isInlineNode || isBR) {
         if (!currentDiv) {
@@ -131,7 +128,7 @@ class WwPasteContentHelper {
   _pasteFirstAid(container) {
     this._sanitizeHtml(container);
 
-    domUtils.findAll(container, '*').forEach(node => {
+    domUtils.findAll(container, '*').forEach((node) => {
       this._removeStyles(node);
     });
 
@@ -147,7 +144,7 @@ class WwPasteContentHelper {
 
     this._tableElementAid(container);
 
-    toArray(container.children).forEach(childNode => {
+    toArray(container.children).forEach((childNode) => {
       if (domUtils.getNodeName(childNode) === 'BR') {
         domUtils.remove(childNode);
       }
@@ -173,7 +170,7 @@ class WwPasteContentHelper {
   _unwrapIfNonBlockElementHasBr(container) {
     const nonBlockElements = domUtils.findAll(container, 'span, a, b, em, i, s');
 
-    nonBlockElements.forEach(node => {
+    nonBlockElements.forEach((node) => {
       const brChildren = domUtils.children(node, 'br');
 
       if (brChildren.length && node.nodeName !== 'LI' && node.nodeName !== 'UL') {
@@ -191,9 +188,9 @@ class WwPasteContentHelper {
   _unwrapNestedBlocks(container, blockTags) {
     const leafElements = domUtils
       .findAll(container, '*')
-      .filter(node => !matches(node, 'b,s,i,em,code,span,hr') && !node.firstChild);
+      .filter((node) => !matches(node, 'b,s,i,em,code,span,hr') && !node.firstChild);
 
-    leafElements.forEach(node => {
+    leafElements.forEach((node) => {
       let leafElement = node.nodeName === 'BR' ? node.parentNode : node;
 
       while (domUtils.parents(leafElement, blockTags).length) {
@@ -215,7 +212,7 @@ class WwPasteContentHelper {
    * @private
    */
   _removeUnnecessaryBlocks(container, blockTags) {
-    domUtils.findAll(container, blockTags).forEach(blockElement => {
+    domUtils.findAll(container, blockTags).forEach((blockElement) => {
       const { tagName } = blockElement;
       const isDivElement = tagName === 'DIV';
       const isInListItem = !!domUtils.parent(blockElement, 'li');
@@ -271,10 +268,7 @@ class WwPasteContentHelper {
   _prepareToPasteList(nodes, rangeInfo, firstBlockIsTaken) {
     let nodeName = domUtils.getNodeName(nodes[0]);
     let node = nodes.shift();
-    const newFragment = this.wwe
-      .getEditor()
-      .getDocument()
-      .createDocumentFragment();
+    const newFragment = this.wwe.getEditor().getDocument().createDocumentFragment();
 
     // IE somethimes returns ul without li
     if (nodeName !== 'LI' && nodes.length && nodes[0].tagName === 'LI') {
@@ -298,10 +292,7 @@ class WwPasteContentHelper {
       }
     } else if (nodeName === 'LI') {
       // handle list group
-      const listGroup = this.wwe
-        .getEditor()
-        .getDocument()
-        .createDocumentFragment();
+      const listGroup = this.wwe.getEditor().getDocument().createDocumentFragment();
 
       listGroup.appendChild(node);
 
@@ -350,7 +341,7 @@ class WwPasteContentHelper {
    * @private
    */
   _unwrapFragmentFirstChildForPasteAsInline(node) {
-    domUtils.findAll(node, 'br').forEach(br => domUtils.remove(br));
+    domUtils.findAll(node, 'br').forEach((br) => domUtils.remove(br));
 
     return node.childNodes;
   }
@@ -365,7 +356,7 @@ class WwPasteContentHelper {
     let currentTagName;
 
     // expand to pasting area
-    this._eachCurrentPath(path => {
+    this._eachCurrentPath((path) => {
       if (path.tagName !== 'DIV') {
         if (domUtils.isElemNode(nodes)) {
           currentTagName = nodes.tagName;
@@ -476,7 +467,7 @@ class WwPasteContentHelper {
 
     const tables = domUtils.findAll(container, 'table');
 
-    tables.forEach(table => {
+    tables.forEach((table) => {
       const foundClassName = table.className.match(/.*\s*(te-content-table-\d+)\s*.*/);
 
       if (foundClassName) {
@@ -484,7 +475,7 @@ class WwPasteContentHelper {
       }
     });
 
-    tables.forEach(table => {
+    tables.forEach((table) => {
       addClass(table, tableManager.getTableIDClassName());
     });
   }

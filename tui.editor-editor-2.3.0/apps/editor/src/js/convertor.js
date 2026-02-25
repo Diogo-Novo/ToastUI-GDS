@@ -86,7 +86,7 @@ class Convertor {
   _removeBrToMarkPassAttributeInCode(renderedHTML) {
     const wrapper = domUtils.createElementWith(`<div>${renderedHTML}</div>`);
 
-    domUtils.findAll(wrapper, 'code, pre').forEach(codeOrPre => {
+    domUtils.findAll(wrapper, 'code, pre').forEach((codeOrPre) => {
       const codeEelement = codeOrPre;
 
       codeEelement.innerHTML = codeEelement.innerHTML.replace(
@@ -132,7 +132,7 @@ class Convertor {
   }
 
   initHtmlSanitizer(sanitizer) {
-    this.eventManager.listen('convertorAfterMarkdownToHtmlConverted', html =>
+    this.eventManager.listen('convertorAfterMarkdownToHtmlConverted', (html) =>
       sanitizer(html, true)
     );
   }
@@ -163,7 +163,7 @@ class Convertor {
       const FIND_BRS_BEFORE_TABLE = /^(<br>)+\|/gi;
 
       if (FIND_TABLE_RX.test(line)) {
-        line = line.replace(FIND_BRS_BEFORE_TABLE, match => match.replace(/<br>/gi, '<br>\n'));
+        line = line.replace(FIND_BRS_BEFORE_TABLE, (match) => match.replace(/<br>/gi, '<br>\n'));
       } else if (!FIND_CODE_RX.test(line)) {
         line = line.replace(/<br>/gi, '<br>\n');
       }
@@ -187,7 +187,7 @@ class Convertor {
   _appendAttributeForLinkIfNeed(html) {
     const LINK_RX = /!?\[.*\]\(<\s*a[^>]*>(.*?)<\s*\/\s*a>\)/gi;
 
-    return html.replace(LINK_RX, match => match.replace(/<a /gi, '<a data-tomark-pass="" '));
+    return html.replace(LINK_RX, (match) => match.replace(/<a /gi, '<a data-tomark-pass="" '));
   }
 
   _appendAttributeForBrIfNeed(html) {

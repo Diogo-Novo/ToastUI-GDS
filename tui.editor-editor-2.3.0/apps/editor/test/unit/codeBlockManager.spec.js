@@ -37,7 +37,7 @@ describe('CodeBlockManager', () => {
 
   describe('createCodeBlockHtml', () => {
     it('creates a code block html when there is a registered replacer', () => {
-      const replacer = codeText => `replaced ${codeText} here`;
+      const replacer = (codeText) => `replaced ${codeText} here`;
 
       codeBlockManager.setReplacer('awesome-languages', replacer);
 

@@ -27,7 +27,7 @@ describe('CodeBlock', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -58,17 +58,7 @@ describe('CodeBlock', () => {
     CodeBlock.exec(wwe);
 
     expect($body.find('pre').length).toBe(1);
-    expect(
-      $body
-        .find('pre')
-        .eq(0)
-        .text()
-    ).toBe('hello');
-    expect(
-      $body
-        .find('pre + div')
-        .eq(0)
-        .text()
-    ).toBe(', my name is code');
+    expect($body.find('pre').eq(0).text()).toBe('hello');
+    expect($body.find('pre + div').eq(0).text()).toBe(', my name is code');
   });
 });

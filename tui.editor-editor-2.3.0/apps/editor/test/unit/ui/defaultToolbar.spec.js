@@ -63,7 +63,7 @@ describe('DefaultToolbar', () => {
   });
 
   describe('_balanceButtons', () => {
-    it('should be called when the container width change', done => {
+    it('should be called when the container width change', (done) => {
       spyOn(toolbar, '_balanceButtons');
 
       $container.width('400px');
@@ -74,7 +74,7 @@ describe('DefaultToolbar', () => {
       }, 100);
     });
 
-    it('should move overflow buttons to dropdown toolbar', done => {
+    it('should move overflow buttons to dropdown toolbar', (done) => {
       $container.width('400px');
 
       setTimeout(() => {

@@ -23,7 +23,7 @@ export function getOffsetTop(id) {
 export function removeOffsetInfoByNode(node) {
   if (node) {
     delete offsetInfoMap[node.getAttribute('data-nodeid')];
-    toArray(node.children).forEach(child => {
+    toArray(node.children).forEach((child) => {
       removeOffsetInfoByNode(child);
     });
   }

@@ -20,7 +20,7 @@ describe('Blockquote', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -28,10 +28,7 @@ describe('Blockquote', () => {
   });
 
   it('add blockquote to current selection', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('text');
 
@@ -44,10 +41,7 @@ describe('Blockquote', () => {
   });
 
   it('if there have blockquote already remove format', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('text');
 

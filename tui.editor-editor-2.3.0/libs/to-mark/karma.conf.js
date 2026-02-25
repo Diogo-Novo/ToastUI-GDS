@@ -79,7 +79,7 @@ function setConfig(defaultConfig, server) {
   }
 }
 
-module.exports = function(config) {
+module.exports = function (config) {
   const defaultConfig = {
     basePath: './',
     frameworks: ['jasmine'],
@@ -124,7 +124,6 @@ module.exports = function(config) {
     singleRun: true
   };
 
-  /* eslint-disable */
   setConfig(defaultConfig, process.env.KARMA_SERVER);
   config.set(defaultConfig);
 };

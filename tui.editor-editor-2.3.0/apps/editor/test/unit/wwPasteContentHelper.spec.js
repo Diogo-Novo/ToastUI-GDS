@@ -16,7 +16,7 @@ describe('WwPasteContentHelper', () => {
 
   beforeEach(() => {
     spy = jasmine.createSpy('sanitizer');
-    const sanitizer = content => {
+    const sanitizer = (content) => {
       spy();
       return htmlSanitizer(content, true);
     };
@@ -248,12 +248,7 @@ describe('WwPasteContentHelper', () => {
       expect(element.find('span').length).toEqual(1);
       expect(element.find('br').length).toEqual(1);
       expect(element.text()).toEqual('ip lorem sit ametand so on');
-      expect(
-        element
-          .find('span')
-          .eq(0)
-          .text()
-      ).toEqual('and so on');
+      expect(element.find('span').eq(0).text()).toEqual('and so on');
     });
     it('_unwrapIfNonBlockElementHasBr should unwrap b, i, em, s element with br', () => {
       const element = $('<div />');
@@ -374,10 +369,7 @@ describe('WwPasteContentHelper', () => {
 
         wwe.getEditor().setHTML('<ul><li><div>list1</div></li><li>list2</li></ul>');
 
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         range.setStart(wwe.getBody().querySelectorAll('div')[0].childNodes[0], 1);
         range.collapse(true);
@@ -404,10 +396,7 @@ describe('WwPasteContentHelper', () => {
               '</ul>'
           );
 
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         range.setStart(wwe.getBody().querySelectorAll('ul li ul li div')[0].childNodes[0], 1);
         range.collapse(true);
@@ -428,10 +417,7 @@ describe('WwPasteContentHelper', () => {
 
         wwe.getEditor().setHTML('<div><br></div>');
 
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         range.setStart(wwe.getBody().querySelectorAll('div')[0], 1);
         range.collapse(true);
@@ -452,10 +438,7 @@ describe('WwPasteContentHelper', () => {
 
         wwe.getEditor().setHTML('<div><br></div>');
 
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         range.setStart(wwe.getBody().querySelectorAll('div')[0], 1);
         range.collapse(true);
@@ -478,10 +461,7 @@ describe('WwPasteContentHelper', () => {
 
         wwe.getEditor().setHTML('<ul><li><div>list1</div></li><li>list2</li></ul>');
 
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         range.setStart(wwe.getBody().querySelectorAll('div')[0].childNodes[0], 1);
         range.collapse(true);
@@ -517,7 +497,7 @@ describe('WwPasteContentHelper', () => {
     let customSanitizer;
 
     beforeEach(() => {
-      customSanitizer = html => {
+      customSanitizer = (html) => {
         spy();
         return html.replace('<br>', '');
       };

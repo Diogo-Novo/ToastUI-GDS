@@ -46,7 +46,7 @@ describe('Preview', () => {
     });
 
     it('calls previewBeforeHook and replace content with it returns', () => {
-      eventManager.listen('previewBeforeHook', html => `to be ${html}d`);
+      eventManager.listen('previewBeforeHook', (html) => `to be ${html}d`);
       preview.render('replace');
 
       expect(preview.getHTML()).toEqual('to be replaced');

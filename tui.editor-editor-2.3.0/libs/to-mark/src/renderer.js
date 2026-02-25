@@ -40,7 +40,7 @@ function forEachOwnProperties(obj, iteratee, context) {
  * @param {Node} node Element
  * @returns {boolean}
  */
-// eslint-disable-next-line complexity
+
 function isInlineNode(node) {
   const tag = node.tagName;
 
@@ -76,7 +76,7 @@ function getRawHtmlString(node, subContent) {
  * @param {object} source source object for clone rules
  */
 function cloneRules(destination, source) {
-  forEachOwnProperties(source, function(value, key) {
+  forEachOwnProperties(source, function (value, key) {
     if (key !== 'converter') {
       if (!destination[key]) {
         destination[key] = {};
@@ -112,7 +112,8 @@ export default class Renderer {
     codeblockTildes: /^(~{3,})/
   };
 
-  static markdownTextToEscapeHtmlRx = /<([a-zA-Z_][a-zA-Z0-9\-._]*)(\s|[^\\/>])*\/?>|<(\/)([a-zA-Z_][a-zA-Z0-9\-._]*)\s*\/?>|<!--[^-]+-->|<([a-zA-Z_][a-zA-Z0-9\-.:/]*)>/;
+  static markdownTextToEscapeHtmlRx =
+    /<([a-zA-Z_][a-zA-Z0-9\-._]*)(\s|[^\\/>])*\/?>|<(\/)([a-zA-Z_][a-zA-Z0-9\-._]*)\s*\/?>|<!--[^-]+-->|<([a-zA-Z_][a-zA-Z0-9\-.:/]*)>/;
 
   static markdownTextToEscapeBackSlashRx = /\\[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\\]/;
 
@@ -156,7 +157,7 @@ export default class Renderer {
   addRules(rules) {
     forEachOwnProperties(
       rules,
-      function(converter, selectorString) {
+      function (converter, selectorString) {
         this.addRule(selectorString, converter);
       },
       this
@@ -169,7 +170,7 @@ export default class Renderer {
    * @param {HTMLElement} node current node
    * @returns {string} result
    */
-  // eslint-disable-next-line complexity
+
   getSpaceControlled(content, node) {
     let lead = '';
     let trail = '';
@@ -211,7 +212,7 @@ export default class Renderer {
    * @param {string} subContent child nodes converted text
    * @returns {string} converted text
    */
-  // eslint-disable-next-line complexity
+
   convert(node, subContent) {
     let result;
     const converter = this._getConverter(node);
@@ -309,7 +310,7 @@ export default class Renderer {
   _setConverterWithSelector(selectors, converter) {
     let rulePointer = this.rules;
 
-    this._eachSelector(selectors, function(ruleElem) {
+    this._eachSelector(selectors, function (ruleElem) {
       if (!rulePointer[ruleElem]) {
         rulePointer[ruleElem] = {};
       }
@@ -369,7 +370,7 @@ export default class Renderer {
    * @returns {string} processed text
    */
   escapeText(text) {
-    return text.replace(FIND_CHAR_TO_ESCAPE_RX, function(matched) {
+    return text.replace(FIND_CHAR_TO_ESCAPE_RX, function (matched) {
       return `\\${matched}`;
     });
   }
@@ -388,8 +389,8 @@ export default class Renderer {
       result = FIND_MARKDOWN_IMAGE_SYNTAX_RX.exec(text);
     }
 
-    return text.replace(FIND_CHAR_TO_ESCAPE_IN_LINK_RX, function(matched, offset) {
-      const isDelimiter = imageSyntaxRanges.some(function(range) {
+    return text.replace(FIND_CHAR_TO_ESCAPE_IN_LINK_RX, function (matched, offset) {
+      const isDelimiter = imageSyntaxRanges.some(function (range) {
         return offset > range[0] && offset < range[1];
       });
 
@@ -404,11 +405,12 @@ export default class Renderer {
    * @returns {string} processed text
    */
   escapeTextHtml(text) {
-    return text.replace(new RegExp(Renderer.markdownTextToEscapeHtmlRx.source, 'g'), function(
-      matched
-    ) {
-      return `\\${matched}`;
-    });
+    return text.replace(
+      new RegExp(Renderer.markdownTextToEscapeHtmlRx.source, 'g'),
+      function (matched) {
+        return `\\${matched}`;
+      }
+    );
   }
 
   /**
@@ -420,11 +422,12 @@ export default class Renderer {
    * @returns {string} processed text
    */
   escapeTextBackSlash(text) {
-    return text.replace(new RegExp(Renderer.markdownTextToEscapeBackSlashRx.source, 'g'), function(
-      matched
-    ) {
-      return `\\${matched}`;
-    });
+    return text.replace(
+      new RegExp(Renderer.markdownTextToEscapeBackSlashRx.source, 'g'),
+      function (matched) {
+        return `\\${matched}`;
+      }
+    );
   }
 
   /**
@@ -435,7 +438,7 @@ export default class Renderer {
   escapePairedCharacters(text) {
     return text.replace(
       new RegExp(Renderer.markdownTextToEscapePairedCharsRx.source, 'g'),
-      function(matched) {
+      function (matched) {
         return `\\${matched}`;
       }
     );

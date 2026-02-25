@@ -91,7 +91,7 @@ class PopupTableUtils extends LayerPopup {
     this.eventManager.listen('focus', () => this.hide());
     this.eventManager.listen('mousedown', () => this.hide());
     this.eventManager.listen('closeAllPopup', () => this.hide());
-    this.eventManager.listen('openPopupTableUtils', ev => {
+    this.eventManager.listen('openPopupTableUtils', (ev) => {
       const { left, top } = this.el.parentNode.getBoundingClientRect();
 
       this._disableRemoveRowMenu(ev.target);
@@ -107,7 +107,7 @@ class PopupTableUtils extends LayerPopup {
   }
 
   _bindClickEventOnRemoveRowMenu() {
-    this.on(`click .${REMOVE_ROW_MENU_CLASS_NAME}`, ev => {
+    this.on(`click .${REMOVE_ROW_MENU_CLASS_NAME}`, (ev) => {
       const { target } = ev;
 
       if (hasClass(target, DISABLED_MENU_CLASS_NAME)) {

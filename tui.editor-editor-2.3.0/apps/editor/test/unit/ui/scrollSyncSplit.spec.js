@@ -8,7 +8,7 @@ import EventManager from '@/eventManager';
 describe('ScrollSyncSplit', () => {
   let scrollSyncSplit, leftElement, rightElement, container;
 
-  beforeEach(done => {
+  beforeEach((done) => {
     jasmine.getStyleFixtures().fixturesPath = '/base';
     loadStyleFixtures('src/css/editor.css');
 
@@ -33,7 +33,7 @@ describe('ScrollSyncSplit', () => {
     document.body.removeChild(container);
   });
 
-  it('sync() adjust style top for elements which height is equal or shorter than wrapper', done => {
+  it('sync() adjust style top for elements which height is equal or shorter than wrapper', (done) => {
     leftElement.style.height = '100px';
     rightElement.style.height = '200px';
 
@@ -46,7 +46,7 @@ describe('ScrollSyncSplit', () => {
     }, 500);
   });
 
-  xit('sync() adjust style top for right side element if both elements are greater than wrapper', done => {
+  xit('sync() adjust style top for right side element if both elements are greater than wrapper', (done) => {
     leftElement.style.height = '200px';
     rightElement.style.height = '400px';
 

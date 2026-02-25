@@ -20,7 +20,7 @@ describe('Table - Remove', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();

@@ -48,7 +48,8 @@ const reTicks = /`+/;
 const reTicksHere = /^`+/;
 const reEllipses = /\.\.\./g;
 const reDash = /--+/g;
-const reEmailAutolink = /^<([a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>/;
+const reEmailAutolink =
+  /^<([a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*)>/;
 const reAutolink = /^<[A-Za-z][A-Za-z0-9.+-]{1,31}:[^<>\x00-\x20]*>/i;
 const reSpnl = /^ *(?:\n *)?/;
 const reWhitespaceChar = /^[ \t\n\x0b\x0c\x0d]/;
@@ -811,7 +812,7 @@ export class InlineParser {
 
     if ((m = this.match(reMain))) {
       if (this.options.smart) {
-        const lit = m.replace(reEllipses, '\u2026').replace(reDash, function(chars) {
+        const lit = m.replace(reEllipses, '\u2026').replace(reDash, function (chars) {
           let enCount = 0;
           let emCount = 0;
           if (chars.length % 3 === 0) {

@@ -39,7 +39,7 @@ class WwTaskManager {
     this._initKeyHandler();
     this._initEvent();
 
-    this.wwe.getEditor().addEventListener('mousedown', ev => {
+    this.wwe.getEditor().addEventListener('mousedown', (ev) => {
       const style = getComputedStyle(ev.target, ':before');
 
       if (
@@ -91,10 +91,7 @@ class WwTaskManager {
     let li;
 
     if (!range) {
-      range = this.wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      range = this.wwe.getEditor().getSelection().cloneRange();
     }
 
     if (
@@ -142,10 +139,7 @@ class WwTaskManager {
    * @private
    */
   _formatTaskIfNeed() {
-    const range = this.wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = this.wwe.getEditor().getSelection().cloneRange();
 
     if (this.isInTaskList(range)) {
       this.formatTask(range.startContainer);
@@ -158,7 +152,7 @@ class WwTaskManager {
    */
   _removeTaskListClass() {
     // because task-list class is block merge normal list and task list
-    domUtils.findAll(this.wwe.getBody(), '.task-list').forEach(node => {
+    domUtils.findAll(this.wwe.getBody(), '.task-list').forEach((node) => {
       removeClass(node, 'task-list');
     });
   }

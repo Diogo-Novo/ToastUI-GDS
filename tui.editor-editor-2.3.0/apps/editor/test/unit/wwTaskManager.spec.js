@@ -25,7 +25,7 @@ describe('WwTaskManager', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -43,22 +43,14 @@ describe('WwTaskManager', () => {
 
         em.emit('wysiwygSetValueAfter');
 
-        expect(
-          $(wwe.getBody())
-            .find('ul')
-            .eq(0)
-            .hasClass('task-list')
-        ).toEqual(false);
+        expect($(wwe.getBody()).find('ul').eq(0).hasClass('task-list')).toEqual(false);
       }
     );
   });
 
   describe('formatTask()', () => {
     it('Format task to passed node', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe.getEditor().setHTML('<ul><li><div><br></div></li></ul>');
 
@@ -68,17 +60,10 @@ describe('WwTaskManager', () => {
       mgr.formatTask(range.startContainer);
 
       expect(wwe.getBody().querySelectorAll('.task-list-item').length).toEqual(1);
-      expect(
-        $(wwe.getBody())
-          .find('li')
-          .attr('data-te-task')
-      ).toBeDefined();
+      expect($(wwe.getBody()).find('li').attr('data-te-task')).toBeDefined();
     });
     it('Format task to passed node that doesnt have any div', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe.getEditor().setHTML('<ul><li><br></li></ul>');
 
@@ -88,20 +73,13 @@ describe('WwTaskManager', () => {
       mgr.formatTask(range.startContainer);
 
       expect(wwe.getBody().querySelectorAll('.task-list-item').length).toEqual(1);
-      expect(
-        $(wwe.getBody())
-          .find('li')
-          .attr('data-te-task')
-      ).toBeDefined();
+      expect($(wwe.getBody()).find('li').attr('data-te-task')).toBeDefined();
     });
   });
 
   describe('unformatTask()', () => {
     it('unformat task to passed node', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe
         .getEditor()
@@ -113,22 +91,11 @@ describe('WwTaskManager', () => {
       mgr.unformatTask(range.startContainer);
 
       expect(wwe.getBody().querySelectorAll('.task-list-item').length).toEqual(0);
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .text()
-      ).toEqual('test');
-      expect(
-        $(wwe.getBody())
-          .find('li')
-          .attr('data-te-task')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('div').text()).toEqual('test');
+      expect($(wwe.getBody()).find('li').attr('data-te-task')).not.toBeDefined();
     });
     it('dont unformat to sub tasks', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe
         .getEditor()
@@ -145,17 +112,8 @@ describe('WwTaskManager', () => {
       mgr.unformatTask(range.startContainer);
 
       expect(wwe.getBody().querySelectorAll('.task-list-item').length).toEqual(1);
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .eq(0)
-          .text()
-      ).toEqual('test1');
-      expect(
-        $(wwe.getBody())
-          .find('li')
-          .attr('data-te-task')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('div').eq(0).text()).toEqual('test1');
+      expect($(wwe.getBody()).find('li').attr('data-te-task')).not.toBeDefined();
     });
   });
 });

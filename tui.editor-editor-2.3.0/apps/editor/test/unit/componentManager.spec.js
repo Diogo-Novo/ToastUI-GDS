@@ -28,7 +28,7 @@ describe('ComponentManager', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       container.parentNode.removeChild(container);
       container2.parentNode.removeChild(container2);

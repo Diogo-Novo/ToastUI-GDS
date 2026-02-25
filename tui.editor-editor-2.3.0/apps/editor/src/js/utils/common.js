@@ -25,7 +25,7 @@ export function sanitizeLinkAttribute(attribute) {
 
   const linkAttribute = {};
 
-  availableLinkAttributes.forEach(key => {
+  availableLinkAttributes.forEach((key) => {
     if (!isUndefined(attribute[key])) {
       linkAttribute[key] = attribute[key];
     }

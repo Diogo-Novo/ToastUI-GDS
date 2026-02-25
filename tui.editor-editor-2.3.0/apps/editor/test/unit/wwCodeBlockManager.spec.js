@@ -27,7 +27,7 @@ describe('WwCodeBlockManager', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -36,10 +36,7 @@ describe('WwCodeBlockManager', () => {
 
   describe('isInCodeBlock', () => {
     it('check if passed range is in codeblock', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe.getEditor().setHTML('<pre><div>test</div></pre>');
 
@@ -53,10 +50,7 @@ describe('WwCodeBlockManager', () => {
   describe('key handlers', () => {
     describe('BACKSPACE', () => {
       it('_onBackspaceKeyEvnetHandler() remove codeblock if codeblock has one code line when offset is 0', () => {
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         wwe.setValue('<pre>test</pre>');
 
@@ -78,10 +72,7 @@ describe('WwCodeBlockManager', () => {
       });
 
       it('_onBackspaceKeyEvnetHandler() remove codeblock and make one empty line if there is no content', () => {
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         wwe.setValue('<pre>\n</pre>');
 
@@ -102,10 +93,7 @@ describe('WwCodeBlockManager', () => {
       });
 
       it('_onBackspaceKeyEventHandler() merge same codeblocks if backspace key is pressed in empty line between same codeblock', () => {
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         wwe.setValue(['<pre>test1</pre>', '<div><br></div>', '<pre>test2</pre>'].join(''));
 
@@ -127,10 +115,7 @@ describe('WwCodeBlockManager', () => {
       });
 
       it('_onBackspaceKeyEventHandler() do not merge codeblocks that has different data-language attribute if backspace key is pressed in empty line between different codeblock', () => {
-        const range = wwe
-          .getEditor()
-          .getSelection()
-          .cloneRange();
+        const range = wwe.getEditor().getSelection().cloneRange();
 
         wwe.setValue(
           [
@@ -158,10 +143,7 @@ describe('WwCodeBlockManager', () => {
     });
 
     it('_onBackspaceKeyEventHandler() sanitize HTML properly when removing codeblock ', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe.setValue('<pre>&lt;svg&gt;&lt;/svg&gt;</pre>');
 
@@ -191,10 +173,7 @@ describe('WwCodeBlockManager', () => {
         '<pre><code class="lang-javascript" data-language="javascript">mycode</code></pre>'
       );
 
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody().querySelectorAll('pre')[0], 1);
       range.collapse(true);
@@ -211,10 +190,7 @@ describe('WwCodeBlockManager', () => {
     it('should change block tag to "\\n" if pasteData have block tag', () => {
       const pasteData = $('<div>test1<br></div><div>test2<br></div>');
 
-      const fragment = wwe
-        .getEditor()
-        .getDocument()
-        .createDocumentFragment();
+      const fragment = wwe.getEditor().getDocument().createDocumentFragment();
 
       $(fragment).append(pasteData);
 
@@ -329,9 +305,7 @@ describe('WwCodeBlockManager', () => {
 
       mgr.modifyCodeBlockForWysiwyg(frag);
 
-      const codeblock = $(frag)
-        .find('pre')
-        .text();
+      const codeblock = $(frag).find('pre').text();
 
       expect(codeblock.split('\n').length).toEqual(3);
     });
@@ -346,9 +320,7 @@ describe('WwCodeBlockManager', () => {
 
       mgr.modifyCodeBlockForWysiwyg(frag);
 
-      const codeblock = $(frag)
-        .find('pre')
-        .text();
+      const codeblock = $(frag).find('pre').text();
 
       expect(codeblock.split('\n').length).toEqual(4);
     });
@@ -360,9 +332,7 @@ describe('WwCodeBlockManager', () => {
 
       mgr.modifyCodeBlockForWysiwyg(frag);
 
-      const codeblock = $(frag)
-        .find('pre')
-        .text();
+      const codeblock = $(frag).find('pre').text();
 
       expect(codeblock.split('\n').length).toEqual(3);
     });
@@ -378,9 +348,7 @@ describe('WwCodeBlockManager', () => {
 
       mgr.modifyCodeBlockForWysiwyg(frag);
 
-      const codeblockText = $(frag)
-        .find('pre')
-        .text();
+      const codeblockText = $(frag).find('pre').text();
 
       expect(codeblockText).toEqual('<span>test</span>');
     });

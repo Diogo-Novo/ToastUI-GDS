@@ -67,13 +67,7 @@ class MdTextObject {
   expandEndOffset() {
     const end = this._end;
 
-    if (
-      end.ch <
-      this._mde
-        .getEditor()
-        .getDoc()
-        .getLine(end.line).length
-    ) {
+    if (end.ch < this._mde.getEditor().getDoc().getLine(end.line).length) {
       end.ch += 1;
     }
   }

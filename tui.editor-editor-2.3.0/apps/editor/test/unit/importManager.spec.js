@@ -25,9 +25,7 @@ function createMDTextClipboardEvent(texts) {
 function createWWLinkClipboardEvent(anchor) {
   return {
     source: 'wysiwyg',
-    clipboardContainer: $('<div>')
-      .append(anchor)
-      .get(0)
+    clipboardContainer: $('<div>').append(anchor).get(0)
   };
 }
 
@@ -53,7 +51,7 @@ function createWWImageClipboardEvent() {
 function createWWIEImageClipboardEvent(children) {
   const fragment = document.createDocumentFragment();
 
-  forEachArray(children, child => fragment.appendChild(child));
+  forEachArray(children, (child) => fragment.appendChild(child));
 
   return {
     source: 'wysiwyg',
@@ -68,7 +66,7 @@ const imageBlobBase64 =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEcAAAAWCAYAAACSYoFNAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHFSURBVFhH7Zgxq8IwFIWvb3boKCI6FMRfILi5uLr5MwSdnZ0VnB2cxaWri5vg6iKCgyDiKOL+Hue+3NKWNlir4nA/CO1Nc5P0JCcWc9fr9ZeUWHLlclnFSeDHXJUYVBwLKo4FFceCimMhlTjr9ZqOx6Nf5vO5eZKd5XJJk8nERI+BHMzpXaTeOaPRiCqVCpdOp2NqPwPEgyBCq9WiRqNhotejtrLwEnGwtbGqYrder8crLLEAGwatGI2FYK7ko/92u03VapXrMEY0f7vd+jlBu4ll457ZSC1Ov9/3B8EEhWazyVbzPI/b7HY7jvf7fawANmAXse5ms+H8brfLfaM/1I/HY9P6H7ywjIlyv99DFoSw8iyfz4fmnkSmMyc4wel0ytfFYkG3241fBmDCjuPw/aNAaFmAer1uau0Ui8XQGTgcDqlQKJiIWFjhcrmQ67omSubrzhwIM5vN/AXAznkW7J4sfFQcrFipVDIRUa1WM3dhsPOEYJvD4cCWiON8PofsOxgM6HQ6meg5Mp05ab8xYDW8nORDrCir1YpXPK4NbAz7oD56ZuAnHUJKHsj6qaF/WVj4ujPnm1BxLKg4FlQcCypOIkR/C2L+CjpFStcAAAAASUVORK5CYII=';
 
 describe('ImportManager', () => {
-  let em, im; // eslint-disable-line no-unused-vars
+  let em, im;
 
   beforeEach(() => {
     em = new EventManager();
@@ -77,7 +75,7 @@ describe('ImportManager', () => {
 
   describe('image', () => {
     describe('ie', () => {
-      it('should call hook and preventDefault', done => {
+      it('should call hook and preventDefault', (done) => {
         const img = document.createElement('img');
 
         img.src = imageBlobBase64;
@@ -96,7 +94,7 @@ describe('ImportManager', () => {
         em.emit('willPaste', ev);
       });
 
-      it('should not call hook on multiple items in paste data', done => {
+      it('should not call hook on multiple items in paste data', (done) => {
         const ev = createWWIEImageClipboardEvent([
           document.createElement('img'),
           document.createElement('img')
@@ -115,7 +113,7 @@ describe('ImportManager', () => {
       });
     });
 
-    it('should call preventDefault & stopPropagation', done => {
+    it('should call preventDefault & stopPropagation', (done) => {
       const ev = createWWImageClipboardEvent();
 
       spyOn(ev.data, 'preventDefault');
@@ -209,12 +207,9 @@ describe('ImportManager', () => {
           const ev = createWWLinkClipboardEvent([$anchor]);
 
           em.emit('pasteBefore', ev);
-          expect(
-            $(ev.clipboardContainer)
-              .children()
-              .first()
-              .text()
-          ).toBe(`http://www.test.com/${charactersDecoded}`);
+          expect($(ev.clipboardContainer).children().first().text()).toBe(
+            `http://www.test.com/${charactersDecoded}`
+          );
         });
 
         it('decode url text should preserve encoded blank(%20) characters', () => {
@@ -224,12 +219,9 @@ describe('ImportManager', () => {
           const ev = createWWLinkClipboardEvent([$anchor]);
 
           em.emit('pasteBefore', ev);
-          expect(
-            $(ev.clipboardContainer)
-              .children()
-              .first()
-              .text()
-          ).toBe(`http://www.test.com/${charactersDecoded}%20${charactersDecoded}`);
+          expect($(ev.clipboardContainer).children().first().text()).toBe(
+            `http://www.test.com/${charactersDecoded}%20${charactersDecoded}`
+          );
         });
 
         it('decode url text should encode markdown characters', () => {
@@ -239,12 +231,9 @@ describe('ImportManager', () => {
           const ev = createWWLinkClipboardEvent([$anchor]);
 
           em.emit('pasteBefore', ev);
-          expect(
-            $(ev.clipboardContainer)
-              .children()
-              .first()
-              .attr('href')
-          ).toBe(`http://www.test.com/${markdownCharactersEncoded}`);
+          expect($(ev.clipboardContainer).children().first().attr('href')).toBe(
+            `http://www.test.com/${markdownCharactersEncoded}`
+          );
         });
       });
     });

@@ -163,7 +163,7 @@ class PopupAddImage extends LayerPopup {
   }
 
   _resetInputs() {
-    domUtils.findAll(this.el, 'input').forEach(input => {
+    domUtils.findAll(this.el, 'input').forEach((input) => {
       input.value = '';
     });
   }

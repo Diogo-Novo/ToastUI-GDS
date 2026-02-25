@@ -74,11 +74,7 @@ describe('LayerPopup', () => {
         textContent: 'text'
       });
 
-      expect(
-        $(popup.el)
-          .find(`.${CLASS_PREFIX}body`)
-          .text()
-      ).toEqual('text');
+      expect($(popup.el).find(`.${CLASS_PREFIX}body`).text()).toEqual('text');
     });
 
     it('has html from content option as html string', () => {
@@ -132,20 +128,12 @@ describe('LayerPopup', () => {
 
     it('should set content', () => {
       popup.setContent('text');
-      expect(
-        $(popup.el)
-          .find(`.${CLASS_PREFIX}body`)
-          .text()
-      ).toEqual('text');
+      expect($(popup.el).find(`.${CLASS_PREFIX}body`).text()).toEqual('text');
     });
     it('should replace previous content', () => {
       popup.setContent('text');
       popup.setContent('text');
-      expect(
-        $(popup.el)
-          .find(`.${CLASS_PREFIX}body`)
-          .text()
-      ).toEqual('text');
+      expect($(popup.el).find(`.${CLASS_PREFIX}body`).text()).toEqual('text');
     });
   });
 

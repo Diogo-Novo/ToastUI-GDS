@@ -41,7 +41,7 @@ cm.on('change', (editor, changeObj) => {
     text.join('\n')
   );
 
-  changed.forEach(result => {
+  changed.forEach((result) => {
     const { nodes, removedNodeRange } = result;
     const html = render(doc.getRootNode());
     htmlEl.innerText = html;
@@ -52,7 +52,7 @@ cm.on('change', (editor, changeObj) => {
       const [startNodeId, endNodeId] = removedNodeRange.id;
       const startEl = previewEl.querySelector(`[data-nodeid="${startNodeId}"]`);
       const endEl = previewEl.querySelector(`[data-nodeid="${endNodeId}"]`);
-      const newHtml = nodes.map(node => render(node)).join('');
+      const newHtml = nodes.map((node) => render(node)).join('');
 
       if (startEl) {
         startEl.insertAdjacentHTML('beforebegin', newHtml);

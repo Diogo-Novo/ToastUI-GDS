@@ -1,4 +1,4 @@
-import {Selector, t} from 'testcafe';
+import { Selector, t } from 'testcafe';
 
 class Toolbar {
   constructor() {
@@ -60,7 +60,7 @@ class Markdown {
 
   _addCustomDOMProperties() {
     this.preview = this.preview.addCustomDOMProperties({
-      innerHTML: el => el.innerHTML
+      innerHTML: (el) => el.innerHTML
     });
   }
 }
@@ -98,8 +98,7 @@ class Editor {
   }
 
   async fixWysiwygCaret() {
-    await t.click(this.toolbar.code)
-      .click(this.toolbar.code);
+    await t.click(this.toolbar.code).click(this.toolbar.code);
   }
 
   async showMarkdown() {

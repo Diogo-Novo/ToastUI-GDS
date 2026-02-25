@@ -477,7 +477,7 @@ export class Parser {
   }
 
   clearRefMaps() {
-    [this.refMap, this.refLinkCandidateMap, this.refDefCandidateMap].forEach(map => {
+    [this.refMap, this.refLinkCandidateMap, this.refDefCandidateMap].forEach((map) => {
       clearObj(map);
     });
   }

@@ -14,7 +14,6 @@ import { getOffsetHeight, setOffsetHeight, getOffsetTop, setOffsetTop } from './
 let blockedMarkdownScrollEvent = false;
 let latestScrollTop = null;
 
-/* eslint-disable no-return-assign */
 function getAndSaveOffsetInfo(node, mdNodeId, root) {
   const cachedHeight = getOffsetHeight(mdNodeId);
   const cachedTop = getOffsetTop(mdNodeId);
@@ -84,7 +83,7 @@ export function syncMarkdownScrollTopToPreview(editor, preview, targetNode) {
   blockedMarkdownScrollEvent = true;
 
   const callbackObjForSync = {
-    syncScrollTop: deltaScrollTop => cm.scrollTo(0, deltaScrollTop),
+    syncScrollTop: (deltaScrollTop) => cm.scrollTo(0, deltaScrollTop),
     releaseEventBlock: () => (blockedMarkdownScrollEvent = false)
   };
 

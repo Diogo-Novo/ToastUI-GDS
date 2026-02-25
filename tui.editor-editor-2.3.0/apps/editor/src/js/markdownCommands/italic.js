@@ -10,9 +10,9 @@ const boldRangeRegex = /^(\*{2}|_{2}).*\1$/;
 const italicRangeRegex = /^(\*|_).*\1$/;
 const italicContentRegex = /([^*_])[*_]([^*_]+)[*_]([^*_])/g;
 
-const isBoldItalic = t => boldItalicRangeRegex.test(t);
-const isBold = t => boldRangeRegex.test(t);
-const isItalic = t => italicRangeRegex.test(t);
+const isBoldItalic = (t) => boldItalicRangeRegex.test(t);
+const isBold = (t) => boldRangeRegex.test(t);
+const isItalic = (t) => italicRangeRegex.test(t);
 
 const italicSymbol = '*';
 const boldSymbol = '**';
@@ -27,11 +27,11 @@ const boldItalicLength = boldItalicSymbol.length;
  * @returns {string} - text eliminated all italic in the middle of it's content
  * @ignore
  */
-const removeItalicInsideText = function(text) {
+const removeItalicInsideText = function (text) {
   return text ? text.replace(italicContentRegex, '$1$2$3') : '';
 };
 
-const replaceText = function(doc, text, range) {
+const replaceText = function (doc, text, range) {
   // Check 3 cases when both text and expand text
   // case 1 : bold & italic (when expand 3 both front and end) => remove italic
   // case 2 : bold (when expand 2 both front and end) => append
@@ -39,26 +39,28 @@ const replaceText = function(doc, text, range) {
   const expandReplaceBind = expandReplace.bind(this, doc, range);
 
   return (
-    expandReplaceBind(boldItalicLength, isBoldItalic, t => removeSyntax(t, italicSymbol)) ||
-    expandReplaceBind(boldLength, isBold, t =>
+    expandReplaceBind(boldItalicLength, isBoldItalic, (t) => removeSyntax(t, italicSymbol)) ||
+    expandReplaceBind(boldLength, isBold, (t) =>
       appendSyntax(removeItalicInsideText(t), italicSymbol)
     ) ||
-    expandReplaceBind(italicLength, isItalic, t => removeSyntax(t, italicSymbol)) ||
-    replace(doc, text, isBoldItalic, t => removeSyntax(t, italicSymbol)) ||
-    replace(doc, text, isBold, t => appendSyntax(removeItalicInsideText(t), italicSymbol)) ||
-    replace(doc, text, isItalic, t => removeSyntax(t, italicSymbol))
+    expandReplaceBind(italicLength, isItalic, (t) => removeSyntax(t, italicSymbol)) ||
+    replace(doc, text, isBoldItalic, (t) => removeSyntax(t, italicSymbol)) ||
+    replace(doc, text, isBold, (t) => appendSyntax(removeItalicInsideText(t), italicSymbol)) ||
+    replace(doc, text, isItalic, (t) => removeSyntax(t, italicSymbol))
   );
 };
 
-const replaceEmptyText = function(doc, range) {
+const replaceEmptyText = function (doc, range) {
   // Check 3 cases when expand text
   // case 1 : bold & italic => remove italic
   // case 2 : bold => append
   // case 3 : italic => remove
   // if there is no match, make italic
   return (
-    expandReplace(doc, range, boldItalicLength, isBoldItalic, t => removeSyntax(t, italicSymbol)) ||
-    expandReplace(doc, range, boldLength, isBold, t => appendSyntax(t, italicSymbol)) ||
+    expandReplace(doc, range, boldItalicLength, isBoldItalic, (t) =>
+      removeSyntax(t, italicSymbol)
+    ) ||
+    expandReplace(doc, range, boldLength, isBold, (t) => appendSyntax(t, italicSymbol)) ||
     expandReplace(doc, range, italicLength, isItalic, () => '') ||
     doc.replaceSelection(`${italicSymbol}${italicSymbol}`, 'around')
   );

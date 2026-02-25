@@ -93,7 +93,7 @@ class CommandManager {
       this.exec(...args);
     });
 
-    this.base.eventManager.listen('keyMap', ev => {
+    this.base.eventManager.listen('keyMap', (ev) => {
       if (!this._options.useCommandShortcut) {
         return;
       }
@@ -144,7 +144,7 @@ class CommandManager {
  * @returns {*}
  * @static
  */
-CommandManager.command = function(type, props) {
+CommandManager.command = function (type, props) {
   const command = Command.factory(type, props.name, props.keyMap);
 
   extend(command, props);

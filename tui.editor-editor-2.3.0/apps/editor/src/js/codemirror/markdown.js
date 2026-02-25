@@ -6,10 +6,9 @@
 // based on https://github.com/codemirror/CodeMirror/blob/ff04f127ba8a736b97d06c505fb85d976e3f2980/mode/markdown/markdown.js
 import CodeMirror from 'codemirror';
 
-/*eslint-disable */
 CodeMirror.defineMode(
   'markdown',
-  function(cmCfg, modeCfg) {
+  function (cmCfg, modeCfg) {
     var htmlMode = CodeMirror.getMode(cmCfg, 'text/html');
     var htmlModeMissing = htmlMode.name == 'null';
 
@@ -771,7 +770,7 @@ CodeMirror.defineMode(
     };
 
     function getLinkHrefInside(endChar) {
-      return function(stream, state) {
+      return function (stream, state) {
         var ch = stream.next();
 
         if (ch === endChar) {
@@ -836,7 +835,7 @@ CodeMirror.defineMode(
     }
 
     var mode = {
-      startState: function() {
+      startState: function () {
         return {
           f: blockNormal,
 
@@ -872,7 +871,7 @@ CodeMirror.defineMode(
         };
       },
 
-      copyState: function(s) {
+      copyState: function (s) {
         return {
           f: s.f,
 
@@ -912,7 +911,7 @@ CodeMirror.defineMode(
         };
       },
 
-      token: function(stream, state) {
+      token: function (stream, state) {
         // Reset state.formatting
         state.formatting = false;
 
@@ -948,13 +947,13 @@ CodeMirror.defineMode(
         return state.f(stream, state);
       },
 
-      innerMode: function(state) {
+      innerMode: function (state) {
         if (state.block == htmlBlock) return { state: state.htmlState, mode: htmlMode };
         if (state.localState) return { state: state.localState, mode: state.localMode };
         return { state: state, mode: mode };
       },
 
-      indent: function(state, textAfter, line) {
+      indent: function (state, textAfter, line) {
         if (state.block == htmlBlock && htmlMode.indent)
           return htmlMode.indent(state.htmlState, textAfter, line);
         if (state.localState && state.localMode.indent)

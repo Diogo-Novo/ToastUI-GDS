@@ -29,7 +29,7 @@ describe('WwListManager', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -131,29 +131,11 @@ describe('WwListManager', () => {
       mgr._removeBranchListAll();
 
       expect(wwe.getBody().querySelectorAll('ul').length).toEqual(3);
+      expect($(wwe.getBody()).find('ul li ul').eq(0).children('li').length).toEqual(2);
       expect(
-        $(wwe.getBody())
-          .find('ul li ul')
-          .eq(0)
-          .children('li').length
-      ).toEqual(2);
-      expect(
-        $(wwe.getBody())
-          .find('ul li ul')
-          .eq(0)
-          .children('li')
-          .eq(0)
-          .children('div')
-          .text()
+        $(wwe.getBody()).find('ul li ul').eq(0).children('li').eq(0).children('div').text()
       ).toEqual('t2');
-      expect(
-        $(wwe.getBody())
-          .find('ul li ul')
-          .eq(0)
-          .children('li')
-          .eq(1)
-          .text()
-      ).toEqual('t5');
+      expect($(wwe.getBody()).find('ul li ul').eq(0).children('li').eq(1).text()).toEqual('t5');
     });
 
     it('Dont break to contentEditable root body', () => {
@@ -179,12 +161,7 @@ describe('WwListManager', () => {
       mgr._removeBranchListAll();
 
       expect(wwe.getBody().querySelectorAll('ul').length).toEqual(1);
-      expect(
-        $(wwe.getBody())
-          .find('ul li ul')
-          .eq(0)
-          .children('li').length
-      ).toEqual(0);
+      expect($(wwe.getBody()).find('ul li ul').eq(0).children('li').length).toEqual(0);
       expect($(wwe.getBody()).children('div').length).toEqual(1);
     });
 
@@ -207,29 +184,11 @@ describe('WwListManager', () => {
       mgr._removeBranchListAll();
 
       expect(wwe.getBody().querySelectorAll('ul').length).toEqual(2);
+      expect($(wwe.getBody()).find('ul li ul').eq(0).children('li').length).toEqual(2);
       expect(
-        $(wwe.getBody())
-          .find('ul li ul')
-          .eq(0)
-          .children('li').length
-      ).toEqual(2);
-      expect(
-        $(wwe.getBody())
-          .find('ul li ul')
-          .eq(0)
-          .children('li')
-          .eq(0)
-          .children('div')
-          .text()
+        $(wwe.getBody()).find('ul li ul').eq(0).children('li').eq(0).children('div').text()
       ).toEqual('t3');
-      expect(
-        $(wwe.getBody())
-          .find('ul li ul')
-          .eq(0)
-          .children('li')
-          .eq(1)
-          .text()
-      ).toEqual('t4');
+      expect($(wwe.getBody()).find('ul li ul').eq(0).children('li').eq(1).text()).toEqual('t4');
     });
   });
 

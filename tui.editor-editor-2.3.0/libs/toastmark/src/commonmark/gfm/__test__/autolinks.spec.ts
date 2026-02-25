@@ -167,7 +167,7 @@ describe('parseEmailLink', () => {
     pairs.forEach(([input, text]) => {
       expect(parseEmailLink(input)![0].text).toBe(text);
     });
-    invalids.forEach(input => {
+    invalids.forEach((input) => {
       expect(parseEmailLink(input)).toEqual([]);
     });
   });
@@ -191,7 +191,7 @@ describe('parseEmailLink', () => {
 describe('custom autolink parser', () => {
   const render = createRenderHTML();
   const reader = new Parser({
-    extendedAutolinks: content => {
+    extendedAutolinks: (content) => {
       const regex = /\d{3}/g;
       const result = [];
       let matched;

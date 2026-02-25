@@ -24,7 +24,7 @@ describe('WwHeadingManager', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -51,11 +51,6 @@ describe('WwHeadingManager', () => {
 
     mgr._addBrToEmptyBlock(range);
 
-    expect(
-      wwe
-        .getBody()
-        .querySelector('h1')
-        .querySelectorAll('br').length
-    ).toBe(expected);
+    expect(wwe.getBody().querySelector('h1').querySelectorAll('br').length).toBe(expected);
   });
 });

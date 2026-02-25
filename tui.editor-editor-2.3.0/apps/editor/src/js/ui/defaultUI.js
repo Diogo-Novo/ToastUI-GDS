@@ -145,7 +145,6 @@ class DefaultUI {
       externalContainer = document.getElementById(toolbarContainer);
 
       if (!externalContainer) {
-        // eslint-disable-next-line no-console
         console.warn(`Toolbar container "${toolbarContainer}" not found. Using default location.`);
         this._isExternalToolbar = false;
         this._initToolbar(eventManager, toolbarItems);
@@ -155,7 +154,6 @@ class DefaultUI {
     } else if (toolbarContainer instanceof HTMLElement) {
       externalContainer = toolbarContainer;
     } else {
-      // eslint-disable-next-line no-console
       console.warn('Invalid toolbarContainer option. Using default location.');
       this._isExternalToolbar = false;
       this._initToolbar(eventManager, toolbarItems);
@@ -200,7 +198,7 @@ class DefaultUI {
       modeSwitch.hide();
     }
 
-    modeSwitch.on('modeSwitched', type => this._editor.changeMode(type));
+    modeSwitch.on('modeSwitched', (type) => this._editor.changeMode(type));
   }
 
   _initMarkdownTab() {
@@ -216,7 +214,7 @@ class DefaultUI {
     this._markdownTabSection = this._toolbarElement.querySelector(`.${CLASS_MARKDOWN_TAB}`);
     this._markdownTabSection.appendChild(this._markdownTab.el);
 
-    this._markdownTab.on('itemClick', itemText => {
+    this._markdownTab.on('itemClick', (itemText) => {
       if (itemText === i18n.get('Preview')) {
         editor.eventManager.emit('previewNeedsRefresh');
         editor.eventManager.emit('changePreviewTabPreview');
@@ -288,7 +286,7 @@ class DefaultUI {
   }
 
   _initPopupTableUtils() {
-    this._editor.eventManager.listen('contextmenu', ev => {
+    this._editor.eventManager.listen('contextmenu', (ev) => {
       if (domUtils.parents(ev.data.target, '[contenteditable=true] table').length > 0) {
         ev.data.preventDefault();
         this._editor.eventManager.emit('openPopupTableUtils', ev.data);
@@ -354,7 +352,7 @@ class DefaultUI {
   getPopupTableUtils() {
     let tablePopup;
 
-    this._popups.forEach(popup => {
+    this._popups.forEach((popup) => {
       if (popup instanceof PopupTableUtils) {
         tablePopup = popup;
       }
@@ -392,7 +390,7 @@ class DefaultUI {
     this._markdownTab.remove();
     this._modeSwitch.remove();
     this._toolbar.destroy();
-    this._popups.forEach(popup => popup.remove());
+    this._popups.forEach((popup) => popup.remove());
     this._popups = [];
     tooltip.hide();
   }

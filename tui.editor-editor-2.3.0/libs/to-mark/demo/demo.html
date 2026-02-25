@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -9,13 +9,13 @@
   <body>
     <textarea id="inputHtml" rows="20" cols="100"></textarea><br />
     <button type="button" id="button">Convert!!</button>
-    <pre id="preview" style="width:600px;white-space: pre-wrap;"></pre>
+    <pre id="preview" style="width: 600px; white-space: pre-wrap"></pre>
     <script>
       var textArea = document.getElementById('inputHtml'),
         preview = document.getElementById('preview'),
         button = document.getElementById('button');
 
-      button.onclick = function() {
+      button.onclick = function () {
         var convertedText = toMark(textArea.value);
         preview.innerText = convertedText;
       };

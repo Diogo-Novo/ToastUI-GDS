@@ -48,7 +48,7 @@ class SquireExt extends Squire {
 
     const handler = handlers[0].bind(this);
 
-    handlers[0] = event => {
+    handlers[0] = (event) => {
       if (!event.defaultPrevented && !event.squirePrevented) {
         handler(event);
       }
@@ -56,7 +56,7 @@ class SquireExt extends Squire {
   }
 
   changeBlockFormat(srcCondition, targetTagName) {
-    this.modifyBlocks(frag => {
+    this.modifyBlocks((frag) => {
       let current,
         newFrag,
         newBlock,
@@ -80,7 +80,7 @@ class SquireExt extends Squire {
           current = current.firstChild;
         }
 
-        appendChidToNextBlock = node => {
+        appendChidToNextBlock = (node) => {
           nextBlock.appendChild(node);
         };
 
@@ -92,7 +92,7 @@ class SquireExt extends Squire {
             nextBlock = current.childNodes.item(0);
 
             // there is no next blocktag
-            // eslint-disable-next-line max-depth
+
             if (!domUtils.isElemNode(nextBlock) || current.childNodes.length > 1) {
               nextBlock = this.createDefaultBlock();
 
@@ -101,13 +101,12 @@ class SquireExt extends Squire {
               lastNodeOfNextBlock = nextBlock.lastChild;
 
               // remove unneccesary br
-              // eslint-disable-next-line max-depth
+
               if (lastNodeOfNextBlock && domUtils.getNodeName(lastNodeOfNextBlock) === 'BR') {
                 nextBlock.removeChild(lastNodeOfNextBlock);
               }
             }
 
-            // eslint-disable-next-line max-depth
             if (targetTagName) {
               newBlock = this.createElement(targetTagName, [nextBlock]);
             } else {
@@ -140,7 +139,7 @@ class SquireExt extends Squire {
   }
 
   changeBlockFormatTo(targetTagName) {
-    this.changeBlockFormat(tagName => FIND_BLOCK_TAGNAME_RX.test(tagName), targetTagName);
+    this.changeBlockFormat((tagName) => FIND_BLOCK_TAGNAME_RX.test(tagName), targetTagName);
   }
 
   getCaretPosition() {
@@ -346,7 +345,7 @@ class SquireExt extends Squire {
       'd'
     ];
 
-    keys.forEach(key => {
+    keys.forEach((key) => {
       this.setKeyHandler(`${meta}-${key}`, (editor, keyboardEvent) => {
         keyboardEvent.preventDefault();
       });

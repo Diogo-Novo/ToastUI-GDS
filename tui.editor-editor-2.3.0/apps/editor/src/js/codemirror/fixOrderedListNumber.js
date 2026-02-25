@@ -14,7 +14,7 @@ const listRE = /^(\s*)((\d+)([.)]\s(?:\[(?:x|\s)\]\s)?))(.*)/;
  * @returns {CodeMirror.Pass|null} - next command
  * @ignore
  */
-CodeMirror.commands.indentLessOrderedList = cm => {
+CodeMirror.commands.indentLessOrderedList = (cm) => {
   if (cm.getOption('disableInput')) {
     return CodeMirror.Pass;
   }
@@ -30,7 +30,7 @@ CodeMirror.commands.indentLessOrderedList = cm => {
  * @returns {CodeMirror.Pass|null} - next command
  * @ignore
  */
-CodeMirror.commands.fixOrderedListNumber = cm => {
+CodeMirror.commands.fixOrderedListNumber = (cm) => {
   if (cm.getOption('disableInput') || !!cm.state.isCursorInCodeBlock) {
     return CodeMirror.Pass;
   }

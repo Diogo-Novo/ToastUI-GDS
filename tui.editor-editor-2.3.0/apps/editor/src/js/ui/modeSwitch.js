@@ -135,7 +135,7 @@ class ModeSwitch extends UIController {
   }
 
   _initEvent() {
-    this._eventManager.listen('changeMode', type => {
+    this._eventManager.listen('changeMode', (type) => {
       if (this._type !== type) {
         this._type = type;
         this._setActiveButton(type);

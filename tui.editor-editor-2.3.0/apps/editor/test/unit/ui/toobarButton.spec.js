@@ -59,7 +59,7 @@ describe('ToolbarButton', () => {
         command: 'mycommand'
       });
 
-      button.on('command', command => {
+      button.on('command', (command) => {
         passedCommand = command;
       });
 
@@ -76,7 +76,7 @@ describe('ToolbarButton', () => {
         event: 'myevent'
       });
 
-      button.on('event', event => {
+      button.on('event', (event) => {
         passedEvent = event;
       });
 

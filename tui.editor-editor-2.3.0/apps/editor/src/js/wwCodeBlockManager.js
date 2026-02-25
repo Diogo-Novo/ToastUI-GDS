@@ -97,7 +97,7 @@ class WwCodeBlockManager {
       this.modifyCodeBlockForWysiwyg();
     });
 
-    this.eventManager.listen('wysiwygProcessHTMLText.codeblock', html =>
+    this.eventManager.listen('wysiwygProcessHTMLText.codeblock', (html) =>
       this._changePreToPreCode(html)
     );
   }
@@ -108,10 +108,7 @@ class WwCodeBlockManager {
    * @returns {DocumentFragment}
    */
   prepareToPasteOnCodeblock(nodes) {
-    const frag = this.wwe
-      .getEditor()
-      .getDocument()
-      .createDocumentFragment();
+    const frag = this.wwe.getEditor().getDocument().createDocumentFragment();
     let text = this.convertNodesToText(nodes);
 
     text = text.replace(/\n$/, '');
@@ -158,7 +155,7 @@ class WwCodeBlockManager {
     if (domUtils.getNodeName(blockNode) === 'PRE') {
       const attrs = blockNode.attributes;
 
-      forEachOwnProperties(attrs, attr => {
+      forEachOwnProperties(attrs, (attr) => {
         element.setAttribute(attr.name, attr.value);
       });
     }
@@ -188,7 +185,7 @@ class WwCodeBlockManager {
       node = this.wwe.getBody();
     }
 
-    domUtils.findAll(node, 'pre').forEach(pre => {
+    domUtils.findAll(node, 'pre').forEach((pre) => {
       const codeTag = pre.querySelector('code');
       let lang, numberOfBackticks;
 
@@ -199,7 +196,7 @@ class WwCodeBlockManager {
 
       // if this pre can have lines
       if (pre.children.length > 1) {
-        toArray(pre.children).forEach(childNode => {
+        toArray(pre.children).forEach((childNode) => {
           if (
             (childNode.nodeName === 'DIV' || childNode.nodeName === 'P') &&
             !childNode.querySelectorAll('br').length
@@ -402,7 +399,7 @@ class WwCodeBlockManager {
  * @ignore
  */
 function sanitizeHtmlCode(code) {
-  return code ? code.replace(/[<>&]/g, tag => tagEntities[tag] || tag) : '';
+  return code ? code.replace(/[<>&]/g, (tag) => tagEntities[tag] || tag) : '';
 }
 
 export default WwCodeBlockManager;

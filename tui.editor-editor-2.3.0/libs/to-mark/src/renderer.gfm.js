@@ -15,10 +15,10 @@ import basicRenderer from './renderer.basic';
  * @augments Renderer
  */
 export default Renderer.factory(basicRenderer, {
-  'DEL, S': function(node, subContent) {
+  'DEL, S': function (node, subContent) {
     return `~~${subContent}~~`;
   },
-  'PRE CODE': function(node, subContent) {
+  'PRE CODE': function (node, subContent) {
     let language = '';
     let numberOfBackticks = node.getAttribute('data-backticks');
 
@@ -36,10 +36,10 @@ export default Renderer.factory(basicRenderer, {
   PRE(node, subContent) {
     return subContent;
   },
-  'UL LI': function(node, subContent) {
+  'UL LI': function (node, subContent) {
     return basicRenderer.convert(node, makeTaskIfNeed(node, subContent));
   },
-  'OL LI': function(node, subContent) {
+  'OL LI': function (node, subContent) {
     return basicRenderer.convert(node, makeTaskIfNeed(node, subContent));
   },
 
@@ -47,15 +47,15 @@ export default Renderer.factory(basicRenderer, {
   TABLE(node, subContent) {
     return `\n\n${subContent}\n\n`;
   },
-  'TBODY, TFOOT': function(node, subContent) {
+  'TBODY, TFOOT': function (node, subContent) {
     return subContent;
   },
-  'TR TD, TR TH': function(node, subContent) {
+  'TR TD, TR TH': function (node, subContent) {
     subContent = subContent.replace(/(\r\n)|(\r)|(\n)/g, '');
 
     return ` ${subContent} |`;
   },
-  'TD BR, TH BR': function() {
+  'TD BR, TH BR': function () {
     return '<br>';
   },
   TR(node, subContent) {

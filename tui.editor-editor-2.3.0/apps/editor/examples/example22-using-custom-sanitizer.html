@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head lang="en">
     <meta charset="UTF-8" />
@@ -46,7 +46,7 @@
         previewStyle: 'vertical',
         height: '500px',
         initialValue: content,
-        customHTMLSanitizer: html => {
+        customHTMLSanitizer: (html) => {
           return DOMPurify.sanitize(html);
         }
       });

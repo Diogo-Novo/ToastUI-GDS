@@ -30,7 +30,7 @@ var always = function () {
     return true;
 };
 
-function TreeWalker ( root, nodeType, filter ) {
+function TreeWalker(root, nodeType, filter) {
     this.root = this.currentNode = root;
     this.nodeType = nodeType;
     this.filter = filter || always;
@@ -42,20 +42,21 @@ TreeWalker.prototype.nextNode = function () {
         nodeType = this.nodeType,
         filter = this.filter,
         node;
-    while ( true ) {
+    while (true) {
         node = current.firstChild;
-        while ( !node && current ) {
-            if ( current === root ) {
+        while (!node && current) {
+            if (current === root) {
                 break;
             }
             node = current.nextSibling;
-            if ( !node ) { current = current.parentNode; }
+            if (!node) {
+                current = current.parentNode;
+            }
         }
-        if ( !node ) {
+        if (!node) {
             return null;
         }
-        if ( ( typeToBitArray[ node.nodeType ] & nodeType ) &&
-                filter( node ) ) {
+        if (typeToBitArray[node.nodeType] & nodeType && filter(node)) {
             this.currentNode = node;
             return node;
         }
@@ -69,23 +70,22 @@ TreeWalker.prototype.previousNode = function () {
         nodeType = this.nodeType,
         filter = this.filter,
         node;
-    while ( true ) {
-        if ( current === root ) {
+    while (true) {
+        if (current === root) {
             return null;
         }
         node = current.previousSibling;
-        if ( node ) {
-            while ( current = node.lastChild ) {
+        if (node) {
+            while ((current = node.lastChild)) {
                 node = current;
             }
         } else {
             node = current.parentNode;
         }
-        if ( !node ) {
+        if (!node) {
             return null;
         }
-        if ( ( typeToBitArray[ node.nodeType ] & nodeType ) &&
-                filter( node ) ) {
+        if (typeToBitArray[node.nodeType] & nodeType && filter(node)) {
             this.currentNode = node;
             return node;
         }
@@ -100,20 +100,21 @@ TreeWalker.prototype.previousPONode = function () {
         nodeType = this.nodeType,
         filter = this.filter,
         node;
-    while ( true ) {
+    while (true) {
         node = current.lastChild;
-        while ( !node && current ) {
-            if ( current === root ) {
+        while (!node && current) {
+            if (current === root) {
                 break;
             }
             node = current.previousSibling;
-            if ( !node ) { current = current.parentNode; }
+            if (!node) {
+                current = current.parentNode;
+            }
         }
-        if ( !node ) {
+        if (!node) {
             return null;
         }
-        if ( ( typeToBitArray[ node.nodeType ] & nodeType ) &&
-                filter( node ) ) {
+        if (typeToBitArray[node.nodeType] & nodeType && filter(node)) {
             this.currentNode = node;
             return node;
         }

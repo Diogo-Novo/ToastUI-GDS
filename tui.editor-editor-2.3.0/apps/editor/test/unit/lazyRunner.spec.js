@@ -41,7 +41,7 @@ describe('LazyRunner', () => {
       const context = {
         data: null
       };
-      const callback = function() {
+      const callback = function () {
         this.data = 'myData';
       };
 
@@ -122,7 +122,7 @@ describe('LazyRunner', () => {
     it('if context are registred, fn is called with context', () => {
       let result;
 
-      const func = function() {
+      const func = function () {
         result = this.res;
       };
 
@@ -142,7 +142,7 @@ describe('LazyRunner', () => {
     it('Invoke with parameters', () => {
       let result;
 
-      const func = function(param) {
+      const func = function (param) {
         result = param;
       };
 

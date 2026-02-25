@@ -6,9 +6,9 @@ import $ from 'jquery';
 
 import htmlSanitizer from '@/htmlSanitizer';
 
-describe('htmlSanitizer', function() {
-  describe('tags', function() {
-    it('removes unnecessary tags', function() {
+describe('htmlSanitizer', function () {
+  describe('tags', function () {
+    it('removes unnecessary tags', function () {
       expect(htmlSanitizer('<script>alert("test");</script>', true)).toBe('');
       expect(htmlSanitizer('<embed>child alive</embed>', true)).toBe('child alive');
       expect(htmlSanitizer('<object>child die</object>', true)).toBe('');

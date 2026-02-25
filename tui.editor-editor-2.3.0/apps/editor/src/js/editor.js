@@ -201,7 +201,6 @@ class ToastUIEditor {
     };
 
     if (this.options.customConvertor) {
-      // eslint-disable-next-line new-cap
       this.convertor = new this.options.customConvertor(this.eventManager, rendererOptions);
     } else {
       this.convertor = new Convertor(this.eventManager, rendererOptions);
@@ -801,7 +800,7 @@ class ToastUIEditor {
    * @param {Array} languages - code lauguage list
    */
   setCodeBlockLanguages(languages = []) {
-    languages.forEach(lang => {
+    languages.forEach((lang) => {
       if (this.codeBlockLanguages.indexOf(lang) < 0) {
         this.codeBlockLanguages.push(lang);
       }

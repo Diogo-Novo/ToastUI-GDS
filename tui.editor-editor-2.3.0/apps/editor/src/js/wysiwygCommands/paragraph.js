@@ -28,14 +28,14 @@ const Paragraph = CommandManager.command(
       wwe.focus();
 
       if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
-        sq.modifyBlocks(fragment => {
+        sq.modifyBlocks((fragment) => {
           const newFragment = document.createDocumentFragment();
 
-          toArray(fragment.childNodes).forEach(block => {
+          toArray(fragment.childNodes).forEach((block) => {
             if (block.nodeName.match(/h\d/i)) {
               appendChildrenTo(newFragment, block.children);
             } else if (block.nodeName.match(/ul|ol/i)) {
-              domUtils.findAll(block, 'li').forEach(listItem => {
+              domUtils.findAll(block, 'li').forEach((listItem) => {
                 appendChildrenTo(newFragment, listItem.children);
               });
             } else {
@@ -56,7 +56,7 @@ const Paragraph = CommandManager.command(
  * @param {Array.<HTMLElement>} children - appending children
  */
 function appendChildrenTo(parent, children) {
-  toArray(children).forEach(child => {
+  toArray(children).forEach((child) => {
     parent.appendChild(child.cloneNode(true));
   });
 }

@@ -139,7 +139,7 @@ describe('Viewer', () => {
       document.body.appendChild(container);
     });
 
-    afterEach(done => {
+    afterEach((done) => {
       setTimeout(() => {
         viewer.remove();
         container.parentNode.removeChild(container);

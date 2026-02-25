@@ -36,10 +36,10 @@ class CodeBlockLanguagesCombo {
   }
 
   _initDOMEvent() {
-    this._inputLanguage.addEventListener('keydown', event => this._onKeyEvent(event));
+    this._inputLanguage.addEventListener('keydown', (event) => this._onKeyEvent(event));
     this._inputLanguage.addEventListener('focus', () => this._showPopupCodeBlockLanguages());
     this._inputLanguage.addEventListener('focusout', () => this._onFocusOut());
-    this._wrapper.addEventListener('mousedown', ev => {
+    this._wrapper.addEventListener('mousedown', (ev) => {
       if (ev.target !== this._wrapper) {
         return;
       }
@@ -49,7 +49,7 @@ class CodeBlockLanguagesCombo {
   }
 
   _initEvent() {
-    this._eventManager.listen('setCodeBlockLanguages', languages => {
+    this._eventManager.listen('setCodeBlockLanguages', (languages) => {
       this._languages = languages;
       if (languages && languages.length) {
         this._show();
@@ -76,7 +76,7 @@ class CodeBlockLanguagesCombo {
         top: clientRect.bottom
       },
       callback: {
-        selected: selectedLanguage => this._onLanguageSelectedFromList(selectedLanguage),
+        selected: (selectedLanguage) => this._onLanguageSelectedFromList(selectedLanguage),
         dismissed: () => {
           this._popupCodeBlockLanguages = null;
         }

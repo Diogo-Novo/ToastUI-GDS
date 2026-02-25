@@ -61,7 +61,7 @@ function setAlignAttributeToTableCells(table, alignDirection, selectionInformati
   const trs = domUtils.findAll(table, 'tr');
   const columnLength = trs.length ? trs[0].querySelectorAll('td,th').length : 0;
 
-  trs.forEach(tr => {
+  trs.forEach((tr) => {
     const cells = toArray(domUtils.children(tr, 'td,th'));
 
     cells.forEach((cell, index) => {

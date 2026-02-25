@@ -29,14 +29,14 @@ function pasteClipboardEvent(text, html, fileType) {
   if (text) {
     items.push({
       type: 'text/plain',
-      getAsString: cb => cb(text)
+      getAsString: (cb) => cb(text)
     });
     types.push('text/plain');
   }
   if (html) {
     items.push({
       type: 'text/html',
-      getAsString: cb => cb(html)
+      getAsString: (cb) => cb(html)
     });
     types.push('text/html');
   }
@@ -64,7 +64,7 @@ describe('Clipboard', () => {
     pending();
   }
 
-  beforeEach(done => {
+  beforeEach((done) => {
     const container = document.createElement('div');
 
     document.body.appendChild(container);
@@ -77,7 +77,7 @@ describe('Clipboard', () => {
     setTimeout(done, 0);
   });
 
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       $('body').empty();
       done();
@@ -124,7 +124,7 @@ describe('Clipboard', () => {
         expect(se.getHTML()).toEqual(outputHtml);
       });
 
-      it('danggling TD should become a table', done => {
+      it('danggling TD should become a table', (done) => {
         const inputHtml = '<td>table</td>';
 
         se.fireEvent('paste', pasteClipboardEvent(null, inputHtml));

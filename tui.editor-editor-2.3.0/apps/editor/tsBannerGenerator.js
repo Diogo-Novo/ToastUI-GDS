@@ -1,9 +1,8 @@
-/*eslint-disable*/
 const fs = require('fs');
 const path = require('path');
 const pkg = require('./package.json');
 
-const tsVersion = (/[0-9.]+/).exec(pkg.devDependencies.typescript)[0];
+const tsVersion = /[0-9.]+/.exec(pkg.devDependencies.typescript)[0];
 const declareFilePath = path.join(__dirname, 'index.d.ts');
 const TS_BANNER = [
   '// Type definitions for TOAST UI Editor v' + pkg.version,

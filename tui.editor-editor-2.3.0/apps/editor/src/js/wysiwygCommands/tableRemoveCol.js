@@ -109,7 +109,7 @@ function removeColByCell(cell) {
   if (table) {
     const index = inArray(cell, toArray(cell.parentNode.childNodes));
 
-    domUtils.findAll(table, 'tr').forEach(tr => {
+    domUtils.findAll(table, 'tr').forEach((tr) => {
       const td = tr.children[index];
 
       domUtils.remove(td);

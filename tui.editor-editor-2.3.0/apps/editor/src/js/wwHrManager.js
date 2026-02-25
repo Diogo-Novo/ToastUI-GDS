@@ -65,7 +65,7 @@ class WwHrManager {
   _changeHRForWysiwyg() {
     const editorContentBody = this.wwe.getBody();
 
-    domUtils.findAll(editorContentBody, 'hr').forEach(hrNode => {
+    domUtils.findAll(editorContentBody, 'hr').forEach((hrNode) => {
       const { parentNode } = hrNode;
 
       parentNode.replaceChild(domUtils.createHorizontalRule(), hrNode);

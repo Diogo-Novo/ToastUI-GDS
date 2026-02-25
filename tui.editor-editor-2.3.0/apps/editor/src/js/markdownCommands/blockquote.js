@@ -91,7 +91,7 @@ const Blockquote = CommandManager.command(
      * @private
      */
     _addBlockquote(textArr) {
-      return textArr.map(text => `> ${text}`);
+      return textArr.map((text) => `> ${text}`);
     },
 
     /**
@@ -101,7 +101,7 @@ const Blockquote = CommandManager.command(
      * @private
      */
     _removeBlockquote(textArr) {
-      return textArr.map(text => text.replace(BlockquoteRegex, ''));
+      return textArr.map((text) => text.replace(BlockquoteRegex, ''));
     },
 
     /**

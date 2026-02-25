@@ -16,7 +16,7 @@ function excelTableParser(content) {
   let data = [];
   let colLength = 0;
 
-  rows.forEach(row => {
+  rows.forEach((row) => {
     const cols = row.split('\t');
 
     if (cols) {

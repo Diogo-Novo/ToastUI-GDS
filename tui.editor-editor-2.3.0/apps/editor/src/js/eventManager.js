@@ -129,7 +129,7 @@ class EventManager {
     let results;
 
     if (eventHandlers) {
-      forEachOwnProperties(eventHandlers, handler => {
+      forEachOwnProperties(eventHandlers, (handler) => {
         const result = handler(...args);
 
         if (!isUndefined(result)) {
@@ -153,7 +153,7 @@ class EventManager {
     const eventHandlers = this.events.get(type);
 
     if (eventHandlers) {
-      forEachOwnProperties(eventHandlers, handler => {
+      forEachOwnProperties(eventHandlers, (handler) => {
         const result = handler(...args);
 
         if (!isFalsy(result)) {
@@ -253,7 +253,7 @@ class EventManager {
       return;
     }
 
-    eventHandlers.map(handler => {
+    eventHandlers.map((handler) => {
       if (handler.namespace !== namespace) {
         handlersToSurvive.push(handler);
       }

@@ -106,7 +106,7 @@ class WysiwygEditor {
    * @private
    */
   _initEvent() {
-    this.eventManager.listen('wysiwygKeyEvent', ev =>
+    this.eventManager.listen('wysiwygKeyEvent', (ev) =>
       this._runKeyEventHandlers(ev.data, ev.keyMap)
     );
     this.eventManager.listen('wysiwygRangeChangeAfter', () => this.scrollIntoCursor());
@@ -130,7 +130,7 @@ class WysiwygEditor {
       keyMap = [keyMap];
     }
 
-    keyMap.forEach(key => {
+    keyMap.forEach((key) => {
       if (!this._keyEventHandlers[key]) {
         this._keyEventHandlers[key] = [];
       }
@@ -152,7 +152,7 @@ class WysiwygEditor {
     const handlers = this._keyEventHandlers[keyMap];
 
     if (handlers) {
-      this._keyEventHandlers[keyMap] = handlers.filter(_handler => _handler !== handler);
+      this._keyEventHandlers[keyMap] = handlers.filter((_handler) => _handler !== handler);
     }
   }
 
@@ -169,7 +169,7 @@ class WysiwygEditor {
     handlers = this._keyEventHandlers.DEFAULT;
 
     if (handlers) {
-      forEachArray(handlers, handler => {
+      forEachArray(handlers, (handler) => {
         isNeedNext = handler(event, range, keyMap);
 
         return isNeedNext;
@@ -179,7 +179,7 @@ class WysiwygEditor {
     handlers = this._keyEventHandlers[keyMap];
 
     if (handlers && isNeedNext !== false) {
-      forEachArray(handlers, handler => handler(event, range, keyMap));
+      forEachArray(handlers, (handler) => handler(event, range, keyMap));
     }
   }
 
@@ -191,7 +191,7 @@ class WysiwygEditor {
     const squire = this.getEditor();
     let isNeedFirePostProcessForRangeChange = false;
 
-    squire.addEventListener('copy', clipboardEvent => {
+    squire.addEventListener('copy', (clipboardEvent) => {
       this.eventManager.emit('copy', {
         source: 'wysiwyg',
         data: clipboardEvent
@@ -208,7 +208,7 @@ class WysiwygEditor {
       })();
     });
 
-    squire.addEventListener(browser.msie ? 'beforecut' : 'cut', clipboardEvent => {
+    squire.addEventListener(browser.msie ? 'beforecut' : 'cut', (clipboardEvent) => {
       this.eventManager.emit('cut', {
         source: 'wysiwyg',
         data: clipboardEvent
@@ -225,20 +225,20 @@ class WysiwygEditor {
       })();
     });
 
-    squire.addEventListener(browser.msie ? 'beforepaste' : 'paste', clipboardEvent => {
+    squire.addEventListener(browser.msie ? 'beforepaste' : 'paste', (clipboardEvent) => {
       this.eventManager.emit('paste', {
         source: 'wysiwyg',
         data: clipboardEvent
       });
     });
 
-    squire.addEventListener('dragover', ev => {
+    squire.addEventListener('dragover', (ev) => {
       ev.preventDefault();
 
       return false;
     });
 
-    squire.addEventListener('drop', ev => {
+    squire.addEventListener('drop', (ev) => {
       ev.preventDefault();
 
       this.eventManager.emit('drop', {
@@ -273,7 +273,7 @@ class WysiwygEditor {
       }, 0)
     );
 
-    squire.addEventListener('keydown', keyboardEvent => {
+    squire.addEventListener('keydown', (keyboardEvent) => {
       const range = this.getEditor().getSelection();
 
       if (!range.collapsed) {
@@ -289,7 +289,7 @@ class WysiwygEditor {
     });
 
     if (browser.firefox) {
-      squire.addEventListener('keypress', keyboardEvent => {
+      squire.addEventListener('keypress', (keyboardEvent) => {
         const { keyCode } = keyboardEvent;
 
         if (keyCode === 13 || keyCode === 9) {
@@ -337,7 +337,7 @@ class WysiwygEditor {
       });
     }
 
-    squire.addEventListener('keyup', keyboardEvent => {
+    squire.addEventListener('keyup', (keyboardEvent) => {
       if (isNeedFirePostProcessForRangeChange) {
         this.debouncedPostProcessForChange();
         isNeedFirePostProcessForRangeChange = false;
@@ -349,49 +349,49 @@ class WysiwygEditor {
       });
     });
 
-    on(this.editorContainerEl, 'scroll', ev => {
+    on(this.editorContainerEl, 'scroll', (ev) => {
       this.eventManager.emit('scroll', {
         source: 'wysiwyg',
         data: ev
       });
     });
 
-    squire.addEventListener('click', ev => {
+    squire.addEventListener('click', (ev) => {
       this.eventManager.emit('click', {
         source: 'wysiwyg',
         data: ev
       });
     });
 
-    squire.addEventListener('mousedown', ev => {
+    squire.addEventListener('mousedown', (ev) => {
       this.eventManager.emit('mousedown', {
         source: 'wysiwyg',
         data: ev
       });
     });
 
-    squire.addEventListener('mouseover', ev => {
+    squire.addEventListener('mouseover', (ev) => {
       this.eventManager.emit('mouseover', {
         source: 'wysiwyg',
         data: ev
       });
     });
 
-    squire.addEventListener('mouseout', ev => {
+    squire.addEventListener('mouseout', (ev) => {
       this.eventManager.emit('mouseout', {
         source: 'wysiwyg',
         data: ev
       });
     });
 
-    squire.addEventListener('mouseup', ev => {
+    squire.addEventListener('mouseup', (ev) => {
       this.eventManager.emit('mouseup', {
         source: 'wysiwyg',
         data: ev
       });
     });
 
-    squire.addEventListener('contextmenu', ev => {
+    squire.addEventListener('contextmenu', (ev) => {
       this.eventManager.emit('contextmenu', {
         source: 'wysiwyg',
         data: ev
@@ -412,7 +412,7 @@ class WysiwygEditor {
     });
 
     // Toolbar status active/inactive
-    squire.addEventListener('pathChange', data => {
+    squire.addEventListener('pathChange', (data) => {
       const state = {
         strong: /(^B>|>B$|>B>|^B$|STRONG)/.test(data.path),
         emph: /(>I|>EM|^I$|^EM$)/.test(data.path),
@@ -431,7 +431,7 @@ class WysiwygEditor {
       this.eventManager.emit('stateChange', state);
     });
 
-    squire.addEventListener('willPaste', ev => {
+    squire.addEventListener('willPaste', (ev) => {
       // ev has 'fragment' when event occurs from 'insertHTML' of squire
       // ev has 'text' when event occurs from 'insertPlainText' of squire
       if (ev.fragment) {
@@ -499,7 +499,7 @@ class WysiwygEditor {
       this.defer(() => this.scrollIntoCursor());
     });
 
-    this.addKeyEventHandler('TAB', ev => {
+    this.addKeyEventHandler('TAB', (ev) => {
       const sq = this.getEditor();
       const range = sq.getSelection();
       const isAbleToInput4Spaces =
@@ -562,11 +562,13 @@ class WysiwygEditor {
   }
 
   _wrapDefaultBlockToOrphanTexts() {
-    const textNodes = toArray(this.getBody().childNodes).filter(node => domUtils.isTextNode(node));
+    const textNodes = toArray(this.getBody().childNodes).filter((node) =>
+      domUtils.isTextNode(node)
+    );
 
     domUtils.getAllTextNode(this.getBody());
 
-    textNodes.forEach(node => {
+    textNodes.forEach((node) => {
       if (node.nextSibling && node.nextSibling.tagName === 'BR') {
         domUtils.remove(node.nextSibling);
       }
@@ -634,9 +636,11 @@ class WysiwygEditor {
   _joinSplitedTextNodes() {
     let prevNode, lastGroup;
     const nodesToRemove = [];
-    const textNodes = toArray(this.getBody().childNodes).filter(node => domUtils.isTextNode(node));
+    const textNodes = toArray(this.getBody().childNodes).filter((node) =>
+      domUtils.isTextNode(node)
+    );
 
-    textNodes.forEach(node => {
+    textNodes.forEach((node) => {
       if (prevNode === node.previousSibling) {
         lastGroup.nodeValue += node.nodeValue;
         nodesToRemove.push(node);
@@ -708,7 +712,7 @@ class WysiwygEditor {
    * Make empty block to current selection
    */
   makeEmptyBlockCurrentSelection() {
-    this.getEditor().modifyBlocks(frag => {
+    this.getEditor().modifyBlocks((frag) => {
       if (!frag.textContent) {
         frag = this.getEditor().createDefaultBlock();
       }
@@ -789,9 +793,7 @@ class WysiwygEditor {
    */
   setPlaceholder(placeholder) {
     if (placeholder) {
-      this.getEditor()
-        .getRoot()
-        .setAttribute('data-placeholder', placeholder);
+      this.getEditor().getRoot().setAttribute('data-placeholder', placeholder);
     }
   }
 
@@ -970,9 +972,7 @@ class WysiwygEditor {
    * @returns {boolean} Match result
    */
   hasFormatWithRx(rx) {
-    return this.getEditor()
-      .getPath()
-      .match(rx);
+    return this.getEditor().getPath().match(rx);
   }
 
   /**
@@ -1016,7 +1016,7 @@ class WysiwygEditor {
    */
   unwrapBlockTag(condition) {
     if (!condition) {
-      condition = tagName => FIND_BLOCK_TAGNAME_RX.test(tagName);
+      condition = (tagName) => FIND_BLOCK_TAGNAME_RX.test(tagName);
     }
 
     this.getEditor().changeBlockFormat(condition);
@@ -1110,9 +1110,7 @@ class WysiwygEditor {
    * @returns {Range}
    */
   getRange() {
-    return this.getEditor()
-      .getSelection()
-      .cloneRange();
+    return this.getEditor().getSelection().cloneRange();
   }
 
   /**

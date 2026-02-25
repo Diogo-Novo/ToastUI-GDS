@@ -31,7 +31,7 @@ class ImportManager {
     const decodedURIs = [];
     let decodedURI;
 
-    forEachArray(uris, uri => {
+    forEachArray(uris, (uri) => {
       try {
         decodedURI = decodeURIComponent(uri);
         decodedURI = decodedURI.replace(/ /g, '%20');
@@ -82,13 +82,13 @@ class ImportManager {
    * @private
    */
   _initEvent() {
-    this.eventManager.listen('drop', ev => {
+    this.eventManager.listen('drop', (ev) => {
       const items = ev.data.dataTransfer && ev.data.dataTransfer.files;
 
       this._processBlobItems(items, ev.data);
     });
 
-    this.eventManager.listen('willPaste', ev => {
+    this.eventManager.listen('willPaste', (ev) => {
       // IE has no interface to handle clipboard image. #976
       const { fragment } = ev.data;
       const descendant = fragment.querySelectorAll('*');
@@ -108,11 +108,11 @@ class ImportManager {
       this._emitAddImageBlobHook(blob, 'paste');
     });
 
-    this.eventManager.listen('paste', ev => {
+    this.eventManager.listen('paste', (ev) => {
       this._processClipboard(ev.data);
     });
 
-    this.eventManager.listen('pasteBefore', ev => {
+    this.eventManager.listen('pasteBefore', (ev) => {
       this._decodeURL(ev);
     });
   }
@@ -125,7 +125,7 @@ class ImportManager {
     this.eventManager.listen('addImageBlobHook', (blob, callback) => {
       const reader = new FileReader();
 
-      reader.onload = event => {
+      reader.onload = (event) => {
         callback(event.target.result);
       };
 
@@ -205,7 +205,7 @@ class ImportManager {
    */
   _processBlobItems(items, evData) {
     if (items) {
-      forEachArray(items, item => {
+      forEachArray(items, (item) => {
         if (item.type.indexOf('image') !== -1) {
           evData.preventDefault();
           evData.stopPropagation();

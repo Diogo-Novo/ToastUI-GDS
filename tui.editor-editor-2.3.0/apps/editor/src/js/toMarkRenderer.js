@@ -39,21 +39,21 @@ function convertEmphasis(node, subContent, delimiter) {
 }
 
 export default toMark.Renderer.factory(toMark.gfmRenderer, {
-  'EM, I': function(node, subContent) {
+  'EM, I': function (node, subContent) {
     if (this.isEmptyText(subContent)) {
       return '';
     }
 
     return convertEmphasis(node, subContent, '*');
   },
-  'STRONG, B': function(node, subContent) {
+  'STRONG, B': function (node, subContent) {
     if (this.isEmptyText(subContent)) {
       return '';
     }
 
     return convertEmphasis(node, subContent, '**');
   },
-  'DEL, S': function(node, subContent) {
+  'DEL, S': function (node, subContent) {
     if (this.isEmptyText(subContent)) {
       return '';
     }

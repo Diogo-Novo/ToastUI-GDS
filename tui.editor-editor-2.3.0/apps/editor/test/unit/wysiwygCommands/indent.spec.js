@@ -36,7 +36,7 @@ describe('Indent', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -44,10 +44,7 @@ describe('Indent', () => {
   });
 
   it('success when it not first li.', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     range.setStart(wwe.getBody().querySelectorAll('li')[1].firstChild, 0);
     range.collapse(true);
@@ -61,10 +58,7 @@ describe('Indent', () => {
   });
 
   it('fail when it does not have previous li.', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     range.setStart(wwe.getBody().querySelectorAll('li')[0].firstChild, 0);
     range.collapse(true);
@@ -78,10 +72,7 @@ describe('Indent', () => {
 
   describe('should indent when cursor', () => {
     it('at startOffset 0.', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody().querySelectorAll('li')[1].firstChild, 0);
       range.collapse(true);
@@ -95,10 +86,7 @@ describe('Indent', () => {
     });
 
     it('at startOffset 1.', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody().querySelectorAll('li')[1].firstChild, 1);
       range.collapse(true);
@@ -113,10 +101,7 @@ describe('Indent', () => {
   });
 
   it('should indent ordinary list', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.getBody().innerHTML = [
       '<ul>',
@@ -145,10 +130,7 @@ describe('Indent', () => {
   });
 
   it('should merge prev/next list after outdent', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.getBody().innerHTML = [
       '<ul>',

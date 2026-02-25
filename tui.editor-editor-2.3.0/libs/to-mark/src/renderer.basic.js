@@ -36,10 +36,10 @@ export default Renderer.factory({
 
     return this.getSpaceControlled(managedText, node);
   },
-  'CODE TEXT_NODE': function(node) {
+  'CODE TEXT_NODE': function (node) {
     return node.nodeValue;
   },
-  'EM, I': function(node, subContent) {
+  'EM, I': function (node, subContent) {
     let res = '';
 
     if (!this.isEmptyText(subContent)) {
@@ -48,7 +48,7 @@ export default Renderer.factory({
 
     return res;
   },
-  'STRONG, B': function(node, subContent) {
+  'STRONG, B': function (node, subContent) {
     let res = '';
 
     if (!this.isEmptyText(subContent)) {
@@ -120,10 +120,10 @@ export default Renderer.factory({
 
     return res;
   },
-  'BLOCKQUOTE P': function(node, subContent) {
+  'BLOCKQUOTE P': function (node, subContent) {
     return subContent;
   },
-  'LI P': function(node, subContent) {
+  'LI P': function (node, subContent) {
     let res = '';
 
     if (!this.isEmptyText(subContent)) {
@@ -134,7 +134,7 @@ export default Renderer.factory({
   },
 
   // Headings
-  'H1, H2, H3, H4, H5, H6': function(node, subContent) {
+  'H1, H2, H3, H4, H5, H6': function (node, subContent) {
     let res = '';
     let headingNumber = parseInt(node.tagName.charAt(1), 10);
 
@@ -148,17 +148,17 @@ export default Renderer.factory({
 
     return `\n\n${res}\n\n`;
   },
-  'LI H1, LI H2, LI H3, LI H4, LI H5, LI H6': function(node, subContent) {
+  'LI H1, LI H2, LI H3, LI H4, LI H5, LI H6': function (node, subContent) {
     const headingNumber = parseInt(node.tagName.charAt(1), 10);
 
     return `${Array(headingNumber + 1).join('#')} ${subContent}`;
   },
 
   // List
-  'UL, OL': function(node, subContent) {
+  'UL, OL': function (node, subContent) {
     return `\n\n${subContent}\n\n`;
   },
-  'LI OL, LI UL': function(node, subContent) {
+  'LI OL, LI UL': function (node, subContent) {
     let processedSubContent;
 
     // remove last br of li
@@ -171,7 +171,7 @@ export default Renderer.factory({
 
     return `\n${res}`;
   },
-  'UL LI': function(node, subContent) {
+  'UL LI': function (node, subContent) {
     let res = '';
 
     // convert multiple brs to one br
@@ -185,8 +185,8 @@ export default Renderer.factory({
 
     return res;
   },
-  // eslint-disable-next-line complexity
-  'OL LI': function(node, subContent) {
+
+  'OL LI': function (node, subContent) {
     let res = '';
     let liCounter = parseInt(node.parentNode.getAttribute('start') || 1, 10);
 
@@ -227,7 +227,7 @@ export default Renderer.factory({
   },
 
   // Code Block
-  'PRE CODE': function(node, subContent) {
+  'PRE CODE': function (node, subContent) {
     const lastNremoved = subContent.replace(FIND_LAST_RETURN_RX, '');
     const res = lastNremoved.replace(START_OF_LINES_RX, '    ');
 

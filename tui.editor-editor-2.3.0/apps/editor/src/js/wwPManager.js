@@ -30,7 +30,7 @@ class WwPManager {
    * @private
    */
   _initEvent() {
-    this.eventManager.listen('wysiwygSetValueBefore', html => this._splitPtagContentLines(html));
+    this.eventManager.listen('wysiwygSetValueBefore', (html) => this._splitPtagContentLines(html));
 
     this.eventManager.listen('wysiwygSetValueAfter', () => {
       this._ensurePtagContentWrappedWithDiv();
@@ -48,7 +48,7 @@ class WwPManager {
     if (html) {
       const wrapper = domUtils.createElementWith(`<div>${html}</div>`);
 
-      domUtils.findAll(wrapper, 'p').forEach(para => {
+      domUtils.findAll(wrapper, 'p').forEach((para) => {
         const { attributes, nextElementSibling } = para;
         const content = para.innerHTML;
         const lines = content.split(/<br>/gi);
@@ -63,7 +63,7 @@ class WwPManager {
           if (line) {
             const block = document.createElement('div');
 
-            Object.keys(attributes).forEach(key => {
+            Object.keys(attributes).forEach((key) => {
               const { name, value } = attributes[key];
 
               block.setAttribute(name, value);
@@ -97,7 +97,7 @@ class WwPManager {
    * @private
    */
   _ensurePtagContentWrappedWithDiv() {
-    domUtils.findAll(this.wwe.getBody(), 'p').forEach(node => {
+    domUtils.findAll(this.wwe.getBody(), 'p').forEach((node) => {
       if (!node.querySelectorAll('div').length) {
         domUtils.wrapInner(node, 'div');
       }
@@ -113,7 +113,7 @@ class WwPManager {
    * @private
    */
   _unwrapPtags() {
-    domUtils.findAll(this.wwe.getBody(), 'div').forEach(node => {
+    domUtils.findAll(this.wwe.getBody(), 'div').forEach((node) => {
       const parent = node.parentNode;
 
       if (parent.tagName === 'P') {

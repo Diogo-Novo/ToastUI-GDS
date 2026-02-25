@@ -43,7 +43,7 @@ const HR = CommandManager.command(
           domUtils.append(wwe.getBody(), nextBlockNode);
         }
 
-        sq.modifyBlocks(frag => {
+        sq.modifyBlocks((frag) => {
           frag.appendChild(hr);
 
           return frag;

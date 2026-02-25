@@ -93,7 +93,7 @@ function addColToCellAfter(cell, numberOfCols = 1) {
     const index = inArray(cell, toArray(cell.parentNode.childNodes));
     let cellToAdd;
 
-    domUtils.findAll(table, 'tr').forEach(tr => {
+    domUtils.findAll(table, 'tr').forEach((tr) => {
       const isTBody = domUtils.getNodeName(tr.parentNode) === 'TBODY';
       const isMSIE = browser.msie;
       const currentCell = tr.children[index];

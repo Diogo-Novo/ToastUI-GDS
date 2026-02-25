@@ -33,20 +33,22 @@ class WwClipboardManager {
    * initialize
    */
   init() {
-    this.wwe.eventManager.listen('willPaste', ev =>
+    this.wwe.eventManager.listen('willPaste', (ev) =>
       this._executeHandler(this._onWillPaste.bind(this), ev)
     );
-    this.wwe.eventManager.listen('copy', ev =>
+    this.wwe.eventManager.listen('copy', (ev) =>
       this._executeHandler(this._onCopyCut.bind(this), ev)
     );
-    this.wwe.eventManager.listen('copyAfter', ev =>
+    this.wwe.eventManager.listen('copyAfter', (ev) =>
       this._executeHandler(this._onCopyAfter.bind(this), ev)
     );
-    this.wwe.eventManager.listen('cut', ev => this._executeHandler(this._onCopyCut.bind(this), ev));
-    this.wwe.eventManager.listen('cutAfter', ev =>
+    this.wwe.eventManager.listen('cut', (ev) =>
+      this._executeHandler(this._onCopyCut.bind(this), ev)
+    );
+    this.wwe.eventManager.listen('cutAfter', (ev) =>
       this._executeHandler(this._onCutAfter.bind(this), ev)
     );
-    this.wwe.eventManager.listen('paste', ev =>
+    this.wwe.eventManager.listen('paste', (ev) =>
       this._executeHandler(this._onPasteIntoTable.bind(this), ev)
     );
   }
@@ -99,10 +101,7 @@ class WwClipboardManager {
   }
 
   _onCopyAfter() {
-    this.wwe
-      .getEditor()
-      .getBody()
-      .focus();
+    this.wwe.getEditor().getBody().focus();
     this._clearClipboardArea();
   }
 
@@ -141,7 +140,7 @@ class WwClipboardManager {
   _replaceNewLineToBr(node) {
     const textNodes = domUtils.getAllTextNode(node);
 
-    textNodes.forEach(textNode => {
+    textNodes.forEach((textNode) => {
       if (/\n/.test(textNode.nodeValue)) {
         textNode.parentNode.innerHTML = textNode.nodeValue.replace(/\n/g, '<br>');
       }
@@ -159,7 +158,7 @@ class WwClipboardManager {
 
     pasteData.fragment = document.createDocumentFragment();
 
-    toArray(clipboardContainer.childNodes).forEach(element => {
+    toArray(clipboardContainer.childNodes).forEach((element) => {
       if (domUtils.getNodeName(element) === 'DIV') {
         this._replaceNewLineToBr(element);
       }
@@ -238,7 +237,7 @@ class WwClipboardManager {
     // clipboard data from ms word tend to have unneccesary font tags
     const children = domUtils.children(clipboardContainer, 'font');
 
-    children.forEach(element => {
+    children.forEach((element) => {
       if (!element.textContent.trim()) {
         domUtils.remove(element);
       }
@@ -264,7 +263,7 @@ class WwClipboardManager {
    * @private
    */
   _preProcessPtag(node) {
-    domUtils.findAll(node, 'p').forEach(pTag => {
+    domUtils.findAll(node, 'p').forEach((pTag) => {
       if (pTag.lastChild && pTag.lastChild.nodeName !== 'BR') {
         pTag.appendChild(document.createElement('br'));
       }

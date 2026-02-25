@@ -21,9 +21,7 @@ declare namespace toastui {
     hreflang: string;
     type: string;
   }>;
-  type AutolinkParser = (
-    content: string
-  ) => {
+  type AutolinkParser = (content: string) => {
     url: string;
     text: string;
     range: [number, number];
@@ -144,7 +142,10 @@ declare namespace toastui {
     origin?: () => ReturnType<CustomHTMLRenderer>;
   }
 
-  export type CustomHTMLRenderer = (node: MdNode, context: Context) => HTMLToken | HTMLToken[] | null;
+  export type CustomHTMLRenderer = (
+    node: MdNode,
+    context: Context
+  ) => HTMLToken | HTMLToken[] | null;
 
   type CustomHTMLRendererMap = Partial<Record<NodeType, CustomHTMLRenderer>>;
   // Toastmark custom renderer type end
@@ -528,9 +529,10 @@ declare namespace toastui {
 
     public pasteClipboardData(clipboardTable: Node): boolean;
 
-    public prepareToTableCellStuffing(
-      trs: HTMLElement
-    ): { maximumCellLength: number; needTableCellStuffingAid: boolean };
+    public prepareToTableCellStuffing(trs: HTMLElement): {
+      maximumCellLength: number;
+      needTableCellStuffingAid: boolean;
+    };
 
     public resetLastCellNode(): void;
 

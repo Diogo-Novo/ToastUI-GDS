@@ -57,10 +57,7 @@ const CodeBlock = CommandManager.command(
  * @param {WysiwygEditor} wwe wysiwygEditor
  */
 function focusToFirstCode(pre, wwe) {
-  const range = wwe
-    .getEditor()
-    .getSelection()
-    .cloneRange();
+  const range = wwe.getEditor().getSelection().cloneRange();
 
   removeClass(pre, CODEBLOCK_CLASS_TEMP);
 

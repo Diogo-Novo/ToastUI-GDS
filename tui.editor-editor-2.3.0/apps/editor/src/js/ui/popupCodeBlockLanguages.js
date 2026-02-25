@@ -17,7 +17,7 @@ const BUTTON_CLASS_PREFIX = 'te-popup-code-block-lang-';
 function getButtonsHTML(languages) {
   return languages
     .map(
-      lang =>
+      (lang) =>
         `<button type="button" class="${BUTTON_CLASS_PREFIX}${lang}" data-lang="${lang}">${lang}</button>`
     )
     .join('');
@@ -59,7 +59,7 @@ class PopupCodeBlockLanguages extends LayerPopup {
     this._currentButton = null;
     this._buttons = null;
     this._languages = options.languages;
-    this._btnMousedownHandler = event => {
+    this._btnMousedownHandler = (event) => {
       const language = event.target.getAttribute('data-lang');
 
       if (this._onSelectedLanguage) {
@@ -102,7 +102,7 @@ class PopupCodeBlockLanguages extends LayerPopup {
   _initEditorEvent() {
     super._initEditorEvent();
 
-    this.eventManager.listen('openPopupCodeBlockLanguages', data => {
+    this.eventManager.listen('openPopupCodeBlockLanguages', (data) => {
       this.show(data.callback);
 
       css(this.el, { top: `${data.offset.top}px` });
@@ -117,7 +117,7 @@ class PopupCodeBlockLanguages extends LayerPopup {
     this.eventManager.listen('closeAllPopup', () => this.hide());
     this.eventManager.listen('closePopupCodeBlockLanguages', () => this.hide());
     this.eventManager.listen('scroll', () => this.hide());
-    this.eventManager.listen('setCodeBlockLanguages', languages =>
+    this.eventManager.listen('setCodeBlockLanguages', (languages) =>
       this._changeLanguageButtons(languages)
     );
   }
@@ -178,7 +178,7 @@ class PopupCodeBlockLanguages extends LayerPopup {
    * @param {string} language - current language
    */
   setCurrentLanguage(language) {
-    const item = this._buttons.filter(button =>
+    const item = this._buttons.filter((button) =>
       matches(button, `.${BUTTON_CLASS_PREFIX}${language}`)
     );
 
@@ -214,7 +214,7 @@ class PopupCodeBlockLanguages extends LayerPopup {
   }
 
   _addBtnMouseDownHandler() {
-    this._languages.forEach(lang => {
+    this._languages.forEach((lang) => {
       this.off(`mousedown .${BUTTON_CLASS_PREFIX}${lang}`, this._btnMousedownHandler);
       this.on(`mousedown .${BUTTON_CLASS_PREFIX}${lang}`, this._btnMousedownHandler);
     });

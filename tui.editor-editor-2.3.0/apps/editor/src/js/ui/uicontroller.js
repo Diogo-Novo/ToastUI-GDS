@@ -102,7 +102,7 @@ class UIController {
 
   _bindDomEvent(event, selector, fn) {
     if (selector) {
-      domUtils.findAll(this.el, selector).forEach(el => {
+      domUtils.findAll(this.el, selector).forEach((el) => {
         on(el, event, fn);
       });
     } else {
@@ -128,7 +128,7 @@ class UIController {
 
   _unbindDomEvent(event, selector, fn) {
     if (selector) {
-      domUtils.findAll(this.el, selector).forEach(el => {
+      domUtils.findAll(this.el, selector).forEach((el) => {
         off(el, event, fn);
       });
     } else {

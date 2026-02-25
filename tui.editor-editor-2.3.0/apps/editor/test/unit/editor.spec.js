@@ -53,7 +53,7 @@ describe('Editor', () => {
     });
 
     // we need to wait squire input event process
-    afterEach(done => {
+    afterEach((done) => {
       setTimeout(() => {
         container.parentNode.removeChild(container);
         done();
@@ -167,7 +167,7 @@ describe('Editor', () => {
     });
 
     describe('setMarkdown()', () => {
-      it('fire setMarkdownAfter evnet after setMarkdown', done => {
+      it('fire setMarkdownAfter evnet after setMarkdown', (done) => {
         editor.on('setMarkdownAfter', done);
         editor.setMarkdown('dd');
       });
@@ -242,7 +242,7 @@ describe('Editor', () => {
     });
 
     // we need to wait squire input event process
-    afterEach(done => {
+    afterEach((done) => {
       setTimeout(() => {
         container.parentNode.removeChild(container);
         done();
@@ -289,7 +289,7 @@ describe('Editor', () => {
       document.body.appendChild(container);
     });
 
-    afterEach(done => {
+    afterEach((done) => {
       setTimeout(() => {
         editor.remove();
         container.parentNode.removeChild(container);
@@ -366,10 +366,7 @@ describe('Editor', () => {
           el: container
         });
 
-        const toolbarItems = editor
-          .getUI()
-          .getToolbar()
-          .getItems();
+        const toolbarItems = editor.getUI().getToolbar().getItems();
 
         expect(toolbarItems[0].getName()).toBe('heading');
         expect(toolbarItems[1].getName()).toBe('bold');
@@ -414,10 +411,7 @@ describe('Editor', () => {
           ]
         });
 
-        const toolbarItems = editor
-          .getUI()
-          .getToolbar()
-          .getItems();
+        const toolbarItems = editor.getUI().getToolbar().getItems();
 
         expect(toolbarItems[0].getName()).toBe('bold');
         expect(toolbarItems[1].getName()).toBe('divider');

@@ -62,7 +62,7 @@ class PopupAddHeading extends LayerPopup {
   _initDOMEvent() {
     super._initDOMEvent();
 
-    this.on('click li', ev => {
+    this.on('click li', (ev) => {
       const li = domUtils.closest(ev.target, 'li');
 
       this._eventManager.emit(

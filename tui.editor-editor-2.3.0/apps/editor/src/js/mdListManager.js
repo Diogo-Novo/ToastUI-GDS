@@ -113,10 +113,10 @@ class MdListManager {
     switch (type) {
       case 'ol':
       case 'ul':
-        fn = lineNumber => this._changeToList(lineNumber, type);
+        fn = (lineNumber) => this._changeToList(lineNumber, type);
         break;
       case 'task':
-        fn = lineNumber => this._changeToTask(lineNumber);
+        fn = (lineNumber) => this._changeToTask(lineNumber);
         break;
       default:
         break;
@@ -178,7 +178,7 @@ class MdListManager {
           ? (lineNum, ordinalNumber) => {
               this._replaceListTypeToOL(lineNum, ordinalNumber);
             }
-          : lineNum => {
+          : (lineNum) => {
               this._replaceListTypeToUL(lineNum);
             }
       );

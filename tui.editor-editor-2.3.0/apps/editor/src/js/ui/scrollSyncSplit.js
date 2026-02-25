@@ -133,7 +133,7 @@ class ScrollSyncSplit {
     }
     addClass(element, CLASS_CONTENT[side]);
     this._contentWrapper.appendChild(element);
-    this._eventManager.listen(EVENT_REQUIRE_SCROLL_INTO_VIEW, ev =>
+    this._eventManager.listen(EVENT_REQUIRE_SCROLL_INTO_VIEW, (ev) =>
       this._requireScrollIntoView(ev)
     );
     this._eventManager.listen('requireScrollSync', () => this.sync());

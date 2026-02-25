@@ -23,7 +23,7 @@ describe('Strike', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -31,10 +31,7 @@ describe('Strike', () => {
   });
 
   it('add Strike to current selection', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('line1<br />line2');
 
@@ -47,10 +44,7 @@ describe('Strike', () => {
   });
 
   it('dont add Strike in PRE tag', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<pre>line1</pre>');
 
@@ -63,10 +57,7 @@ describe('Strike', () => {
   });
 
   it('if there have Strike already remove format', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('line1<br />line2');
 
@@ -80,10 +71,7 @@ describe('Strike', () => {
   });
 
   it('if there have Strike already remove format in colappsed selection', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<s>line</s>');
 
@@ -98,10 +86,7 @@ describe('Strike', () => {
   });
 
   it('if there have italic apply Strike into italic', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<i>line</i>');
 
@@ -114,10 +99,7 @@ describe('Strike', () => {
   });
 
   it('if there have italic apply Strike into bold', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<b>line</b>');
 
@@ -130,10 +112,7 @@ describe('Strike', () => {
   });
 
   it('if there have italic apply Strike into bold and italic', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<b><i>line</i></b>');
 
@@ -146,10 +125,7 @@ describe('Strike', () => {
   });
 
   it('if there have code remove and add Strike', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<code>line</code>');
 
@@ -162,10 +138,7 @@ describe('Strike', () => {
   });
 
   it('when some of the text is selected, the strike already applied should be removed', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<s>foo b</s>ar');
 

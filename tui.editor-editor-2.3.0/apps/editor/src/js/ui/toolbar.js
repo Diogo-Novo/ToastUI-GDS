@@ -49,8 +49,8 @@ class Toolbar extends UIController {
    * @override
    */
   _initEvent(eventManager) {
-    eventManager.listen('stateChange', ev => {
-      this._items.forEach(item => {
+    eventManager.listen('stateChange', (ev) => {
+      this._items.forEach((item) => {
         if (item._state) {
           domUtils.toggleClass(item.el, 'active', !!ev[item._state]);
         }
@@ -65,7 +65,7 @@ class Toolbar extends UIController {
    * disable all toolbar button
    */
   disableAllButton() {
-    this._items.forEach(item => {
+    this._items.forEach((item) => {
       if (item instanceof ToolbarButton) {
         item.disable();
       }
@@ -76,7 +76,7 @@ class Toolbar extends UIController {
    * enable all toolbar button
    */
   enableAllButton() {
-    this._items.forEach(item => {
+    this._items.forEach((item) => {
       if (item instanceof ToolbarButton) {
         item.enable();
       }
@@ -139,8 +139,8 @@ class Toolbar extends UIController {
       this._items.push(item);
     }
 
-    item.onCommandHandler = commandName => this._eventManager.emit('command', commandName);
-    item.onEventHandler = eventName => this._eventManager.emit(eventName);
+    item.onCommandHandler = (commandName) => this._eventManager.emit('command', commandName);
+    item.onEventHandler = (eventName) => this._eventManager.emit(eventName);
     item.on('command', item.onCommandHandler);
     item.on('event', item.onEventHandler);
   }
@@ -158,7 +158,7 @@ class Toolbar extends UIController {
     } else if (isString(item)) {
       const itemName = item;
 
-      index = this._items.map(itemToTest => itemToTest.getName()).indexOf(itemName);
+      index = this._items.map((itemToTest) => itemToTest.getName()).indexOf(itemName);
     }
 
     return index;

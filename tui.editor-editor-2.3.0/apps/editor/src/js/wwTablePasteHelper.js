@@ -80,7 +80,7 @@ class WwTablePasteHelper {
     let textItem = null;
     let htmlItem = null;
 
-    toArray(items).forEach(item => {
+    toArray(items).forEach((item) => {
       if (item.type === 'text/html') {
         htmlItem = item;
       } else if (item.type === 'text/plain') {
@@ -89,11 +89,11 @@ class WwTablePasteHelper {
     });
 
     if (htmlItem) {
-      htmlItem.getAsString(html => {
+      htmlItem.getAsString((html) => {
         this._pasteClipboardHtml(html);
       });
     } else if (textItem) {
-      textItem.getAsString(text => {
+      textItem.getAsString((text) => {
         const fragment = domUtils.getFragmentReplacedByNewlineToBr(text);
 
         this._pasteClipboardContainer(fragment);

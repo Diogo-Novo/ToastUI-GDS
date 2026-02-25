@@ -20,7 +20,7 @@ describe('code block gadget', () => {
     });
   });
 
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       $('body').empty();
       done();

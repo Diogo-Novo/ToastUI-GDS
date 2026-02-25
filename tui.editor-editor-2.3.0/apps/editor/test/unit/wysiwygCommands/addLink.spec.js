@@ -22,7 +22,7 @@ describe('AddLink', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -30,10 +30,7 @@ describe('AddLink', () => {
   });
 
   it('add link to current selection', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('line');
 
@@ -46,12 +43,7 @@ describe('AddLink', () => {
     });
 
     expect(wwe.getBody().querySelectorAll('a').length).toEqual(1);
-    expect(
-      wwe
-        .getBody()
-        .querySelector('a')
-        .getAttribute('href')
-    ).toEqual('#url');
+    expect(wwe.getBody().querySelector('a').getAttribute('href')).toEqual('#url');
     expect(wwe.getBody().querySelector('a').textContent).toEqual('line');
   });
 
@@ -62,12 +54,7 @@ describe('AddLink', () => {
     });
 
     expect(wwe.getBody().querySelectorAll('a').length).toEqual(1);
-    expect(
-      wwe
-        .getBody()
-        .querySelector('a')
-        .getAttribute('href')
-    ).toEqual('#url');
+    expect(wwe.getBody().querySelector('a').getAttribute('href')).toEqual('#url');
     expect(wwe.getBody().querySelector('a').textContent).toEqual('inputText');
   });
 
@@ -86,12 +73,7 @@ describe('AddLink', () => {
       linkText: ''
     });
 
-    expect(
-      wwe
-        .getBody()
-        .querySelector('a')
-        .getAttribute('href')
-    ).toEqual('%28%29%5B%5D%3C%3E');
+    expect(wwe.getBody().querySelector('a').getAttribute('href')).toEqual('%28%29%5B%5D%3C%3E');
   });
 
   it('should apply linkAttribute option to link node', () => {
@@ -100,11 +82,6 @@ describe('AddLink', () => {
       linkText: 'google'
     });
 
-    expect(
-      wwe
-        .getBody()
-        .querySelector('a')
-        .getAttribute('target')
-    ).toEqual('_blank');
+    expect(wwe.getBody().querySelector('a').getAttribute('target')).toEqual('_blank');
   });
 });

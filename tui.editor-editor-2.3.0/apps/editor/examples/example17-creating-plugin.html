@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head lang="en">
     <meta charset="UTF-8" />
@@ -22,7 +22,8 @@
       You can see the tutorial
       <a
         href="https://github.com/nhn/tui.editor/blob/master/apps/editor/docs/plugins.md"
-        rel="noopener noreferrer" target="_blank"
+        rel="noopener noreferrer"
+        target="_blank"
         >here</a
       >.
     </div>
@@ -38,11 +39,9 @@
 
       // Step 1: Define the user plugin function
       function youtubePlugin() {
-        Editor.codeBlockManager.setReplacer('youtube', function(youtubeId) {
+        Editor.codeBlockManager.setReplacer('youtube', function (youtubeId) {
           // Indentify multiple code blocks
-          const wrapperId = `yt${Math.random()
-            .toString(36)
-            .substr(2, 10)}`;
+          const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
 
           // Avoid sanitizing iframe tag
           setTimeout(renderYoutube.bind(null, wrapperId, youtubeId), 0);

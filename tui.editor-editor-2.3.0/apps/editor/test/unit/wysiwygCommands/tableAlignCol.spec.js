@@ -24,7 +24,7 @@ describe('Table - AlignCol', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -57,31 +57,11 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'center');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
     });
 
     it('at TH', () => {
@@ -109,31 +89,11 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'center');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
     });
 
     it('on multi cell selection', () => {
@@ -162,55 +122,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'center');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).not.toBeDefined();
     });
 
     it('on multi cell selection', () => {
@@ -239,55 +159,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'center');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).not.toBeDefined();
     });
 
     it('on multi line selection', () => {
@@ -316,55 +196,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'center');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).toEqual('center');
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('center');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('center');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).toEqual('center');
     });
   });
 
@@ -394,31 +234,11 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'left');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
     });
 
     it('at TH', () => {
@@ -446,31 +266,11 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'left');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
     });
 
     it('on multiline selection', () => {
@@ -498,31 +298,11 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'left');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).toEqual('left');
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).toEqual('left');
     });
 
     it('on multi cell selection', () => {
@@ -551,55 +331,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'left');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).not.toBeDefined();
     });
 
     it('on multi cell selection', () => {
@@ -628,55 +368,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'left');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).not.toBeDefined();
     });
 
     it('on multi line selection', () => {
@@ -705,55 +405,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'left');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).toEqual('left');
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('left');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('left');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).toEqual('left');
     });
   });
 
@@ -783,31 +443,11 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'right');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
     });
 
     it('at TH', () => {
@@ -835,31 +475,11 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'right');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
     });
 
     it('on multi cell selection', () => {
@@ -888,55 +508,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'right');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).not.toBeDefined();
     });
 
     it('on multi cell selection', () => {
@@ -965,55 +545,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'right');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).not.toBeDefined();
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).not.toBeDefined();
     });
 
     it('on multi line selection', () => {
@@ -1042,55 +582,15 @@ describe('Table - AlignCol', () => {
 
       AlignCol.exec(wwe, 'right');
 
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(2)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('thead th')
-          .eq(3)
-          .attr('align')
-      ).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('thead th').eq(1).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(2).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('thead th').eq(3).attr('align')).toEqual('right');
 
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(0)
-          .attr('align')
-      ).toEqual('right');
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(1)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(2)
-          .attr('align')
-      ).not.toBeDefined();
-      expect(
-        $(wwe.getBody())
-          .find('tbody td')
-          .eq(3)
-          .attr('align')
-      ).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(0).attr('align')).toEqual('right');
+      expect($(wwe.getBody()).find('tbody td').eq(1).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(2).attr('align')).not.toBeDefined();
+      expect($(wwe.getBody()).find('tbody td').eq(3).attr('align')).toEqual('right');
     });
   });
 });

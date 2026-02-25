@@ -29,7 +29,7 @@ describe('WwTableManager', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -44,48 +44,30 @@ describe('WwTableManager', () => {
           '<table><thead><tr><th>1234</th></tr></thead>' +
             '<tbody><tr><td>1123</td></tr></tbody></table>'
         );
-      $(wwe.getBody())
-        .find('br')
-        .remove();
+      $(wwe.getBody()).find('br').remove();
     });
     const expectation = browser.msie && (browser.version === 10 || browser.version === 11) ? 0 : 1;
 
     it('append br if td or th does not have br as lastchild, td case', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody().querySelectorAll('td')[0].childNodes[0], 2);
       range.collapse(true);
 
       mgr._appendBrIfTdOrThNotHaveAsLastChild(range);
 
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(0)
-          .find('br').length
-      ).toEqual(expectation);
+      expect($(wwe.getBody()).find('td').eq(0).find('br').length).toEqual(expectation);
     });
 
     it('append br if td or th does not have br as lastchild, th case', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody().querySelectorAll('th')[0].childNodes[0], 2);
       range.collapse(true);
 
       mgr._appendBrIfTdOrThNotHaveAsLastChild(range);
 
-      expect(
-        $(wwe.getBody())
-          .find('th')
-          .eq(0)
-          .find('br').length
-      ).toEqual(expectation);
+      expect($(wwe.getBody()).find('th').eq(0).find('br').length).toEqual(expectation);
     });
   });
 
@@ -102,10 +84,7 @@ describe('WwTableManager', () => {
     it('_recordUndoStateIfNeed record undo state if range is in different cell', () => {
       wwe.getEditor().saveUndoState = jasmine.createSpy('saveUndoState');
 
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody().querySelectorAll('th')[0], 0);
       range.collapse(true);
@@ -119,10 +98,7 @@ describe('WwTableManager', () => {
     it('_recordUndoStateAndResetCellNode record undo state and reset laste cell node info', () => {
       wwe.getEditor().saveUndoState = jasmine.createSpy('saveUndoState');
 
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody().querySelectorAll('th')[0], 0);
       range.collapse(true);
@@ -195,10 +171,7 @@ describe('WwTableManager', () => {
       wwe.getEditor().setHTML(table);
       const $body = $(wwe.getBody());
 
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .selectNode($body.find('th')[1]);
+      const range = wwe.getEditor().getSelection().selectNode($body.find('th')[1]);
 
       wwe.getEditor().setSelection(range);
 
@@ -223,10 +196,7 @@ describe('WwTableManager', () => {
       wwe.getEditor().setHTML(table);
       const $body = $(wwe.getBody());
 
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .selectNode($body.find('th')[1]);
+      const range = wwe.getEditor().getSelection().selectNode($body.find('th')[1]);
 
       wwe.getEditor().setSelection(range);
 
@@ -246,10 +216,7 @@ describe('WwTableManager', () => {
 
       wwe.getEditor().setHTML(table);
       const $body = $(wwe.getBody());
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart($body.find('table td a').get(0).firstChild, 0);
       range.collapse(true);
@@ -418,7 +385,7 @@ describe('WwTableManager', () => {
     });
   });
   describe('_completeTableIfNeed', () => {
-    it('should complete TR to TABLE', done => {
+    it('should complete TR to TABLE', (done) => {
       const html = '<tr><td>3</td><td>4</td></tr><tr><td>5</td><td>6</td></tr>';
 
       const $body = $(wwe.getBody()).html(html);
@@ -433,7 +400,7 @@ describe('WwTableManager', () => {
       });
     });
 
-    it('shuold complete TBODY to TABLE', done => {
+    it('shuold complete TBODY to TABLE', (done) => {
       const html = '<tbody><tr><td>b</td><td>o</td></tr><tr><td>d</td><td>y</td></tr></tbody>';
 
       const $body = $(wwe.getBody()).html(html);
@@ -447,7 +414,7 @@ describe('WwTableManager', () => {
       });
     });
 
-    it('shuold complete THEAD to TABLE', done => {
+    it('shuold complete THEAD to TABLE', (done) => {
       const html = '<thead><tr><th>he</th><th>ad</th></tr></thead>';
 
       const $body = $(wwe.getBody()).html(html);
@@ -461,7 +428,7 @@ describe('WwTableManager', () => {
       });
     });
 
-    it('shuold complete TR>TH to TABLE', done => {
+    it('shuold complete TR>TH to TABLE', (done) => {
       const html = '<tr><th>he</th><th>ad</th></tr>';
 
       const $body = $(wwe.getBody()).html(html);
@@ -475,7 +442,7 @@ describe('WwTableManager', () => {
       });
     });
 
-    it('do nothing when current node is complete TABLE', done => {
+    it('do nothing when current node is complete TABLE', (done) => {
       const html =
         '<table>' +
         '<thead>' +
@@ -498,7 +465,7 @@ describe('WwTableManager', () => {
       });
     });
 
-    it('prepend table cells into first TR in TABLE', done => {
+    it('prepend table cells into first TR in TABLE', (done) => {
       const html =
         '<table>' +
         '<thead>' +
@@ -522,7 +489,7 @@ describe('WwTableManager', () => {
         done();
       });
     });
-    it('append table cells into last TR in TABLE', done => {
+    it('append table cells into last TR in TABLE', (done) => {
       const html =
         '<table>' +
         '<thead>' +
@@ -546,7 +513,7 @@ describe('WwTableManager', () => {
         done();
       });
     });
-    it('remove textNode and BR in TR', done => {
+    it('remove textNode and BR in TR', (done) => {
       const html =
         '<div>123</div>' +
         '<table>' +
@@ -572,7 +539,7 @@ describe('WwTableManager', () => {
       });
     });
 
-    it('remove textNode and BR in TR', done => {
+    it('remove textNode and BR in TR', (done) => {
       const html =
         '<div>123</div>' +
         '<table>' +
@@ -596,7 +563,7 @@ describe('WwTableManager', () => {
       });
     });
 
-    it('do nothing and return inner loop when not table or sub table element', done => {
+    it('do nothing and return inner loop when not table or sub table element', (done) => {
       const html =
         '<div>123</div>' +
         '<table>' +
@@ -621,7 +588,7 @@ describe('WwTableManager', () => {
         done();
       });
     });
-    it('remove blank table element', done => {
+    it('remove blank table element', (done) => {
       const html = '<table></table>';
 
       const $body = $(wwe.getBody()).html(html);
@@ -930,13 +897,7 @@ describe('WwTableManager', () => {
           body: ['<ul><li>bar</li></ul>', 'foo<br>bar']
         });
 
-        setCursor(
-          $body
-            .find('td:eq(0)')
-            .find('li')
-            .last()[0].firstChild,
-          2
-        );
+        setCursor($body.find('td:eq(0)').find('li').last()[0].firstChild, 2);
         mgr._moveCursorTo('next', 'row', eventMock);
 
         const range = wwe.getEditor().getSelection();
@@ -950,13 +911,7 @@ describe('WwTableManager', () => {
           body: ['<ul><li>foo</li><li>bar</li></ul>', '<ol><li>baz</li></ol>']
         });
 
-        setCursor(
-          $body
-            .find('td:eq(0)')
-            .find('li')
-            .last()[0].firstChild,
-          2
-        );
+        setCursor($body.find('td:eq(0)').find('li').last()[0].firstChild, 2);
         mgr._moveCursorTo('next', 'row', eventMock);
 
         const range = wwe.getEditor().getSelection();
@@ -971,13 +926,7 @@ describe('WwTableManager', () => {
           body: ['<ul><li><br></li></ul>']
         });
 
-        setCursor(
-          $body
-            .find('th:eq(0)')
-            .find('li')
-            .last()[0].firstChild,
-          2
-        );
+        setCursor($body.find('th:eq(0)').find('li').last()[0].firstChild, 2);
         mgr._moveCursorTo('next', 'row', eventMock);
 
         const range = wwe.getEditor().getSelection();
@@ -1065,24 +1014,9 @@ describe('WwTableManager', () => {
       range = wwe.getEditor().getSelection();
       expect(range.startContainer).toBe(wwe.getBody().querySelectorAll('th')[0]);
       expect(range.startContainer.textContent).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('th')
-          .eq(1)
-          .text()
-      ).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(0)
-          .text()
-      ).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(1)
-          .text()
-      ).toBe('');
+      expect($(wwe.getBody()).find('th').eq(1).text()).toBe('');
+      expect($(wwe.getBody()).find('td').eq(0).text()).toBe('');
+      expect($(wwe.getBody()).find('td').eq(1).text()).toBe('');
       expect(range.collapsed).toBe(true);
     });
     it('delete contents and collapse selection to startContainer', () => {
@@ -1116,24 +1050,9 @@ describe('WwTableManager', () => {
       range = wwe.getEditor().getSelection();
       expect(range.startContainer).toBe(wwe.getBody().querySelectorAll('th')[0]);
       expect(range.startContainer.textContent).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('th')
-          .eq(1)
-          .text()
-      ).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(0)
-          .text()
-      ).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(1)
-          .text()
-      ).toBe('');
+      expect($(wwe.getBody()).find('th').eq(1).text()).toBe('');
+      expect($(wwe.getBody()).find('td').eq(0).text()).toBe('');
+      expect($(wwe.getBody()).find('td').eq(1).text()).toBe('');
       expect(range.collapsed).toBe(true);
     });
     it('delete contents and collapse selection to startContainer', () => {
@@ -1167,24 +1086,9 @@ describe('WwTableManager', () => {
       range = wwe.getEditor().getSelection();
       expect(range.startContainer).toBe(wwe.getBody().querySelectorAll('th')[0]);
       expect(range.startContainer.textContent).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('th')
-          .eq(1)
-          .text()
-      ).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(0)
-          .text()
-      ).toBe('');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(1)
-          .text()
-      ).toBe('');
+      expect($(wwe.getBody()).find('th').eq(1).text()).toBe('');
+      expect($(wwe.getBody()).find('td').eq(0).text()).toBe('');
+      expect($(wwe.getBody()).find('td').eq(1).text()).toBe('');
       expect(range.collapsed).toBe(true);
     });
 
@@ -1219,24 +1123,9 @@ describe('WwTableManager', () => {
       range = wwe.getEditor().getSelection();
       expect(range.startContainer).toBe(wwe.getBody().querySelectorAll('th')[0]);
       expect(range.startContainer.textContent).toBe('1');
-      expect(
-        $(wwe.getBody())
-          .find('th')
-          .eq(1)
-          .text()
-      ).toBe('2');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(0)
-          .text()
-      ).toBe('321');
-      expect(
-        $(wwe.getBody())
-          .find('td')
-          .eq(1)
-          .text()
-      ).toBe('4');
+      expect($(wwe.getBody()).find('th').eq(1).text()).toBe('2');
+      expect($(wwe.getBody()).find('td').eq(0).text()).toBe('321');
+      expect($(wwe.getBody()).find('td').eq(1).text()).toBe('4');
       expect(range.collapsed).toBe(false);
     });
 
@@ -1351,10 +1240,7 @@ describe('WwTableManager', () => {
       mgr._recordUndoStateIfNeed = jasmine.createSpy('recordUndoStateIfNeed');
       defaultKeyEventHandler = mgr.keyEventHandlers.DEFAULT;
 
-      range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      range = wwe.getEditor().getSelection().cloneRange();
       range.setStart(wwe.getBody().querySelectorAll('th')[0], 0);
       range.collapse(true);
     });

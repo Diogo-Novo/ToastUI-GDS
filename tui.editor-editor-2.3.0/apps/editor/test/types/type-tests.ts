@@ -143,7 +143,7 @@ viewer.isMarkdownMode();
 viewer.isViewer();
 viewer.isWysiwygMode();
 viewer.off('click');
-viewer.on('click', e => {
+viewer.on('click', (e) => {
   return 1;
 });
 viewer.remove();

@@ -31,7 +31,7 @@ describe('OL', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -265,10 +265,10 @@ describe('OL', () => {
     expect(range.endOffset).toBe(endOffset);
   });
 
-  it('should emit change event', done => {
+  it('should emit change event', (done) => {
     spyOn(wwe, 'isEditorValid').and.returnValue(true);
 
-    eventManager.listen('change', ev => {
+    eventManager.listen('change', (ev) => {
       expect(ev).toEqual({ source: 'wysiwyg' });
       done();
     });

@@ -177,7 +177,7 @@ export class ToastMark {
     } else {
       insertNodesBefore(startNode, newNodes);
       removeNextUntil(startNode, endNode!);
-      [startNode.id, endNode!.id].forEach(id => removeNodeById(id));
+      [startNode.id, endNode!.id].forEach((id) => removeNodeById(id));
       startNode.unlink();
     }
   }
@@ -195,7 +195,7 @@ export class ToastMark {
   }
 
   private trigger(eventName: EventName, param: any) {
-    this.eventHandlerMap[eventName].forEach(handler => {
+    this.eventHandlerMap[eventName].forEach((handler) => {
       handler(param);
     });
   }
@@ -299,7 +299,7 @@ export class ToastMark {
           }
         }
       };
-      nodes.forEach(node => {
+      nodes.forEach((node) => {
         invokeNextUntil(replaceWith, node);
       });
     }
@@ -396,8 +396,8 @@ export class ToastMark {
 
   private removeUnlinkedCandidate() {
     if (!isEmptyObj(this.refDefCandidateMap)) {
-      [this.refLinkCandidateMap, this.refDefCandidateMap].forEach(candidateMap => {
-        iterateObject(candidateMap, id => {
+      [this.refLinkCandidateMap, this.refDefCandidateMap].forEach((candidateMap) => {
+        iterateObject(candidateMap, (id) => {
           if (isUnlinked(id)) {
             delete candidateMap[id];
           }

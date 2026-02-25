@@ -85,7 +85,7 @@ class MarkdownPreview extends Preview {
       });
     }
 
-    on(this.el, 'scroll', event => {
+    on(this.el, 'scroll', (event) => {
       this.eventManager.emit('scroll', {
         source: 'preview',
         data: findAdjacentElementToScrollTop(event.target.scrollTop, this._previewContent)
@@ -105,7 +105,7 @@ class MarkdownPreview extends Preview {
 
   _updateCursorNode(cursorNode, cursorPos) {
     if (cursorNode) {
-      cursorNode = findClosestNode(cursorNode, mdNode => !isInlineNode(mdNode));
+      cursorNode = findClosestNode(cursorNode, (mdNode) => !isInlineNode(mdNode));
 
       if (cursorNode.type === 'tableRow') {
         cursorNode = findTableCell(cursorNode, cursorPos);
@@ -142,7 +142,7 @@ class MarkdownPreview extends Preview {
   }
 
   update(changed) {
-    changed.forEach(editResult => this.replaceRangeNodes(editResult));
+    changed.forEach((editResult) => this.replaceRangeNodes(editResult));
     this.eventManager.emit('previewRenderAfter', this);
   }
 
@@ -151,7 +151,7 @@ class MarkdownPreview extends Preview {
     const contentEl = this._previewContent;
     const newHtml = this.eventManager.emitReduce(
       'convertorAfterMarkdownToHtmlConverted',
-      nodes.map(node => this.renderHTML(node)).join('')
+      nodes.map((node) => this.renderHTML(node)).join('')
     );
 
     if (!removedNodeRange) {
@@ -179,7 +179,7 @@ class MarkdownPreview extends Preview {
       }
     }
 
-    const codeBlockEls = this.getCodeBlockElements(nodes.map(node => node.id));
+    const codeBlockEls = this.getCodeBlockElements(nodes.map((node) => node.id));
 
     if (codeBlockEls.length) {
       this.lazyRunner.run('invokeCodeBlock', codeBlockEls);

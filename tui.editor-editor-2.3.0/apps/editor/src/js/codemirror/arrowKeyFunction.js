@@ -5,8 +5,7 @@
  */
 import CodeMirror from 'codemirror';
 
-/*eslint-disable */
-CodeMirror.commands.replaceLineTextToUpper = cm => {
+CodeMirror.commands.replaceLineTextToUpper = (cm) => {
   if (cm.getOption('disableInput')) {
     return CodeMirror.Pass;
   }
@@ -33,7 +32,7 @@ CodeMirror.commands.replaceLineTextToUpper = cm => {
   }
 };
 
-CodeMirror.commands.replaceLineTextToLower = cm => {
+CodeMirror.commands.replaceLineTextToLower = (cm) => {
   if (cm.getOption('disableInput')) {
     return CodeMirror.Pass;
   }

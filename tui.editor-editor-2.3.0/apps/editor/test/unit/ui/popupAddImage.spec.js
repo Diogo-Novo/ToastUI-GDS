@@ -146,7 +146,7 @@ describe('PopupAddImage', () => {
       clickBtn('ok-button');
     });
 
-    xit('image url can be modified on addImageBlobHook callback', done => {
+    xit('image url can be modified on addImageBlobHook callback', (done) => {
       const addImage = jasmine.createSpy('addImage');
       const value = {
         imageUrl: 'imageUrlText',

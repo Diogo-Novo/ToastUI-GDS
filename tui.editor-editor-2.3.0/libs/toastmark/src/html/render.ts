@@ -73,7 +73,7 @@ export function createRenderHTML(customOptions?: Partial<Options>) {
   if (options.convertors) {
     const customConvertors = options.convertors;
     const nodeTypes = Object.keys(customConvertors) as NodeType[];
-    nodeTypes.forEach(nodeType => {
+    nodeTypes.forEach((nodeType) => {
       const orgConvertor = convertors[nodeType];
       const extConvertor = customConvertors[nodeType]!;
       if (orgConvertor) {
@@ -102,7 +102,7 @@ function generateOpenTagString(node: OpenTagToken): string {
   }
 
   if (attributes) {
-    Object.keys(attributes).forEach(attrName => {
+    Object.keys(attributes).forEach((attrName) => {
       const attrValue = attributes[attrName];
       buffer.push(` ${attrName}="${attrValue}"`);
     });

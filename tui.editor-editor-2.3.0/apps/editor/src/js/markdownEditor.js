@@ -55,7 +55,7 @@ function getToolbarState(targetNode, ch, mdLine, mdCh) {
   const state = { ...defaultToolbarState };
   let listEnabled = false;
 
-  traverseParentNodes(targetNode, mdNode => {
+  traverseParentNodes(targetNode, (mdNode) => {
     const type = getToolbarStateType(mdNode);
 
     if (!isBoolean(state[type])) {
@@ -101,7 +101,7 @@ function isToolbarStateChanged(previousState, currentState) {
     return true;
   }
 
-  return Object.keys(currentState).some(type => previousState[type] !== currentState[type]);
+  return Object.keys(currentState).some((type) => previousState[type] !== currentState[type]);
 }
 
 const ATTR_NAME_MARK = 'data-tui-mark';
@@ -313,7 +313,7 @@ class MarkdownEditor extends CodeMirrorExt {
   _toggleTaskStates() {
     const ranges = this.cm.listSelections();
 
-    ranges.forEach(range => {
+    ranges.forEach((range) => {
       const { anchor, head } = range;
       const startLine = Math.min(anchor.line, head.line);
       const endLine = Math.max(anchor.line, head.line);
@@ -343,7 +343,7 @@ class MarkdownEditor extends CodeMirrorExt {
       return;
     }
 
-    changed.forEach(editResult => this._markNodes(editResult));
+    changed.forEach((editResult) => this._markNodes(editResult));
   }
 
   _markNodes(editResult) {
@@ -373,7 +373,6 @@ class MarkdownEditor extends CodeMirrorExt {
         while (event) {
           const { node, entering } = event;
 
-          // eslint-disable-next-line max-depth
           if (entering) {
             this._markNode(node);
           }
@@ -389,7 +388,7 @@ class MarkdownEditor extends CodeMirrorExt {
     const mdNode = this.toastMark.findNodeAtPosition([line + 1, mdCh]);
     const paraNode = findClosestNode(
       mdNode,
-      node => node.type === 'paragraph' && node.parent && node.parent.type === 'item'
+      (node) => node.type === 'paragraph' && node.parent && node.parent.type === 'item'
     );
 
     if (paraNode && paraNode.firstChild) {

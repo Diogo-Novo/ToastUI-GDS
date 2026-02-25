@@ -10,7 +10,7 @@ export function pos(line1: number, col1: number, line2: number, col2: number) {
 export function convertToArrayTree(root: BlockNode, attrs: (keyof BlockNode)[]) {
   function recur(node: Node) {
     const newNode: any = {};
-    attrs.forEach(attr => {
+    attrs.forEach((attr) => {
       const attrVal = node[attr as keyof Node];
       if (attrVal !== undefined && attrVal !== null) {
         newNode[attr] = attrVal;

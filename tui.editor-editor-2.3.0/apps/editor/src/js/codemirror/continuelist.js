@@ -5,12 +5,11 @@
  */
 import CodeMirror from 'codemirror';
 
-/*eslint-disable */
 var listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]\s))(\s*)/,
   emptyListRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]|[*+-]|(\d+)[.)])(\s*)$/,
   unorderedListRE = /[*+-]\s/;
 
-CodeMirror.commands.indentOrderedList = function(cm) {
+CodeMirror.commands.indentOrderedList = function (cm) {
   if (cm.getOption('disableInput')) return CodeMirror.Pass;
   var ranges = cm.listSelections();
   for (var i = 0; i < ranges.length; i++) {
@@ -27,7 +26,7 @@ CodeMirror.commands.indentOrderedList = function(cm) {
   cm.execCommand('fixOrderedListNumber');
 };
 
-CodeMirror.commands.newlineAndIndentContinueMarkdownList = function(cm) {
+CodeMirror.commands.newlineAndIndentContinueMarkdownList = function (cm) {
   if (cm.getOption('disableInput') || !!cm.state.isCursorInCodeBlock) return CodeMirror.Pass;
   var ranges = cm.listSelections(),
     replacements = [];

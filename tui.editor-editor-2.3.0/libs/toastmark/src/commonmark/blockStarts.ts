@@ -137,7 +137,7 @@ function isDisallowedDeepHeading(parser: Parser, node: BlockNode) {
   return parser.options.disallowDeepHeading && (node.type === 'blockQuote' || node.type === 'item');
 }
 
-const blockQuote: BlockStart = parser => {
+const blockQuote: BlockStart = (parser) => {
   if (!parser.indented && peek(parser.currentLine, parser.nextNonspace) === C_GREATERTHAN) {
     parser.advanceNextNonspace();
     parser.advanceOffset(1, false);
@@ -178,7 +178,7 @@ const atxHeading: BlockStart = (parser, container) => {
   return Matched.None;
 };
 
-const fencedCodeBlock: BlockStart = parser => {
+const fencedCodeBlock: BlockStart = (parser) => {
   let match;
   if (
     !parser.indented &&
@@ -266,7 +266,7 @@ const seTextHeading: BlockStart = (parser, container) => {
   return Matched.None;
 };
 
-const thematicBreak: BlockStart = parser => {
+const thematicBreak: BlockStart = (parser) => {
   if (!parser.indented && reThematicBreak.test(parser.currentLine.slice(parser.nextNonspace))) {
     parser.closeUnmatchedBlocks();
     parser.addChild('thematicBreak', parser.nextNonspace);
@@ -302,7 +302,7 @@ const listItem: BlockStart = (parser, container) => {
 };
 
 // indented code block
-const indentedCodeBlock: BlockStart = parser => {
+const indentedCodeBlock: BlockStart = (parser) => {
   if (parser.indented && parser.tip.type !== 'paragraph' && !parser.blank) {
     // indented code
     parser.advanceOffset(CODE_INDENT, true);

@@ -34,7 +34,7 @@ class I18n {
   setLanguage(codes, data) {
     codes = [].concat(codes);
 
-    codes.forEach(code => {
+    codes.forEach((code) => {
       if (!this._langs.has(code)) {
         this._langs.set(code, data);
       } else {

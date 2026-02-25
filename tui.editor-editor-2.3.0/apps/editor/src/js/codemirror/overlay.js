@@ -14,10 +14,9 @@
  */
 import CodeMirror from 'codemirror';
 
-/*eslint-disable */
-CodeMirror.overlayMode = function(base, overlay, combine) {
+CodeMirror.overlayMode = function (base, overlay, combine) {
   return {
-    startState: function() {
+    startState: function () {
       return {
         base: CodeMirror.startState(base),
         overlay: CodeMirror.startState(overlay),
@@ -28,7 +27,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
         streamSeen: null
       };
     },
-    copyState: function(state) {
+    copyState: function (state) {
       return {
         base: CodeMirror.copyState(base, state.base),
         overlay: CodeMirror.copyState(overlay, state.overlay),
@@ -39,7 +38,7 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
       };
     },
 
-    token: function(stream, state) {
+    token: function (stream, state) {
       if (stream != state.streamSeen || Math.min(state.basePos, state.overlayPos) < stream.start) {
         state.streamSeen = stream;
         state.basePos = state.overlayPos = stream.start;
@@ -69,16 +68,16 @@ CodeMirror.overlayMode = function(base, overlay, combine) {
 
     indent:
       base.indent &&
-      function(state, textAfter) {
+      function (state, textAfter) {
         return base.indent(state.base, textAfter);
       },
     electricChars: base.electricChars,
 
-    innerMode: function(state) {
+    innerMode: function (state) {
       return { state: state.base, mode: base };
     },
 
-    blankLine: function(state) {
+    blankLine: function (state) {
       if (base.blankLine) base.blankLine(state.base);
       if (overlay.blankLine) overlay.blankLine(state.overlay);
     }

@@ -22,7 +22,7 @@ describe('Heading', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -30,10 +30,7 @@ describe('Heading', () => {
   });
 
   it('add heading to current selection or cursor', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('text');
 
@@ -75,10 +72,7 @@ describe('Heading', () => {
   });
 
   it('set heading tag 1~6 rotation', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('text');
 

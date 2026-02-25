@@ -29,10 +29,10 @@ const Heading = CommandManager.command(
       wwe.focus();
 
       if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
-        sq.modifyBlocks(fragment => {
+        sq.modifyBlocks((fragment) => {
           const blocks = domUtils.children(fragment, blockTagName);
 
-          toArray(blocks).forEach(block => {
+          toArray(blocks).forEach((block) => {
             const headingHTML = `h${size}`;
 
             if (domUtils.getNodeName(block) === 'DIV') {

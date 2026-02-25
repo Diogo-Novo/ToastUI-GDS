@@ -46,7 +46,7 @@ class WwListManager {
    * @private
    */
   _initEvent() {
-    this.eventManager.listen('wysiwygSetValueBefore', html =>
+    this.eventManager.listen('wysiwygSetValueBefore', (html) =>
       this._convertToArbitraryNestingList(html)
     );
 
@@ -59,19 +59,19 @@ class WwListManager {
       this._removeBranchListAll();
     });
 
-    this.eventManager.listen('wysiwygProcessHTMLText', html => {
+    this.eventManager.listen('wysiwygProcessHTMLText', (html) => {
       html = this._convertFromArbitraryNestingList(html);
 
       return html;
     });
 
-    this.eventManager.listen('convertorBeforeHtmlToMarkdownConverted', html =>
+    this.eventManager.listen('convertorBeforeHtmlToMarkdownConverted', (html) =>
       this._insertDataToMarkPassForListInTable(html)
     );
   }
 
   _initKeyHandler() {
-    this.wwe.addKeyEventHandler(['TAB', 'CTRL+]', 'META+]'], ev => {
+    this.wwe.addKeyEventHandler(['TAB', 'CTRL+]', 'META+]'], (ev) => {
       let isNeedNext;
 
       if (this.wwe.getEditor().hasFormat('LI')) {
@@ -133,7 +133,7 @@ class WwListManager {
    * @private
    */
   _findAndRemoveEmptyList() {
-    domUtils.findAll(this.wwe.getBody(), UL_OR_OL).forEach(node => {
+    domUtils.findAll(this.wwe.getBody(), UL_OR_OL).forEach((node) => {
       if (!FIND_LI_ELEMENT.test(node.innerHTML)) {
         domUtils.remove(node);
       }
@@ -148,7 +148,7 @@ class WwListManager {
   _removeBranchListAll(root) {
     root = !root ? this.wwe.getBody() : root;
 
-    domUtils.findAll(root, 'li > ul, li > ol').forEach(node => {
+    domUtils.findAll(root, 'li > ul, li > ol').forEach((node) => {
       if (!node || node.previousSibling) {
         return;
       }
@@ -418,8 +418,8 @@ class WwListManager {
 
     const liParent = domUtils.getParentUntilBy(
       targetNode,
-      node => node && domUtils.isListNode(node),
-      node => node && node.nodeName === 'TD'
+      (node) => node && domUtils.isListNode(node),
+      (node) => node && node.nodeName === 'TD'
     );
 
     if (liParent) {
@@ -585,7 +585,7 @@ class WwListManager {
   _createListItemElement(oneLineNodes, listType) {
     const liNode = document.createElement('li');
 
-    oneLineNodes.forEach(node => {
+    oneLineNodes.forEach((node) => {
       liNode.appendChild(node);
     });
 
@@ -639,7 +639,7 @@ class WwListManager {
 
     const newLIs = [];
 
-    lines.forEach(oneLineNodes => {
+    lines.forEach((oneLineNodes) => {
       const [oneLineFirstNode] = oneLineNodes;
       let liElement;
 

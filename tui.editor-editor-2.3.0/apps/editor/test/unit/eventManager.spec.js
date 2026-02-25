@@ -4,36 +4,36 @@
  */
 import EventManager from '@/eventManager';
 
-describe('eventManager', function() {
+describe('eventManager', function () {
   let em;
 
-  beforeEach(function() {
+  beforeEach(function () {
     em = new EventManager();
   });
 
-  describe('Event registration', function() {
-    it('should throw exception when it use not registered event type', function() {
-      expect(function() {
-        em.listen('testNoEvent', function() {});
+  describe('Event registration', function () {
+    it('should throw exception when it use not registered event type', function () {
+      expect(function () {
+        em.listen('testNoEvent', function () {});
       }).toThrow(new Error('There is no event type testNoEvent'));
     });
 
-    it('should throw exception when it register event type that already have', function() {
+    it('should throw exception when it register event type that already have', function () {
       em.addEventType('testAlreadyHaveEvent');
 
-      expect(function() {
+      expect(function () {
         em.addEventType('testAlreadyHaveEvent');
       }).toThrow(new Error('There is already have event type testAlreadyHaveEvent'));
     });
   });
 
-  describe('Event', function() {
-    beforeEach(function() {
+  describe('Event', function () {
+    beforeEach(function () {
       em.addEventType('testEvent');
       em.addEventType('testEventHook');
     });
 
-    it('should emit and listen event', function() {
+    it('should emit and listen event', function () {
       const handler = jasmine.createSpy('handler');
 
       em.listen('testEvent', handler);
@@ -42,14 +42,14 @@ describe('eventManager', function() {
       expect(handler).toHaveBeenCalled();
     });
 
-    it('emit should return value that returned by listener', function() {
+    it('emit should return value that returned by listener', function () {
       let count = 0;
 
-      em.listen('testEventHook', function() {
+      em.listen('testEventHook', function () {
         return count;
       });
 
-      em.listen('testEventHook', function() {
+      em.listen('testEventHook', function () {
         count += 1;
 
         return count;
@@ -60,7 +60,7 @@ describe('eventManager', function() {
       expect(result).toEqual([0, 1]);
     });
 
-    it('emit should return undefined if listener have not return value', function() {
+    it('emit should return undefined if listener have not return value', function () {
       const handler = jasmine.createSpy('handler');
 
       em.listen('testEvent', handler);
@@ -70,7 +70,7 @@ describe('eventManager', function() {
       expect(result).toBeUndefined();
     });
 
-    it('emit event handler added with namespace', function() {
+    it('emit event handler added with namespace', function () {
       const handler = jasmine.createSpy('handler');
 
       em.listen('testEvent.ns', handler);
@@ -78,19 +78,19 @@ describe('eventManager', function() {
       expect(handler).toHaveBeenCalled();
     });
   });
-  describe('emitReduce()', function() {
-    beforeEach(function() {
+  describe('emitReduce()', function () {
+    beforeEach(function () {
       em.addEventType('reduceTest');
     });
 
-    it('emit handlers reduce style return value', function() {
-      em.listen('reduceTest', function(data) {
+    it('emit handlers reduce style return value', function () {
+      em.listen('reduceTest', function (data) {
         data += 1;
 
         return data;
       });
 
-      em.listen('reduceTest', function(data) {
+      em.listen('reduceTest', function (data) {
         data += 2;
 
         return data;
@@ -99,14 +99,14 @@ describe('eventManager', function() {
       expect(em.emitReduce('reduceTest', 1)).toEqual(4);
     });
 
-    it('emitReduce can have additional parameter', function() {
-      em.listen('reduceTest', function(data, addition) {
+    it('emitReduce can have additional parameter', function () {
+      em.listen('reduceTest', function (data, addition) {
         data += addition;
 
         return data;
       });
 
-      em.listen('reduceTest', function(data, addition) {
+      em.listen('reduceTest', function (data, addition) {
         data += addition + 1;
 
         return data;
@@ -114,10 +114,10 @@ describe('eventManager', function() {
       expect(em.emitReduce('reduceTest', 1, 2)).toEqual(6);
     });
 
-    it('emitReduce pass handler return value if return value is falsy', function() {
-      em.listen('reduceTest', function() {});
+    it('emitReduce pass handler return value if return value is falsy', function () {
+      em.listen('reduceTest', function () {});
 
-      em.listen('reduceTest', function(data, addition) {
+      em.listen('reduceTest', function (data, addition) {
         data += addition + 1;
 
         return data;
@@ -126,17 +126,17 @@ describe('eventManager', function() {
     });
   });
 
-  describe('remove handler', function() {
+  describe('remove handler', function () {
     let handlerBeRemoved, handlerBeRemained;
 
-    beforeEach(function() {
+    beforeEach(function () {
       handlerBeRemoved = jasmine.createSpy('handlerBeRemoved');
       handlerBeRemained = jasmine.createSpy('handlerBeRemained');
       em.addEventType('myEvent');
       em.addEventType('myEvent2');
     });
 
-    it('remove all event handler by event', function() {
+    it('remove all event handler by event', function () {
       em.listen('myEvent', handlerBeRemoved);
       em.listen('myEvent.ns', handlerBeRemoved);
 
@@ -147,7 +147,7 @@ describe('eventManager', function() {
       expect(handlerBeRemoved).not.toHaveBeenCalled();
     });
 
-    it('remove all event handler by namespace', function() {
+    it('remove all event handler by namespace', function () {
       em.listen('myEvent.ns', handlerBeRemoved);
       em.listen('myEvent2.ns', handlerBeRemoved);
       em.listen('myEvent', handlerBeRemained);
@@ -161,7 +161,7 @@ describe('eventManager', function() {
       expect(handlerBeRemained).toHaveBeenCalled();
     });
 
-    it('remove specific event handler by namespace and type', function() {
+    it('remove specific event handler by namespace and type', function () {
       em.listen('myEvent.ns', handlerBeRemoved);
       em.listen('myEvent2.ns', handlerBeRemained);
       em.listen('myEvent', handlerBeRemained);

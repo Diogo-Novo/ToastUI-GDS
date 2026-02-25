@@ -27,7 +27,7 @@ describe('WysiwygEditor', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       if (container.parentNode) {
         container.parentNode.removeChild(container);
@@ -134,11 +134,7 @@ describe('WysiwygEditor', () => {
         }
       });
 
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .text()
-      ).toBe('\u00a0\u00a0\u00a0\u00a0');
+      expect($(wwe.getBody()).find('div').text()).toBe('\u00a0\u00a0\u00a0\u00a0');
     });
 
     it('should not insert 4 spaces when "TAB" pressed in list item', () => {
@@ -157,11 +153,7 @@ describe('WysiwygEditor', () => {
         }
       });
 
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .text()
-      ).toBe('');
+      expect($(wwe.getBody()).find('div').text()).toBe('');
     });
 
     it('should not insert 4 spaces when "TAB" pressed in task list', () => {
@@ -184,24 +176,20 @@ describe('WysiwygEditor', () => {
         }
       });
 
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .text()
-      ).toBe('');
+      expect($(wwe.getBody()).find('div').text()).toBe('');
     });
   });
 
   describe('Event', () => {
-    beforeEach(done => {
+    beforeEach((done) => {
       // wait for squire events routine
       setTimeout(() => {
         done();
       }, 0);
     });
 
-    it('when something changed in editor Emit contentChangedFromWysiwyg event', done => {
-      em.listen('contentChangedFromWysiwyg', editor => {
+    it('when something changed in editor Emit contentChangedFromWysiwyg event', (done) => {
+      em.listen('contentChangedFromWysiwyg', (editor) => {
         expect(editor).toBe(wwe);
         done();
       });
@@ -209,7 +197,7 @@ describe('WysiwygEditor', () => {
       wwe.editor.insertHTML('<p>test</p>');
     });
 
-    it('when something changed in editor Emit change.wysiwygEditor event', done => {
+    it('when something changed in editor Emit change.wysiwygEditor event', (done) => {
       // events of squire are asynchronous
       em.listen('changeFromWysiwyg', () => {
         done();
@@ -218,9 +206,9 @@ describe('WysiwygEditor', () => {
       wwe.editor.insertPlainText('t');
     });
 
-    it('when something changed in editor Emit change event', done => {
+    it('when something changed in editor Emit change event', (done) => {
       // squire event fire asynchronous
-      em.listen('change', ev => {
+      em.listen('change', (ev) => {
         expect(ev.source).toEqual('wysiwyg');
         done();
       });
@@ -228,14 +216,14 @@ describe('WysiwygEditor', () => {
       wwe.editor.insertHTML('t');
     });
 
-    it('should not fire change event when getValue', done => {
+    it('should not fire change event when getValue', (done) => {
       em.listen('change', fail);
       wwe.getValue();
       setTimeout(done, 100);
     });
 
     it('when editor gain focus, emit focus event', () => {
-      em.listen('focus', ev => {
+      em.listen('focus', (ev) => {
         expect(ev.source).toEqual('wysiwyg');
       });
 
@@ -243,7 +231,7 @@ describe('WysiwygEditor', () => {
     });
 
     it('when editor lost focus, emit blur event', () => {
-      em.listen('blur', ev => {
+      em.listen('blur', (ev) => {
         expect(ev.source).toEqual('wysiwyg');
       });
 
@@ -251,7 +239,7 @@ describe('WysiwygEditor', () => {
     });
 
     xit('fire stateChange event when state changed', () => {
-      em.listen('stateChange', data => {
+      em.listen('stateChange', (data) => {
         expect(data.strong).toBe(true);
       });
 
@@ -330,38 +318,18 @@ describe('WysiwygEditor', () => {
       wwe.setValue(html);
 
       expect(wwe.getBody().querySelectorAll('div').length).toEqual(3);
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .eq(0)
-          .text()
-      ).toEqual('test');
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .eq(1)
-          .find('img').length
-      ).toEqual(1);
+      expect($(wwe.getBody()).find('div').eq(0).text()).toEqual('test');
+      expect($(wwe.getBody()).find('div').eq(1).find('img').length).toEqual(1);
 
       html = 'test<br>\n<img src="" alt="image">';
       wwe.setValue(html);
 
       expect(wwe.getBody().querySelectorAll('div').length).toEqual(2);
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .eq(0)
-          .text()
-      ).toEqual('test');
-      expect(
-        $(wwe.getBody())
-          .find('div')
-          .eq(1)
-          .find('img').length
-      ).toEqual(1);
+      expect($(wwe.getBody()).find('div').eq(0).text()).toEqual('test');
+      expect($(wwe.getBody()).find('div').eq(1).find('img').length).toEqual(1);
     });
 
-    it('record undo state after all setValue process not setHTML', done => {
+    it('record undo state after all setValue process not setHTML', (done) => {
       const html = '<ul><li>test</li></ul>';
 
       em.listen('wysiwygSetValueAfter', () => {
@@ -444,11 +412,8 @@ describe('WysiwygEditor', () => {
   });
 
   describe('_wrapDefaultBlockTo', () => {
-    it('wrap selection defulat block', done => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+    it('wrap selection defulat block', (done) => {
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe.getBody().innerHTML = 'abcdef';
 
@@ -470,10 +435,7 @@ describe('WysiwygEditor', () => {
     it('make new defulatBlock then move selection to it', () => {
       wwe.getBody().innerHTML = '<div>aef<br></div>';
 
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       range.setStart(wwe.getBody(), 0);
       range.collapse(true);
@@ -487,10 +449,7 @@ describe('WysiwygEditor', () => {
     it('make new defulatBlock to body child then move selection to it', () => {
       wwe.getBody().innerHTML = '<h1><div>aef<br></div></h1>';
 
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       // select text node
       range.setStart(wwe.getBody().querySelectorAll('div')[0], 0);
@@ -505,10 +464,7 @@ describe('WysiwygEditor', () => {
 
   describe('unwrapBlockTag()', () => {
     it('unwrap tag of current selection with tag name', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe.getBody().innerHTML = '<h1><div>test<br></div></h1>';
 
@@ -521,10 +477,7 @@ describe('WysiwygEditor', () => {
     });
 
     it('unwrap tag of current selection with condition callback', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe.getBody().innerHTML = '<h1><div>test<br></div></h1>';
 
@@ -532,7 +485,7 @@ describe('WysiwygEditor', () => {
       range.collapse(true);
       wwe.getEditor().setSelection(range);
 
-      wwe.unwrapBlockTag(tagName => tagName === 'H1');
+      wwe.unwrapBlockTag((tagName) => tagName === 'H1');
 
       expect(wwe.getValue().replace(/<br \/>/g, '')).toBe('test');
     });
@@ -610,7 +563,7 @@ describe('WysiwygEditor', () => {
   });
 
   describe('defer()', () => {
-    it('should run passed callback on next frame', done => {
+    it('should run passed callback on next frame', (done) => {
       let count = 0;
 
       wwe.defer(() => {
@@ -674,10 +627,8 @@ describe('WysiwygEditor', () => {
       wwe.scrollIntoCursor();
 
       const { top: cursorTop, height: cursorHeight } = sqe.getCursorPosition();
-      const {
-        top: editorTop,
-        height: editorHeight
-      } = wwe.editorContainerEl.getBoundingClientRect();
+      const { top: editorTop, height: editorHeight } =
+        wwe.editorContainerEl.getBoundingClientRect();
 
       expect(cursorTop >= 0).toBe(true);
       expect(cursorTop + cursorHeight <= editorTop + editorHeight).toBe(true);
@@ -698,10 +649,8 @@ describe('WysiwygEditor', () => {
       wwe.scrollIntoCursor();
 
       const { top: cursorTop, height: cursorHeight } = sqe.getCursorPosition();
-      const {
-        top: editorTop,
-        height: editorHeight
-      } = wwe.editorContainerEl.getBoundingClientRect();
+      const { top: editorTop, height: editorHeight } =
+        wwe.editorContainerEl.getBoundingClientRect();
 
       expect(cursorTop - editorTop >= 0).toBe(true);
       expect(cursorTop + cursorHeight <= editorTop + editorHeight).toBe(true);
@@ -710,10 +659,7 @@ describe('WysiwygEditor', () => {
 
   describe('isInTable ', () => {
     it('isInTable() check if passed range is in table', () => {
-      const range = wwe
-        .getEditor()
-        .getSelection()
-        .cloneRange();
+      const range = wwe.getEditor().getSelection().cloneRange();
 
       wwe
         .getEditor()

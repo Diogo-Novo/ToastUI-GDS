@@ -100,7 +100,7 @@ export function getHTMLRenderConvertors(linkAttribute, customConvertors) {
   }
 
   if (customConvertors) {
-    Object.keys(customConvertors).forEach(nodeType => {
+    Object.keys(customConvertors).forEach((nodeType) => {
       const orgConvertor = convertors[nodeType];
       const customConvertor = customConvertors[nodeType];
 

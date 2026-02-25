@@ -6,7 +6,7 @@ import CommandManager from '@/commandManager';
 import Command from '@/command';
 import EventManager from '@/eventManager';
 
-describe('CommandManager', function() {
+describe('CommandManager', function () {
   const mockupCm = {
     execCommand(name) {
       return name;
@@ -24,21 +24,21 @@ describe('CommandManager', function() {
 
   let cmgr;
 
-  beforeEach(function() {
+  beforeEach(function () {
     mockupBase.eventManager = new EventManager();
     cmgr = new CommandManager(mockupBase);
 
-    mockupBase.isMarkdownMode = function() {
+    mockupBase.isMarkdownMode = function () {
       return true;
     };
   });
 
-  describe('addCommand', function() {
-    it('register to _mdCommand', function() {
+  describe('addCommand', function () {
+    it('register to _mdCommand', function () {
       const command = new Command('mycommand', Command.TYPE.MD);
 
       command.setKeyMap('Ctrl-B', 'Cmd-B');
-      command.exec = function() {};
+      command.exec = function () {};
 
       cmgr.addCommand(command);
 
@@ -46,8 +46,8 @@ describe('CommandManager', function() {
     });
   });
 
-  describe('exec()', function() {
-    it('should execute command', function() {
+  describe('exec()', function () {
+    it('should execute command', function () {
       const command = new Command('mycommand', Command.TYPE.GB);
 
       command.exec = jasmine.createSpy('global command');
@@ -58,7 +58,7 @@ describe('CommandManager', function() {
       expect(command.exec).toHaveBeenCalled();
     });
 
-    it('should execute markdown command', function() {
+    it('should execute markdown command', function () {
       const command = new Command('mycommand', Command.TYPE.MD),
         execSpy = jasmine.createSpy('spy');
 
@@ -71,7 +71,7 @@ describe('CommandManager', function() {
       expect(execSpy).toHaveBeenCalled();
     });
 
-    it('should execute wysiwyg command', function() {
+    it('should execute wysiwyg command', function () {
       const command = new Command('mycommand', Command.TYPE.WW),
         execSpy = jasmine.createSpy('spy');
 
@@ -79,7 +79,7 @@ describe('CommandManager', function() {
       command.exec = execSpy;
       cmgr.addCommand(command);
 
-      mockupBase.isMarkdownMode = function() {
+      mockupBase.isMarkdownMode = function () {
         return false;
       };
 
@@ -88,7 +88,7 @@ describe('CommandManager', function() {
       expect(execSpy).toHaveBeenCalled();
     });
 
-    it('should execute command with params', function() {
+    it('should execute command with params', function () {
       const command = new Command('mycommand', Command.TYPE.GB),
         execSpy = jasmine.createSpy('spy');
 
@@ -102,7 +102,7 @@ describe('CommandManager', function() {
       expect(execSpy).toHaveBeenCalledWith(mockupBase, 'arg', 'arg2');
     });
 
-    it('should execute command via event manager', function() {
+    it('should execute command via event manager', function () {
       const command = new Command('mycommand', Command.TYPE.GB);
 
       command.exec = jasmine.createSpy('global command');
@@ -114,8 +114,8 @@ describe('CommandManager', function() {
     });
   });
 
-  describe('produce command', function() {
-    it('create command', function() {
+  describe('produce command', function () {
+    it('create command', function () {
       const command = CommandManager.command('global', {
         name: 'mycommand'
       });
@@ -133,7 +133,7 @@ describe('CommandManager', function() {
       expect(wwCommand.isWWType()).toBe(true);
     });
 
-    it('add & create command', function() {
+    it('add & create command', function () {
       const execSpy = jasmine.createSpy('spy');
 
       cmgr.addCommand('markdown', {
@@ -157,7 +157,7 @@ describe('CommandManager', function() {
       command.exec = execSpy;
       cmgr.addCommand(command);
 
-      mockupBase.isMarkdownMode = function() {
+      mockupBase.isMarkdownMode = function () {
         return false;
       };
 
@@ -183,7 +183,7 @@ describe('CommandManager', function() {
       command.exec = execSpy;
       cmgr.addCommand(command);
 
-      mockupBase.isMarkdownMode = function() {
+      mockupBase.isMarkdownMode = function () {
         return false;
       };
 

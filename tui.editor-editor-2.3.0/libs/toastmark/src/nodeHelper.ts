@@ -203,9 +203,11 @@ export function toString(node: Node | null) {
   if (!node) {
     return 'null';
   }
-  return `type: ${node.type}, sourcepos: ${node.sourcepos}, firstChild: ${node.firstChild &&
-    node.firstChild.type}, lastChild: ${node.lastChild && node.lastChild.type}, prev: ${node.prev &&
-    node.prev.type}, next: ${node.next && node.next.type}`;
+  return `type: ${node.type}, sourcepos: ${node.sourcepos}, firstChild: ${
+    node.firstChild && node.firstChild.type
+  }, lastChild: ${node.lastChild && node.lastChild.type}, prev: ${
+    node.prev && node.prev.type
+  }, next: ${node.next && node.next.type}`;
 }
 
 export function findNodeById(id: number) {

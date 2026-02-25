@@ -23,7 +23,7 @@ describe('Italic', () => {
   });
 
   // we need to wait squire input event process
-  afterEach(done => {
+  afterEach((done) => {
     setTimeout(() => {
       document.body.removeChild(container);
       done();
@@ -31,10 +31,7 @@ describe('Italic', () => {
   });
 
   it('add italic to current selection', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('line1<br />line2');
 
@@ -47,10 +44,7 @@ describe('Italic', () => {
   });
 
   it('if there have italic already remove format', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('line1<br />line2');
 
@@ -64,10 +58,7 @@ describe('Italic', () => {
   });
 
   it('if there have italic already remove format in colappsed selection', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<i>line</i>');
 
@@ -82,10 +73,7 @@ describe('Italic', () => {
   });
 
   it('if there have bold apply italic into bold', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<b>line</b>');
 
@@ -98,10 +86,7 @@ describe('Italic', () => {
   });
 
   it('if there have code remove and add italic', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<code>line</code>');
 
@@ -114,10 +99,7 @@ describe('Italic', () => {
   });
 
   it('when some of the text is selected, the italic already applied should be removed', () => {
-    const range = wwe
-      .getEditor()
-      .getSelection()
-      .cloneRange();
+    const range = wwe.getEditor().getSelection().cloneRange();
 
     wwe.setValue('<i>foo b</i>ar');
 

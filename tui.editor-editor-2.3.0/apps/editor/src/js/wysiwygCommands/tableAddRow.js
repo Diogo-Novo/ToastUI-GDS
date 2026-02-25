@@ -94,7 +94,7 @@ function getNewRow(tr) {
   const cloned = tr.cloneNode(true);
   const htmlString = browser.msie ? '' : '<br />';
 
-  domUtils.findAll(cloned, 'td').forEach(td => {
+  domUtils.findAll(cloned, 'td').forEach((td) => {
     td.innerHTML = htmlString;
   });
 

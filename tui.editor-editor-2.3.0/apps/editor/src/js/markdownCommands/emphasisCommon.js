@@ -54,7 +54,7 @@ export const removeSyntax = (text, symbol) => {
  * @returns {string}
  * @ignore
  */
-export const appendSyntax = function(text, symbol) {
+export const appendSyntax = function (text, symbol) {
   return `${symbol}${text}${symbol}`;
 };
 
@@ -68,7 +68,7 @@ export const appendSyntax = function(text, symbol) {
  * @returns {boolean} - if replace text, return true.
  * @ignore
  */
-export const expandReplace = function(doc, range, expandSize, checker, replacer) {
+export const expandReplace = function (doc, range, expandSize, checker, replacer) {
   const expendRange = getExpandedRange(range, expandSize);
   let result = false;
 
@@ -95,7 +95,7 @@ export const expandReplace = function(doc, range, expandSize, checker, replacer)
  * @returns {boolean} - if replace text, return true.
  * @ignore
  */
-export const replace = function(doc, text, checker, replacer) {
+export const replace = function (doc, text, checker, replacer) {
   let result = false;
 
   if (checker(text)) {
@@ -106,19 +106,19 @@ export const replace = function(doc, text, checker, replacer) {
   return result;
 };
 
-export const changeSyntax = function(doc, range, symbol, syntaxRegex, contentRegex) {
+export const changeSyntax = function (doc, range, symbol, syntaxRegex, contentRegex) {
   const { line, ch } = doc.getCursor();
   const selectionStr = doc.getSelection();
   const symbolLength = symbol.length;
-  const isSyntax = t => syntaxRegex.test(t);
+  const isSyntax = (t) => syntaxRegex.test(t);
 
   // 1. expand text and check syntax => remove syntax
   // 2. check text is syntax => remove syntax
   // 3. If text does not match syntax, remove syntax inside text and then append syntax
   if (
     !(
-      expandReplace(doc, range, symbolLength, isSyntax, t => removeSyntax(t, symbol)) ||
-      replace(doc, selectionStr, isSyntax, t => removeSyntax(t, symbol))
+      expandReplace(doc, range, symbolLength, isSyntax, (t) => removeSyntax(t, symbol)) ||
+      replace(doc, selectionStr, isSyntax, (t) => removeSyntax(t, symbol))
     )
   ) {
     const removeSyntaxInsideText = selectionStr.replace(contentRegex, '$1');

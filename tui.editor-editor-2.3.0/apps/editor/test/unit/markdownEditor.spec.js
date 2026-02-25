@@ -21,8 +21,8 @@ describe('MarkdownEditor', () => {
     document.body.removeChild(container);
   });
 
-  it('when something change emit contentChangedFromMarkdown event', done => {
-    em.listen('contentChangedFromMarkdown', changed => {
+  it('when something change emit contentChangedFromMarkdown event', (done) => {
+    em.listen('contentChangedFromMarkdown', (changed) => {
       changed.forEach(({ nodes, removedNodeRange }) => {
         const expectedMdNode = mde.getToastMark().findFirstNodeAtLine(1);
 
@@ -35,8 +35,8 @@ describe('MarkdownEditor', () => {
     mde.getEditor().replaceSelection('myText');
   });
 
-  it('when something change emit changeFromMarkdown event', done => {
-    em.listen('changeFromMarkdown', ev => {
+  it('when something change emit changeFromMarkdown event', (done) => {
+    em.listen('changeFromMarkdown', (ev) => {
       expect(ev.source).toEqual('markdown');
 
       done();
@@ -45,8 +45,8 @@ describe('MarkdownEditor', () => {
     mde.getEditor().replaceSelection('my');
   });
 
-  it('when something change emit change event', done => {
-    em.listen('change', ev => {
+  it('when something change emit change event', (done) => {
+    em.listen('change', (ev) => {
       expect(ev.source).toEqual('markdown');
 
       done();
@@ -55,8 +55,8 @@ describe('MarkdownEditor', () => {
     mde.getEditor().replaceSelection('comment');
   });
 
-  it('when editor gain focus, emit focus event', done => {
-    em.listen('focus', ev => {
+  it('when editor gain focus, emit focus event', (done) => {
+    em.listen('focus', (ev) => {
       expect(ev.source).toEqual('markdown');
 
       done();
@@ -65,8 +65,8 @@ describe('MarkdownEditor', () => {
     mde.focus();
   });
 
-  it('when editor lost focus, emit blur event', done => {
-    em.listen('blur', ev => {
+  it('when editor lost focus, emit blur event', (done) => {
+    em.listen('blur', (ev) => {
       expect(ev.source).toEqual('markdown');
 
       done();
@@ -83,8 +83,8 @@ describe('MarkdownEditor', () => {
     function init() {
       const doc = mde.getEditor().getDoc();
 
-      setValue = val => mde.setValue(val);
-      setCursor = pos => doc.setCursor(pos);
+      setValue = (val) => mde.setValue(val);
+      setCursor = (pos) => doc.setCursor(pos);
       setSelection = (from, to) => doc.setSelection(from, to);
       getValue = () => mde.getValue();
       toggleTaskStates = () => mde._toggleTaskStates();

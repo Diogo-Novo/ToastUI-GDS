@@ -101,7 +101,7 @@ class DefaultToolbar extends Toolbar {
     // Move all items currently in the popup back to the main toolbar
     const dropDownToolbarItems = this._popupDropdownToolbar.getItems();
 
-    dropDownToolbarItems.forEach(item => {
+    dropDownToolbarItems.forEach((item) => {
       this._popupDropdownToolbar.removeItem(item, false);
       super.insertItem(this.getItems().length, item);
     });
@@ -119,10 +119,10 @@ class DefaultToolbar extends Toolbar {
     // Row-based overflow calculation: use first item's offsetTop as reference
     const firstRowTop = toolbarItems[0].el.offsetTop;
 
-    const overflowItems = toolbarItems.filter(item => item.el.offsetTop > firstRowTop);
+    const overflowItems = toolbarItems.filter((item) => item.el.offsetTop > firstRowTop);
 
     // Move overflowed items into the popup
-    overflowItems.forEach(item => {
+    overflowItems.forEach((item) => {
       this.removeItem(item, false);
       this._popupDropdownToolbar.addItem(item);
     });
@@ -135,7 +135,7 @@ class DefaultToolbar extends Toolbar {
       toolbarHeight: this.el.clientHeight,
       firstRowTop,
       overflowCount: overflowItems.length,
-      visibleItems: this.getItems().map(item => item.name)
+      visibleItems: this.getItems().map((item) => item.name)
     });
   }
 
@@ -216,7 +216,6 @@ class DefaultToolbar extends Toolbar {
 
   debug(...args) {
     if (DEBUG_TOOLBAR) {
-      // eslint-disable-next-line no-console
       console.log('[DefaultToolbar]', ...args);
     }
   }

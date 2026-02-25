@@ -121,7 +121,7 @@ class LayerPopup extends UIController {
     if (buttons) {
       const closeButtons = domUtils.findAll(this.el, `.${CLASS_PREFIX}close-button`);
 
-      closeButtons.forEach(button => {
+      closeButtons.forEach((button) => {
         domUtils.remove(button);
       });
 
@@ -145,7 +145,7 @@ class LayerPopup extends UIController {
     const { body } = document;
 
     if (openerCssQuery) {
-      domUtils.findAll(body, openerCssQuery).forEach(el => {
+      domUtils.findAll(body, openerCssQuery).forEach((el) => {
         const eventKey = `click.${this._id}`;
 
         this._clickEventMap[eventKey] = this.show.bind(this);
@@ -154,7 +154,7 @@ class LayerPopup extends UIController {
     }
 
     if (closerCssQuery) {
-      domUtils.findAll(body, closerCssQuery).forEach(el => {
+      domUtils.findAll(body, closerCssQuery).forEach((el) => {
         const eventKey = `click.${this._id}`;
 
         this._clickEventMap[eventKey] = this.hide.bind(this);
@@ -266,13 +266,13 @@ class LayerPopup extends UIController {
     this.off(`click .${CLASS_PREFIX}close-button`, this._onClickCloseButton);
 
     if (openerCssQuery) {
-      domUtils.findAll(body, openerCssQuery).forEach(opener => {
+      domUtils.findAll(body, openerCssQuery).forEach((opener) => {
         off(opener, 'click', this._clickEventMap[`click.${this._id}`]);
         delete this._clickEventMap[`click.${this._id}`];
       });
     }
     if (closerCssQuery) {
-      domUtils.findAll(body, closerCssQuery).forEach(closer => {
+      domUtils.findAll(body, closerCssQuery).forEach((closer) => {
         off(closer, 'click', this._clickEventMap[`click.${this._id}`]);
         delete this._clickEventMap[`click.${this._id}`];
       });

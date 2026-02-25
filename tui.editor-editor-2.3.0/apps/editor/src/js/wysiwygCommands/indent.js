@@ -45,7 +45,7 @@ const Indent = CommandManager.command(
         if (next) {
           nextClasses = next.className;
 
-          const divElements = toArray(next.children).filter(child => matches(child, 'div'));
+          const divElements = toArray(next.children).filter((child) => matches(child, 'div'));
 
           if (!divElements.length) {
             next.className = '';

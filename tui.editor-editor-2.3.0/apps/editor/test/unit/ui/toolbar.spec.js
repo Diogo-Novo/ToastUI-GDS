@@ -106,7 +106,7 @@ describe('Toolbar', () => {
     it('should bind the item command', () => {
       const command = new Command('testCommand', Command.TYPE.GB);
 
-      command.setup = function() {};
+      command.setup = function () {};
       command.exec = jasmine.createSpy('exec');
       cm.addCommand(command);
 
@@ -130,7 +130,7 @@ describe('Toolbar', () => {
     });
 
     afterEach(() => {
-      inputItems.forEach(inputItem => {
+      inputItems.forEach((inputItem) => {
         inputItem.destroy();
       });
     });
@@ -197,7 +197,7 @@ describe('Toolbar', () => {
     it('should bind the item command', () => {
       const command = new Command('testCommand', Command.TYPE.GB);
 
-      command.setup = function() {};
+      command.setup = function () {};
       command.exec = jasmine.createSpy('exec');
       cm.addCommand(command);
 
@@ -213,7 +213,7 @@ describe('Toolbar', () => {
       const items = toolbar.getItems();
 
       expect(items).toEqual(jasmine.any(Array));
-      items.forEach(item => {
+      items.forEach((item) => {
         expect(item).toEqual(jasmine.any(ToolbarItem));
       });
     });
@@ -318,7 +318,7 @@ describe('Toolbar', () => {
       const items = [new ToolbarItem(), new ToolbarItem()];
       const { length } = items;
 
-      items.forEach(item => {
+      items.forEach((item) => {
         item.destroy = destroySpy;
       });
       toolbar.setItems(items);
@@ -438,7 +438,7 @@ describe('Toolbar', () => {
       const items = [new ToolbarItem(), new ToolbarItem()];
       const { length } = items;
 
-      items.forEach(item => {
+      items.forEach((item) => {
         item.destroy = destroySpy;
       });
       toolbar.setItems(items);

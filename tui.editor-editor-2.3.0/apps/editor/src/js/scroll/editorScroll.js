@@ -14,7 +14,6 @@ const EDITING_POSITION_RATIO = 0.5;
 let blockedPreviewScrollEvent = false;
 let latestScrollTop = null;
 
-/* eslint-disable no-return-assign */
 function getAndSaveOffsetHeight(node, mdNodeId) {
   const cachedHeight = getOffsetHeight(mdNodeId);
   const offsetHeight = cachedHeight || node.offsetHeight;
@@ -103,7 +102,7 @@ export function syncPreviewScrollTopToMarkdown(editor, preview, scrollEvent) {
   blockedPreviewScrollEvent = true;
 
   const callbackObjForSync = {
-    syncScrollTop: deltaScrollTop => (previewEl.scrollTop = deltaScrollTop),
+    syncScrollTop: (deltaScrollTop) => (previewEl.scrollTop = deltaScrollTop),
     releaseEventBlock: () => (blockedPreviewScrollEvent = false)
   };
 

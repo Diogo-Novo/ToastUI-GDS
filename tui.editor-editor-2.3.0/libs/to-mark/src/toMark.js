@@ -80,7 +80,7 @@ function finalize(text, isGfm, lineFeedReplacement) {
   // collapse multiple br
   text = text.replace(FIND_MULTIPLE_BRS_RX, '\n\n');
 
-  text = text.replace(FIND_RETURNS_AND_SPACE_RX, matched => {
+  text = text.replace(FIND_RETURNS_AND_SPACE_RX, (matched) => {
     const returnCount = (matched.match(/\n/g) || []).length;
 
     if (returnCount >= 3) {

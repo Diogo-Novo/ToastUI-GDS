@@ -74,7 +74,7 @@ function removeUnnecessaryTags(html) {
     'script, iframe, textarea, form, button, select, input, meta, style, link, title, embed, object, details, summary'
   );
 
-  removedTags.forEach(node => {
+  removedTags.forEach((node) => {
     domUtils.remove(node);
   });
 }
@@ -114,9 +114,9 @@ function removeBlacklistAttributes(node, blacklistAttrs) {
  * @private
  */
 function leaveOnlyWhitelistAttribute(html) {
-  domUtils.findAll(html, '*').forEach(node => {
+  domUtils.findAll(html, '*').forEach((node) => {
     const { attributes } = node;
-    const blacklist = toArray(attributes).filter(attr => {
+    const blacklist = toArray(attributes).filter((attr) => {
       const { name, value } = attr;
       const htmlAttr = name.match(HTML_ATTR_LIST_RX);
       const svgAttr = name.match(SVG_ATTR_LIST_RX);
