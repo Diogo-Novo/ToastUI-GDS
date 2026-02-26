@@ -22,7 +22,11 @@
     },
     "homepage": "https://ui.toast.com",
     "scripts": {
-        "build": "make build"
+        "build": "npm run build:clean && npm run build:raw-js && npm run build:js && npm run build:html",
+        "build:clean": "rm build -rf && mkdir build",
+        "build:raw-js": "cat source/intro.js source/Constants.js source/TreeWalker.js source/Node.js source/Range.js source/KeyHandlers.js source/Clean.js source/Clipboard.js source/Editor.js source/exports.js source/outro.js | grep -v 'jshint' > build/squire-raw.js",
+        "build:js": "../../../node_modules/uglify-js/bin/uglifyjs ./build/squire-raw.js -c -m -o ./build/squire.js",
+        "build:html": "cp source/document.html build/document.html"
     },
     "devDependencies": {
         "mocha": "^8.0.0",
