@@ -1757,6 +1757,9 @@ proto.setHTML = function (html) {
     return this;
 };
 
+// All list elements
+// It's invalid to have a completely empty
+const invalidFirstChildren = ['UL', 'OL', 'LI'];
 proto.insertElement = function (el, range) {
     if (!range) {
         range = this.getSelection();
@@ -1779,6 +1782,30 @@ proto.insertElement = function (el, range) {
             parent = splitNode.parentNode;
             nodeAfterSplit = split(parent, splitNode.nextSibling, root, root);
         }
+
+        // Bugfix - if node after split is a div inside an empty List element then kill it
+        if (nodeAfterSplit) {
+            // Get first base level element after the split
+            var rootFirstChild = nodeAfterSplit.firstElementChild;
+            while (rootFirstChild.firstElementChild)
+                rootFirstChild = rootFirstChild.firstElementChild;
+
+            // First child could be an empty dot, caused by a ul -> li chain with no contents
+            // Travel back up the tree to the first element that doesn't fit this condition and delete the elements
+            while (
+                invalidFirstChildren.indexOf(rootFirstChild.nodeName) !== -1 &&
+                (!rootFirstChild.children || rootFirstChild.children.length <= 1) &&
+                !rootFirstChild.textContent.trim()
+            ) {
+                rootFirstChild = rootFirstChild.parentElement;
+            }
+
+            // Delete the invalid markup, in this case it will be the first child - if it exists
+            if (rootFirstChild.firstElementChild) {
+                rootFirstChild.removeChild(rootFirstChild.firstElementChild);
+            }
+        }
+
         if (nodeAfterSplit) {
             root.insertBefore(el, nodeAfterSplit);
         } else {
