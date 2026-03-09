@@ -1758,17 +1758,8 @@ span.CodeMirror-selectedtext {
 .tui-editor-contents {
   margin: 0;
   padding: 0;
-  font-size: 13px;
-  font-family:
-    Open Sans,
-    Helvetica Neue,
-    Helvetica,
-    Arial,
-    나눔바른고딕,
-    Nanum Barun Gothic,
-    맑은고딕,
-    Malgun Gothic,
-    sans-serif;
+  font-size: 1rem;
+  font-family: Aptos, Aptos_EmbeddedFont, Aptos_MS_FontService, Calibri, sans-serif;
 }
 
 .tui-editor-contents :not(table) {
