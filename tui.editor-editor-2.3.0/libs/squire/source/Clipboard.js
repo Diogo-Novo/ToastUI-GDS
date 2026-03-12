@@ -142,7 +142,8 @@ function monitorShiftKey(event) {
 var onPaste = function (event) {
     var clipboardData = event.clipboardData;
     var items = clipboardData && clipboardData.items;
-    var choosePlain = this.isShiftDown;
+    // Bugfix, all pastes must be plain
+    var choosePlain = true; //this.isShiftDown;
     var fireDrop = false;
     var hasImage = false;
     var plainItem = null;

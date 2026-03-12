@@ -2024,23 +2024,26 @@ proto.insertPlainText = function (plainText, isPaste) {
         return this;
     }
     var lines = plainText.split('\n');
-    var config = this._config;
-    var tag = config.blockTag;
-    var attributes = config.blockAttributes;
-    var closeBlock = '</' + tag + '>';
-    var openBlock = '<' + tag;
-    var attr, i, l, line;
+    // var config = this._config;
+    // var tag = config.blockTag;
+    // var attributes = config.blockAttributes;
+    // var closeBlock = '</' + tag + '>';
+    // var openBlock = '<' + tag;
+    var i, l, line; // attr,
 
-    for (attr in attributes) {
-        openBlock += ' ' + attr + '="' + escapeHTMLFragement(attributes[attr]) + '"';
-    }
-    openBlock += '>';
+    // for (attr in attributes) {
+    //     openBlock += ' ' + attr + '="' + escapeHTMLFragement(attributes[attr]) + '"';
+    // }
+    // openBlock += '>';
 
     for (i = 0, l = lines.length; i < l; i += 1) {
         line = lines[i];
         line = escapeHTMLFragement(line).replace(/ (?= )/g, '&nbsp;');
         // Wrap each line in <div></div>
-        lines[i] = openBlock + (line || '<BR>') + closeBlock;
+        // lines[i] = openBlock + (line || '<BR>') + closeBlock;
+
+        // Actually don't wrap each line!
+        lines[i] = line || '<BR>';
     }
     return this.insertHTML(lines.join(''), isPaste);
 };
