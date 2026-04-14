@@ -2171,23 +2171,90 @@ proto.setFontSize = function (size) {
 
 proto.setTextColour = function (colour) {
     var className = this._config.classNames.colour;
-    this.changeFormat(
-        colour
-            ? {
-                  tag: 'SPAN',
-                  attributes: {
-                      class: className,
-                      style: 'color:' + colour
-                  }
-              }
-            : null,
-        {
-            tag: 'SPAN',
-            attributes: { class: className }
+    var range = this.getSelection();
+    if (!range) return this;
+
+    this.saveUndoState(range);
+
+    var colourSpans = getColourSpansInRange(range, className);
+
+    if (colourSpans.length) {
+        colourSpans.forEach(function (span) {
+            if (colour) {
+                // Only touch the color — all other attributes are left alone
+                span.style.color = colour;
+            } else {
+                // Reset: remove only the color property, not the whole element
+                span.style.removeProperty('color');
+
+                // Only unwrap the span if it's now a no-op element
+                if (isEmptyColourSpan(span, className)) {
+                    unwrapSpan(span);
+                }
+            }
+        });
+
+        this.setSelection(range);
+        this._updatePath(range, true);
+        if (!canObserveMutations) {
+            this._docWasChanged();
         }
-    );
+    } else if (colour) {
+        // No existing colour span — safe to create a fresh one via changeFormat
+        this.changeFormat(
+            {
+                tag: 'SPAN',
+                attributes: {
+                    class: className,
+                    style: 'color:' + colour
+                }
+            },
+            null, // No remove — nothing to preserve yet
+            range
+        );
+    }
+
     return this.focus();
 };
+
+function getColourSpansInRange(range, className) {
+    var ancestor = range.commonAncestorContainer;
+    var root = ancestor.nodeType === Node.ELEMENT_NODE
+        ? ancestor
+        : ancestor.parentNode;
+
+    var spans = Array.from(root.querySelectorAll('span.' + className));
+
+    // If the ancestor itself is a matching span, include it
+    if (
+        root.nodeName === 'SPAN' &&
+        root.classList.contains(className)
+    ) {
+        spans.unshift(root);
+    }
+
+    return spans.filter(function (span) {
+        return range.intersectsNode(span);
+    });
+}
+
+function isEmptyColourSpan(span, className) {
+    // Unwrap only if: no remaining inline style AND no attributes beyond the colour class
+    var styleEmpty = !span.getAttribute('style') || span.style.length === 0;
+    var onlyColourClass =
+        span.classList.length === 1 && span.classList.contains(className);
+    var noOtherAttrs = span.attributes.length <= (onlyColourClass ? 1 : 0);
+
+    return styleEmpty && noOtherAttrs;
+}
+
+function unwrapSpan(span) {
+    var parent = span.parentNode;
+    while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+    }
+    parent.removeChild(span);
+}
 
 proto.setHighlightColour = function (colour) {
     var className = this._config.classNames.highlight;
