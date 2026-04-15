@@ -22,7 +22,11 @@
     },
     "homepage": "https://ui.toast.com",
     "scripts": {
-        "build": "make build"
+        "build": "npm run build:clean && npm run build:raw-js && npm run build:js && npm run build:html",
+        "build:clean": "node scripts/build-clean.js",
+        "build:raw-js": "node scripts/build-raw.js",
+        "build:js": "uglifyjs ../build/squire-raw.js -c -m -o ../build/squire.js",
+        "build:html": "node scripts/build-html.js"
     },
     "devDependencies": {
         "mocha": "^8.0.0",
