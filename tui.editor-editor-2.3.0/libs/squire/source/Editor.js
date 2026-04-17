@@ -2175,138 +2175,31 @@ proto.setTextColour = function (colour) {
     if (!range) return this;
 
     this.saveUndoState(range);
-
-    applyColourToRange(range,className,colour);
-
+    applyColourToRange(range, className, colour);
     this.setSelection(range);
     this._updatePath(range, true);
-    if(!canObserveMutations) {
+    if (!canObserveMutations) {
         this._docWasChanged();
     }
-
     return this.focus();
 };
 
 function applyColourToRange(range, className, colour) {
     var textNodes = getTextNodesInRange(range);
-
-    textNodes.forEach(function(node){
+    textNodes.forEach(function (node) {
         var existingSpan = getParentColourSpan(node, className);
-
-        if(existingSpan) {
-            if(colour){
+        if (existingSpan) {
+            if (colour) {
                 existingSpan.style.color = colour;
-            }
-            else {
+            } else {
                 existingSpan.style.removeProperty('color');
-                if(isEmptyColourSpan(existingSpan,className)) {
+                if (isEmptyColourSpan(existingSpan, className)) {
                     unwrapSpan(existingSpan);
                 }
             }
+        } else if (colour) {
+            wrapTextNode(node, range, className, colour);
         }
-        else if (colour) {
-            wrapTextNode(node,range,className,colour);
-        }
-    })
-}
-
-function getParentColourSpan(node,className) {
-    var parent = node.parentNode;
-    while (parent) {
-        if (
-            parent.nodeName === 'SPAN' &&
-            parent.classList.contains(className)
-        ) {
-            return parent;
-        }
-        parent = parent.parentNode;
-    }
-    return null;
-}
-
-function wrapTextNode(node, range,className,colour) {
-    var start = node === range.startContainer ? range.startOffset : 0;
-    var end = node === range.endContainer ? range.endOffset : node.length;
-
-    if(end < node.length) {
-        node.splitText(end);
-    }
-
-    var targetNode = start > 0 ? node.splitText(start) : node;
-
-    var span = document.createElement('span');
-    span.className = className;
-    span.style.color = colour;
-
-    targetNode.parentNode.insertBefore(span,targetNode);
-    span.appendChild(targetNode);
-}
-
-function getColourSpansInRange(range, className) {
-    var ancestor = range.commonAncestorContainer;
-    var root = ancestor.nodeType === Node.ELEMENT_NODE
-        ? ancestor
-        : ancestor.parentNode;
-
-    var spans = Array.from(root.querySelectorAll('span.' + className));
-
-    // If the ancestor itself is a matching span, include it
-    if (
-        root.nodeName === 'SPAN' &&
-        root.classList.contains(className)
-    ) {
-        spans.unshift(root);
-    }
-
-    return spans.filter(function (span) {
-        return range.intersectsNode(span);
-    });
-}
-
-function isEmptyColourSpan(span, className) {
-    // Unwrap only if: no remaining inline style AND no attributes beyond the colour class
-    var styleEmpty = !span.getAttribute('style') || span.style.length === 0;
-    var onlyColourClass =
-        span.classList.length === 1 && span.classList.contains(className);
-    var noOtherAttrs = span.attributes.length <= (onlyColourClass ? 1 : 0);
-
-    return styleEmpty && noOtherAttrs;
-}
-
-function unwrapSpan(span) {
-    var parent = span.parentNode;
-    while (span.firstChild) {
-        parent.insertBefore(span.firstChild, span);
-    }
-    parent.removeChild(span);
-}
-
-function wrapTextNodesInRange(range, className, colour) {
-    var textNodes = getTextNodesInRange(range);
-
-    textNodes.forEach(function (node) {
-        // Don't wrap if already inside a colour span
-        if (isInsideColourSpan(node, className)) return;
-
-        var span = document.createElement('span');
-        span.className = className;
-        span.style.color = colour;
-
-        // Slice the text node if the range only partially covers it
-        var start = node === range.startContainer ? range.startOffset : 0;
-        var end = node === range.endContainer ? range.endOffset : node.length;
-
-        var targetNode = node;
-        if (end < node.length) {
-            targetNode = node.splitText(end);
-            targetNode = node; // use the left part
-        }
-        if (start > 0) {
-            targetNode = node.splitText(start);
-        }
-
-        targetNode.parentNode.insertBefore(span, targetNode);
-        span.appendChild(targetNode);
     });
 }
 
@@ -2325,7 +2218,6 @@ function getTextNodesInRange(range) {
             }
         }
     );
-
     var node;
     while ((node = walker.nextNode())) {
         textNodes.push(node);
@@ -2333,18 +2225,46 @@ function getTextNodesInRange(range) {
     return textNodes;
 }
 
-function isInsideColourSpan(node, className) {
+function getParentColourSpan(node, className) {
     var parent = node.parentNode;
     while (parent) {
-        if (
-            parent.nodeName === 'SPAN' &&
-            parent.classList.contains(className)
-        ) {
-            return true;
+        if (parent.nodeName === 'SPAN' && parent.classList.contains(className)) {
+            return parent;
         }
         parent = parent.parentNode;
     }
-    return false;
+    return null;
+}
+
+function wrapTextNode(node, range, className, colour) {
+    var start = node === range.startContainer ? range.startOffset : 0;
+    var end = node === range.endContainer ? range.endOffset : node.length;
+
+    if (end < node.length) {
+        node.splitText(end);
+    }
+    var targetNode = start > 0 ? node.splitText(start) : node;
+
+    var span = document.createElement('span');
+    span.className = className;
+    span.style.color = colour;
+    targetNode.parentNode.insertBefore(span, targetNode);
+    span.appendChild(targetNode);
+}
+
+function isEmptyColourSpan(span, className) {
+    var styleEmpty = !span.getAttribute('style') || span.style.length === 0;
+    var onlyColourClass = span.classList.length === 1 && span.classList.contains(className);
+    var noOtherAttrs = span.attributes.length <= (onlyColourClass ? 1 : 0);
+    return styleEmpty && noOtherAttrs;
+}
+
+function unwrapSpan(span) {
+    var parent = span.parentNode;
+    while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+    }
+    parent.removeChild(span);
 }
 
 proto.setHighlightColour = function (colour) {
