@@ -2265,6 +2265,71 @@ function unwrapSpan(span) {
     parent.removeChild(span);
 }
 
+function wrapTextNodesInRange(range, className, colour) {
+    var textNodes = getTextNodesInRange(range);
+
+    textNodes.forEach(function (node) {
+        // Don't wrap if already inside a colour span
+        if (isInsideColourSpan(node, className)) return;
+
+        var span = document.createElement('span');
+        span.className = className;
+        span.style.color = colour;
+
+        // Slice the text node if the range only partially covers it
+        var start = node === range.startContainer ? range.startOffset : 0;
+        var end = node === range.endContainer ? range.endOffset : node.length;
+
+        var targetNode = node;
+        if (end < node.length) {
+            targetNode = node.splitText(end);
+            targetNode = node; // use the left part
+        }
+        if (start > 0) {
+            targetNode = node.splitText(start);
+        }
+
+        targetNode.parentNode.insertBefore(span, targetNode);
+        span.appendChild(targetNode);
+    });
+}
+
+function getTextNodesInRange(range) {
+    var textNodes = [];
+    var walker = document.createTreeWalker(
+        range.commonAncestorContainer.nodeType === Node.TEXT_NODE
+            ? range.commonAncestorContainer.parentNode
+            : range.commonAncestorContainer,
+        NodeFilter.SHOW_TEXT,
+        {
+            acceptNode: function (node) {
+                return range.intersectsNode(node)
+                    ? NodeFilter.FILTER_ACCEPT
+                    : NodeFilter.FILTER_REJECT;
+            }
+        }
+    );
+
+    var node;
+    while ((node = walker.nextNode())) {
+        textNodes.push(node);
+    }
+    return textNodes;
+}
+
+function isInsideColourSpan(node, className) {
+    var parent = node.parentNode;
+    while (parent) {
+        if (
+            parent.nodeName === 'SPAN' &&
+            parent.classList.contains(className)
+        ) {
+            return true;
+        }
+        parent = parent.parentNode;
+    }
+    return false;
+}
 
 proto.setHighlightColour = function (colour) {
     var className = this._config.classNames.highlight;
