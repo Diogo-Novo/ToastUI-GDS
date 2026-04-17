@@ -1759,7 +1759,7 @@ proto.setHTML = function (html) {
 
 // All list elements
 // It's invalid to have a completely empty
-const invalidFirstChildren = ['UL', 'OL', 'LI'];
+var invalidFirstChildren = ['UL', 'OL', 'LI'];
 proto.insertElement = function (el, range) {
     if (!range) {
         range = this.getSelection();
@@ -2200,18 +2200,27 @@ proto.setTextColour = function (colour) {
             this._docWasChanged();
         }
     } else if (colour) {
-        // No existing colour span — safe to create a fresh one via changeFormat
-        this.changeFormat(
-            {
-                tag: 'SPAN',
-                attributes: {
-                    class: className,
-                    style: 'color:' + colour
-                }
-            },
-            null, // No remove — nothing to preserve yet
-            range
-        );
+        
+        wrapTextNodesInRange(range, className, colour);
+
+        this.setSelection(range);
+        this._updatePath(range, true);
+        if(!canObserveMutations) {
+            this._docWasChanged();
+        }
+
+        // // No existing colour span — safe to create a fresh one via changeFormat
+        // this.changeFormat(
+        //     {
+        //         tag: 'SPAN',
+        //         attributes: {
+        //             class: className,
+        //             style: 'color:' + colour
+        //         }
+        //     },
+        //     null, // No remove — nothing to preserve yet
+        //     range
+        // );
     }
 
     return this.focus();
@@ -2255,6 +2264,7 @@ function unwrapSpan(span) {
     }
     parent.removeChild(span);
 }
+
 
 proto.setHighlightColour = function (colour) {
     var className = this._config.classNames.highlight;
