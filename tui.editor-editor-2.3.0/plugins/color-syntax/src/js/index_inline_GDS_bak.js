@@ -37,12 +37,10 @@ let lastScrollTop = 0;
  * @ignore
  */
 function setStyleColor(sq, color) {
+  console.log('setStyleColor called')
   if (!sq.hasFormat('PRE')) {
     if (color === RESET_COLOR) {
-      sq.changeFormat(null, {
-        class: 'colour',
-        tag: 'span'
-      });
+      sq.setTextColour(null);
     } else {
       sq.setTextColour(color);
     }

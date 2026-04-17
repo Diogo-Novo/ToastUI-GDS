@@ -2176,55 +2176,71 @@ proto.setTextColour = function (colour) {
 
     this.saveUndoState(range);
 
-    var colourSpans = getColourSpansInRange(range, className);
+    applyColourToRange(range,className,colour);
 
-    if (colourSpans.length) {
-        colourSpans.forEach(function (span) {
-            if (colour) {
-                // Only touch the color — all other attributes are left alone
-                span.style.color = colour;
-            } else {
-                // Reset: remove only the color property, not the whole element
-                span.style.removeProperty('color');
-
-                // Only unwrap the span if it's now a no-op element
-                if (isEmptyColourSpan(span, className)) {
-                    unwrapSpan(span);
-                }
-            }
-        });
-
-        this.setSelection(range);
-        this._updatePath(range, true);
-        if (!canObserveMutations) {
-            this._docWasChanged();
-        }
-    } else if (colour) {
-        
-        wrapTextNodesInRange(range, className, colour);
-
-        this.setSelection(range);
-        this._updatePath(range, true);
-        if(!canObserveMutations) {
-            this._docWasChanged();
-        }
-
-        // // No existing colour span — safe to create a fresh one via changeFormat
-        // this.changeFormat(
-        //     {
-        //         tag: 'SPAN',
-        //         attributes: {
-        //             class: className,
-        //             style: 'color:' + colour
-        //         }
-        //     },
-        //     null, // No remove — nothing to preserve yet
-        //     range
-        // );
+    this.setSelection(range);
+    this._updatePath(range, true);
+    if(!canObserveMutations) {
+        this._docWasChanged();
     }
 
     return this.focus();
 };
+
+function applyColourToRange(range, className, colour) {
+    var textNodes = getTextNodesInRange(range);
+
+    textNodes.forEach(function(node){
+        var existingSpan = getParentColourSpan(node, className);
+
+        if(existingSpan) {
+            if(colour){
+                existingSpan.style.color = colour;
+            }
+            else {
+                existingSpan.style.removeProperty('color');
+                if(isEmptyColourSpan(existingSpan,className)) {
+                    unwrapSpan(existingSpan);
+                }
+            }
+        }
+        else if (colour) {
+            wrapTextNodesInRange(node,range,className,colour);
+        }
+    })
+}
+
+function getParentColourSpan(node,className) {
+    var parent = node.parentNode;
+    while (parent) {
+        if (
+            parent.nodeName === 'SPAN' &&
+            parent.classList.contains(className)
+        ) {
+            return parent;
+        }
+        parent = parent.parentNode;
+    }
+    return null;
+}
+
+function wrapTextNode(node, range,className,colour) {
+    var start = node === range.startContainer ? range.startOffset : 0;
+    var end = node === range.endContainer ? range.endOffset : node.length;
+
+    if(end < node.length) {
+        node.splitText(end);
+    }
+
+    var targetNode = start > 0 ? node.splitText(start) : node;
+
+    var span = document.createElement('span');
+    span.className = className;
+    span.style.color = colour;
+
+    targetNode.parentNode.insertBefore(span,targetNode);
+    span.appendChild(targetNode);
+}
 
 function getColourSpansInRange(range, className) {
     var ancestor = range.commonAncestorContainer;
