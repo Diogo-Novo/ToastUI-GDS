@@ -13,8 +13,7 @@
     "build:squire": "npm run build -workspace tui.editor-editor-2.3.0/libs/squire",
     "build:to-mark": "npm run build -workspace tui.editor-editor-2.3.0/libs/to-mark",
     "build:toastmark": "npm run build -workspace tui.editor-editor-2.3.0/libs/toastmark",
-    "lint": "prettier . --fix && eslint . --fix",
-    "serve": 
+    "lint": "prettier . --fix && eslint . --fix"
   },
   "devDependencies": {
     "@eslint/css": "^0.14.1",

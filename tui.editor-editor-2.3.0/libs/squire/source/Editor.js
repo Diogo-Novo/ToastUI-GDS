@@ -2205,7 +2205,7 @@ function applyColourToRange(range, className, colour) {
             }
         }
         else if (colour) {
-            wrapTextNodesInRange(node,range,className,colour);
+            wrapTextNode(node,range,className,colour);
         }
     })
 }
