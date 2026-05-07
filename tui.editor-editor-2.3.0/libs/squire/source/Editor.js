@@ -2170,12 +2170,11 @@ proto.setFontSize = function (size) {
 };
 
 proto.setTextColour = function (colour) {
-    var className = this._config.classNames.colour;
     var range = this.getSelection();
     if (!range) return this;
 
     this.saveUndoState(range);
-    applyColourToRange(range, className, colour);
+    applyColourToRange(range, colour);
     this.setSelection(range);
     this._updatePath(range, true);
     if (!canObserveMutations) {
@@ -2184,23 +2183,68 @@ proto.setTextColour = function (colour) {
     return this.focus();
 };
 
-function applyColourToRange(range, className, colour) {
+function applyColourToRange(range, colour) {
     var textNodes = getTextNodesInRange(range);
     textNodes.forEach(function (node) {
-        var existingSpan = getParentColourSpan(node, className);
-        if (existingSpan) {
+        var existingColourNode = getParentColourSpan(node);
+        if (existingColourNode) {
             if (colour) {
-                existingSpan.style.color = colour;
+                existingColourNode.style.color = colour;
             } else {
-                existingSpan.style.removeProperty('color');
-                if (isEmptyColourSpan(existingSpan, className)) {
-                    unwrapSpan(existingSpan);
+                existingColourNode.style.removeProperty('color');
+                if (existingColourNode.nodeName === "SPAN" && isEmptyColourSpan(existingColourNode)) {
+                    unwrapSpan(existingColourNode);
                 }
             }
         } else if (colour) {
-            wrapTextNode(node, range, className, colour);
+            wrapTextNode(node, range, colour);
         }
     });
+}
+
+function getParentColourSpan(node) {
+    var parent = node.parentNode;
+    while (parent) {
+        if (parent.style && parent.style.color) {
+            return parent;
+        }
+        
+        if(isBlockElement(parent)) {
+            break;
+        }
+        parent = parent.parentNode;
+    }
+    return null;
+}
+function isBlockElement(node) {
+    return /^(P|LI|UL|OL|DIV|BLOCKQUOTE|H[1-6]|TD|TH)$/.test(node.nodeName);
+}
+
+function wrapTextNode(node, range, colour) {
+    var start = node === range.startContainer ? range.startOffset : 0;
+    var end = node === range.endContainer ? range.endOffset : node.length;
+
+    if (end < node.length) {
+        node.splitText(end);
+    }
+    var targetNode = start > 0 ? node.splitText(start) : node;
+
+    var span = document.createElement('span');
+    span.style.color = colour;
+    targetNode.parentNode.insertBefore(span, targetNode);
+    span.appendChild(targetNode);
+}
+
+function isEmptyColourSpan(span) {
+    return span.style.length === 0;
+}
+
+function unwrapSpan(span) {
+    var parent = span.parentNode;
+    while (span.firstChild) {
+        parent.insertBefore(span.firstChild, span);
+    }
+    parent.removeChild(span);
 }
 
 function getTextNodesInRange(range) {
@@ -2223,48 +2267,6 @@ function getTextNodesInRange(range) {
         textNodes.push(node);
     }
     return textNodes;
-}
-
-function getParentColourSpan(node, className) {
-    var parent = node.parentNode;
-    while (parent) {
-        if (parent.nodeName === 'SPAN' && parent.classList.contains(className)) {
-            return parent;
-        }
-        parent = parent.parentNode;
-    }
-    return null;
-}
-
-function wrapTextNode(node, range, className, colour) {
-    var start = node === range.startContainer ? range.startOffset : 0;
-    var end = node === range.endContainer ? range.endOffset : node.length;
-
-    if (end < node.length) {
-        node.splitText(end);
-    }
-    var targetNode = start > 0 ? node.splitText(start) : node;
-
-    var span = document.createElement('span');
-    span.className = className;
-    span.style.color = colour;
-    targetNode.parentNode.insertBefore(span, targetNode);
-    span.appendChild(targetNode);
-}
-
-function isEmptyColourSpan(span, className) {
-    var styleEmpty = !span.getAttribute('style') || span.style.length === 0;
-    var onlyColourClass = span.classList.length === 1 && span.classList.contains(className);
-    var noOtherAttrs = span.attributes.length <= (onlyColourClass ? 1 : 0);
-    return styleEmpty && noOtherAttrs;
-}
-
-function unwrapSpan(span) {
-    var parent = span.parentNode;
-    while (span.firstChild) {
-        parent.insertBefore(span.firstChild, span);
-    }
-    parent.removeChild(span);
 }
 
 proto.setHighlightColour = function (colour) {

@@ -19,7 +19,10 @@ const DOM_EVENTS = [
   'mouseup',
   'mouseover',
   'mouseout',
-  'scroll'
+  'scroll',
+  'focus',
+  'blur'
+  
 ];
 let _uiInstanceId = -1;
 

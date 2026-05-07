@@ -64,6 +64,8 @@ class ToolbarButton extends ToolbarItem {
     if (options.tooltip) {
       this.on('mouseover', this._onOver.bind(this));
       this.on('mouseout', this._onOut.bind(this));
+      this.on('focus', this._onOver.bind(this));
+      this.on('blur', this._onOut.bind(this));
     }
   }
 
