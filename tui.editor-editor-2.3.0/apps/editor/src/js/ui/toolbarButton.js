@@ -87,18 +87,21 @@ class ToolbarButton extends ToolbarItem {
   }
 
   _render() {
-    const text = document.createTextNode(this._text || '');
 
+    const text = document.createTextNode(this._text || '');    
     this.el.appendChild(text);
     this.el.setAttribute('type', 'button');
 
+    const descriptorId = `descriptor-${Math.random().toString(36).slice(2)}`;
     // Hidden text for screenreader
     const descriptor = document.createElement('span');
-
+    descriptor.id = descriptorId;
     descriptor.innerText = this._tooltip || '';
     descriptor.classList.add('govuk-visually-hidden');
     this.el.appendChild(descriptor);
 
+    this.el.setAttribute('aria-labelledby',descriptorId);
+    
     if (this._style) {
       this.el.setAttribute('style', this._style);
     }

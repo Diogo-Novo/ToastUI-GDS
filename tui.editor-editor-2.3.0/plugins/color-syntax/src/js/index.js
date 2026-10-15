@@ -30,6 +30,7 @@ const DEFAULT_GDS_COLORS = [
 
 let lastScrollTop = 0;
 
+
 /**
  * Set style color
  * @param {SquireExt} sq - squire ext instance
@@ -104,7 +105,7 @@ function createGDSColorPicker(container, colors, labelMap, options = {}) {
 
   picker.className = 'gds-color-picker';
   picker.setAttribute('role', 'listbox');
-  picker.setAttribute('aria-label', 'Choose a color');
+  picker.setAttribute('aria-label', 'Choose a font color');
 
   // Apply GDS styling
   picker.style.cssText = `
@@ -205,16 +206,32 @@ function createGDSColorPicker(container, colors, labelMap, options = {}) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         handleSelect();
+
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
         const next = option.nextElementSibling;
-
         if (next) next.focus();
+
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         const prev = option.previousElementSibling;
-
         if (prev) prev.focus();
+
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        const escapeEvent = new CustomEvent('escapePicker');
+        picker.dispatchEvent(escapeEvent);
+
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        const first = option.parentElement.firstChild;
+        if (first) first.focus();
+
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        const last = option.parentElement.lastChild;
+        if(last) last.focus();
+
       }
     };
 
@@ -310,7 +327,7 @@ function initUI(editor, presetColors, options = {}) {
       name,
       className,
       event: 'colorButtonClicked',
-      tooltip: i18n.get('Change font colour')
+      tooltip: i18n.get('Choose a font colour')
     }
   });
 
@@ -395,6 +412,13 @@ function initUI(editor, presetColors, options = {}) {
     colorPicker.off('colorSelected');
     colorPicker.destroy();
     popup.remove();
+  });
+
+  colorPicker.on('escapePicker', e => {
+    var buttonIndex = toolbar.indexOfItem(name);
+    popup.hide();
+
+    toolbar.getItem(buttonIndex).el.focus();
   });
 
   // Handle color selection
