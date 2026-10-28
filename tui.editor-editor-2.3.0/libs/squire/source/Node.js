@@ -456,6 +456,18 @@ function fixContainer(container, root) {
         child = children[i];
         isBR = child.nodeName === 'BR';
 
+        // Drop stray <br> between block/container elements — extraction artifact, not content
+        if (isBR && i > 0) {
+            var prevChild = children[i - 1];
+            if (prevChild && (isBlock(prevChild) || isContainer(prevChild))) {
+                container.removeChild(child);
+                children = container.childNodes;
+                l = children.length;
+                i -= 1;
+                continue;
+            }
+        }
+
         // Don't wrap if child is already a proper block
         if (!isBR && isInline(child)) {
             if (!wrapper) {
