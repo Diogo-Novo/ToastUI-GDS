@@ -1358,14 +1358,15 @@ proto.modifyBlocks = function (modify, range) {
     mergeContainers(range.startContainer.childNodes[range.startOffset], root);
 
     // 5.5. Clean up empty/BR-only containers that may have been left behind
-    // DEBUG: log root content before cleanup
-    if (typeof console !== 'undefined' && console.warn) {
-        console.warn('[Squire.modifyBlocks] BEFORE fixContainer:', root.innerHTML.substring(0, 500));
+    // DEBUG: store root content before cleanup for inspection
+    if (typeof window !== 'undefined' && window.__squireDebug__) {
+        window.__squireDebug__.beforeFix = root.innerHTML.substring(0, 2000);
+        window.__squireDebug__.hadRemoval = false;
     }
     fixContainer(root, root);
-    // DEBUG: log root content after cleanup
-    if (typeof console !== 'undefined' && console.warn) {
-        console.warn('[Squire.modifyBlocks] AFTER fixContainer:', root.innerHTML.substring(0, 500));
+    // DEBUG: store root content after cleanup
+    if (typeof window !== 'undefined' && window.__squireDebug__) {
+        window.__squireDebug__.afterFix = root.innerHTML.substring(0, 2000);
     }
 
     // 6. Restore selection

@@ -519,13 +519,14 @@ function fixContainer(container, root) {
                 var isEmptyOrBr = (child.textContent === '' ||
                     (child.childNodes.length === 1 && child.firstChild.nodeName === 'BR'));
                 if (isEmptyOrBr) {
-                    // DEBUG: log when we find and remove empty/BR-only containers
-                    if (typeof console !== 'undefined' && console.warn) {
-                        console.warn('[Squire] fixContainer: removing empty/BR-only container', {
+                    // DEBUG: mark empty/BR-only containers for inspection
+                    if (typeof window !== 'undefined' && window.__squireDebug__) {
+                        if (!window.__squireDebug__.emptyContainers) window.__squireDebug__.emptyContainers = [];
+                        window.__squireDebug__.emptyContainers.push({
                             tag: child.nodeName,
                             innerHTML: child.innerHTML,
                             parentTag: container.nodeName,
-                            parentInnerHTML: container.innerHTML.substring(0, 500)
+                            timestamp: Date.now()
                         });
                     }
                     container.removeChild(child);
@@ -537,8 +538,12 @@ function fixContainer(container, root) {
         }
     }
 
-    if (removedAny && typeof console !== 'undefined' && console.warn) {
-        console.warn('[Squire] fixContainer: done, new parentInnerHTML:', container.innerHTML.substring(0, 500));
+    if (removedAny) {
+        // DEBUG: store result on root for inspection
+        if (typeof window !== 'undefined' && window.__squireDebug__) {
+            window.__squireDebug__.lastFixContainerResult = container.innerHTML;
+            window.__squireDebug__.hadRemoval = true;
+        }
     }
 
     return container;

@@ -11,4 +11,7 @@ import '../css/md-syntax-highlighting.css';
 
 import './i18n/en-us';
 
+// DEBUG: Initialize Squire debug helper (survives build)
+import './squireDebug';
+
 export default Editor;
