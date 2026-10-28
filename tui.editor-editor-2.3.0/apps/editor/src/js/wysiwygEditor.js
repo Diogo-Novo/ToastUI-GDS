@@ -859,6 +859,9 @@ class WysiwygEditor {
 
     this.editor.setHTML(html);
 
+    // Clean up empty <div><br></div> blocks that Squire may create during setHTML
+    this._fixEmptyBlocks();
+
     this.eventManager.emit('wysiwygSetValueAfter', this);
     this.eventManager.emit('contentChangedFromWysiwyg', this);
 
@@ -1252,7 +1255,48 @@ class WysiwygEditor {
   }
 
   /**
-   * WysiwygEditor factory method
+    * Clean up empty <div><br></div> blocks that Squire may create during setHTML.
+    * This is a known issue where Squire creates empty block containers between
+    * content blocks, causing visual gaps in the editor.
+    * @private
+    */
+  _fixEmptyBlocks() {
+    var root = this.getEditor().getRoot();
+    if (!root || !root.childNodes) return;
+
+    var self = this;
+    var changed = true;
+
+    // Iterate until no more empty blocks are found
+    while (changed) {
+      changed = false;
+      var children = root.childNodes;
+
+      // Never remove the last child — editor needs at least one block
+      if (children.length <= 1) return;
+
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+        if (child.nodeType !== 1) continue; // ELEMENT_NODE only
+
+        // Only target <div> elements (the default block tag)
+        if (child.nodeName !== 'DIV') continue;
+
+        // Check if this div is empty or contains only a single <br>
+        var isEmpty = child.textContent === '' ||
+          (child.childNodes.length === 1 && child.firstChild && child.firstChild.nodeName === 'BR');
+
+        if (isEmpty) {
+          root.removeChild(child);
+          changed = true;
+          break; // Restart iteration after removal
+        }
+      }
+    }
+  }
+
+  /**
+    * WysiwygEditor factory method
    * @param {HTMLElement} el Container element for editor
    * @param {EventManager} eventManager EventManager instance
    * @param {object} [options={}] - option object
