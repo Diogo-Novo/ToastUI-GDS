@@ -1746,8 +1746,10 @@ proto.setHTML = function (html) {
     }
 
     // And insert new content
-    root.appendChild(frag);
-    fixCursor(root, root);
+        root.appendChild(frag);
+        fixCursor(root, root);
+        // Clean up empty/BR-only containers that may result from HTML parsing
+        fixContainer(root, root);
 
     // Reset the undo stack
     this._undoIndex = -1;

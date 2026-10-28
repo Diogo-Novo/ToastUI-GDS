@@ -535,6 +535,31 @@ function fixContainer(container, root) {
                     break;
                 }
             }
+            // Also check BLOCK elements (not just CONTAINER) — <div><br></div> blocks
+            // are classified as BLOCK because their children are all inline.
+            // Skip structural elements like TABLE, PRE, BLOCKQUOTE which are intentional.
+            if (isBlock(child) && !child.hasChildNodes) {
+                container.removeChild(child);
+                cleaned = true;
+                removedAny = true;
+                break;
+            }
+            if (isBlock(child) && child.textContent === '' && child.childNodes.length === 1 && child.firstChild && child.firstChild.nodeName === 'BR') {
+                // DEBUG: mark empty/BR-only blocks for inspection
+                if (typeof window !== 'undefined' && window.__squireDebug__) {
+                    if (!window.__squireDebug__.emptyContainers) window.__squireDebug__.emptyContainers = [];
+                    window.__squireDebug__.emptyContainers.push({
+                        tag: child.nodeName,
+                        innerHTML: child.innerHTML,
+                        parentTag: container.nodeName,
+                        timestamp: Date.now()
+                    });
+                }
+                container.removeChild(child);
+                cleaned = true;
+                removedAny = true;
+                break;
+            }
         }
     }
 
