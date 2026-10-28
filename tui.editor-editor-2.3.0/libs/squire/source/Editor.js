@@ -1357,6 +1357,17 @@ proto.modifyBlocks = function (modify, range) {
     }
     mergeContainers(range.startContainer.childNodes[range.startOffset], root);
 
+    // 5.5. Clean up empty/BR-only containers that may have been left behind
+    // DEBUG: log root content before cleanup
+    if (typeof console !== 'undefined' && console.warn) {
+        console.warn('[Squire.modifyBlocks] BEFORE fixContainer:', root.innerHTML.substring(0, 500));
+    }
+    fixContainer(root, root);
+    // DEBUG: log root content after cleanup
+    if (typeof console !== 'undefined' && console.warn) {
+        console.warn('[Squire.modifyBlocks] AFTER fixContainer:', root.innerHTML.substring(0, 500));
+    }
+
     // 6. Restore selection
     this._getRangeAndRemoveBookmark(range);
     this.setSelection(range);

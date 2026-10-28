@@ -456,10 +456,10 @@ function fixContainer(container, root) {
         child = children[i];
         isBR = child.nodeName === 'BR';
 
-        // Drop stray <br> between block/container elements — extraction artifact, not content
+        // Drop stray <br> after any element node — extraction artifact, not content
         if (isBR && i > 0) {
             var prevChild = children[i - 1];
-            if (prevChild && (isBlock(prevChild) || isContainer(prevChild))) {
+            if (prevChild && prevChild.nodeType === ELEMENT_NODE) {
                 container.removeChild(child);
                 children = container.childNodes;
                 l = children.length;
@@ -497,6 +497,50 @@ function fixContainer(container, root) {
     if (wrapper) {
         container.appendChild(fixCursor(wrapper, root));
     }
+
+    // Post-processing: remove empty or BR-only containers (extraction artifacts)
+    // This catches cases where modifyBlocks/extractContentsOfRange creates
+    // <div><br></div> or similar empty blocks between real content
+    var cleaned = true;
+    var removedAny = false;
+    while (cleaned) {
+        cleaned = false;
+        children = container.childNodes;
+        for (i = 0; i < children.length; i += 1) {
+            child = children[i];
+            if (isContainer(child)) {
+                // Recurse into nested containers first
+                fixContainer(child, root);
+                // Check if this container is now empty or BR-only
+                var inner = child;
+                while (inner.firstChild) {
+                    inner = inner.firstChild;
+                }
+                var isEmptyOrBr = (child.textContent === '' ||
+                    (child.childNodes.length === 1 && child.firstChild.nodeName === 'BR'));
+                if (isEmptyOrBr) {
+                    // DEBUG: log when we find and remove empty/BR-only containers
+                    if (typeof console !== 'undefined' && console.warn) {
+                        console.warn('[Squire] fixContainer: removing empty/BR-only container', {
+                            tag: child.nodeName,
+                            innerHTML: child.innerHTML,
+                            parentTag: container.nodeName,
+                            parentInnerHTML: container.innerHTML.substring(0, 500)
+                        });
+                    }
+                    container.removeChild(child);
+                    cleaned = true;
+                    removedAny = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (removedAny && typeof console !== 'undefined' && console.warn) {
+        console.warn('[Squire] fixContainer: done, new parentInnerHTML:', container.innerHTML.substring(0, 500));
+    }
+
     return container;
 }
 // Recursively examine container nodes and wrap any inline children.
