@@ -1748,7 +1748,28 @@ proto.setHTML = function (html) {
     if (!root.firstChild) {
         root.appendChild(this.createDefaultBlock());
     }
-    var range = this._getRangeAndRemoveBookmark() || this.createRange(root.firstChild, 0);
+    
+    // Safety check: validate firstChild before using it with Range.setStart
+    // Range.setStart requires a Node of type ELEMENT_NODE (1), TEXT_NODE (3), or COMMENT_NODE (8)
+    // If firstChild is from a different document or has an invalid type, replace with default block
+    var _fc = root.firstChild;
+    if (_fc) {
+        // Check if firstChild is a valid node type for Range.setStart
+        // nodeType 1 = ELEMENT_NODE, 3 = TEXT_NODE, 8 = COMMENT_NODE
+        if (_fc.nodeType !== 1 && _fc.nodeType !== 3 && _fc.nodeType !== 8) {
+            root.removeChild(_fc);
+            root.appendChild(this.createDefaultBlock());
+            _fc = root.firstChild;
+        }
+        // Check if firstChild is from the same document as the editor's Range
+        if (_fc && _fc.ownerDocument !== this._doc) {
+            root.removeChild(_fc);
+            root.appendChild(this.createDefaultBlock());
+            _fc = root.firstChild;
+        }
+    }
+    
+    var range = this._getRangeAndRemoveBookmark() || this.createRange(_fc, 0);
     this.saveUndoState(range);
     // IE will also set focus when selecting text so don't use
     // setSelection. Instead, just store it in lastSelection, so if
