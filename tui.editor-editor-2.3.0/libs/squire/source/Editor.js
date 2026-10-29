@@ -1744,6 +1744,10 @@ proto.setHTML = function (html) {
     this._isInUndoState = false;
 
     // Record undo state
+    // Ensure root has at least one child before creating range
+    if (!root.firstChild) {
+        root.appendChild(this.createDefaultBlock());
+    }
     var range = this._getRangeAndRemoveBookmark() || this.createRange(root.firstChild, 0);
     this.saveUndoState(range);
     // IE will also set focus when selecting text so don't use
