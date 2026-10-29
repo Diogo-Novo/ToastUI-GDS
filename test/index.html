@@ -19,10 +19,71 @@
     <script src="../tui.editor-editor-2.3.0/plugins/color-syntax/dist/cdn/toastui-editor-plugin-color-syntax.js"></script>
     <script class="code-js">
 
+      /**
+       * Sanitize HTML before loading into the editor.
+       * Converts problematic patterns that Squire/wysiwyg editor handles poorly.
+       */
+      function sanitizeHTMLForEditor(html) {
+        // Create a temporary container to parse and manipulate the HTML
+        var temp = document.createElement('div');
+        temp.innerHTML = html;
+        
+        // 1. Convert <span style="display:block"> to <div>
+        // These are commonly used as spacing hacks but Squire converts them to <div><br></div> artifacts
+        var spansWithDisplayBlock = temp.querySelectorAll('span[style*="display:block"], span[style*="display: block"]');
+        for (var i = 0; i < spansWithDisplayBlock.length; i++) {
+          var span = spansWithDisplayBlock[i];
+          var div = document.createElement('div');
+          // Copy all attributes
+          for (var j = 0; j < span.attributes.length; j++) {
+            if (span.attributes[j].name !== 'style') {
+              div.setAttribute(span.attributes[j].name, span.attributes[j].value);
+            }
+          }
+          // Copy computed style minus display:block
+          var computedStyle = window.getComputedStyle(span);
+          var newStyle = '';
+          var style = span.getAttribute('style') || '';
+          // Remove display:block/display: block from style
+          style = style.replace(/display\s*:\s*block\s*;?/gi, '').trim();
+          if (style) {
+            div.setAttribute('style', style);
+          }
+          // Move children
+          while (span.firstChild) {
+            div.appendChild(span.firstChild);
+          }
+          span.parentNode.replaceChild(div, span);
+        }
+        
+        // 2. Remove empty <span> elements (they serve no purpose and get stripped by Squire)
+        var emptySpans = temp.querySelectorAll('span');
+        for (var k = 0; k < emptySpans.length; k++) {
+          var emptySpan = emptySpans[k];
+          if (!emptySpan.textContent.trim() && !emptySpan.querySelector('img, br')) {
+            // Just remove the span, keeping its (empty) content
+            emptySpan.parentNode.removeChild(emptySpan);
+          }
+        }
+        
+        // 3. Normalize <span style="color:blue"> to <span style="color: blue"> (add space after colon)
+        var spansWithColor = temp.querySelectorAll('span[style*="color:blue"], span[style*="color:black"]');
+        for (var m = 0; m < spansWithColor.length; m++) {
+          var span = spansWithColor[m];
+          var style = span.getAttribute('style') || '';
+          style = style.replace(/color\s*:\s*blue/gi, 'color: blue');
+          style = style.replace(/color\s*:\s*black/gi, 'color: black');
+          span.setAttribute('style', style);
+        }
+        
+        return temp.innerHTML;
+      }
+
       function loadHTML() {
         const element = document.getElementById('vcl5');
         window.element = element;
-        const html = element.textContent;
+        const rawHtml = element.textContent;
+        const html = sanitizeHTMLForEditor(rawHtml);
 
         loadEditor(html);
       }

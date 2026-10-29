@@ -431,24 +431,28 @@ function fixContainer(container, root) {
     var i, l, child, isBR;
     var config = root.__squire__._config;
 
-    // Skip fixing containers that have style attributes (likely layout elements)
-    // or display:flex which indicates intentional layout structure
+    // Handle containers with style attributes
     if (container.hasAttribute && container.hasAttribute('style')) {
         var style = container.getAttribute('style');
-        if (
-            style &&
-            (style.indexOf('display') > -1 ||
-                style.indexOf('flex') > -1 ||
-                style.indexOf('text-align') > -1)
-        ) {
-            // Still recursively fix nested containers, but don't wrap their direct children
-            for (i = 0, l = children.length; i < l; i += 1) {
-                child = children[i];
-                if (isContainer(child)) {
-                    fixContainer(child, root);
+        if (style) {
+            // Check for display: flex or display: grid - these are intentional layouts
+            // that should preserve their children as-is (don't wrap inline children)
+            var isFlexLayout = /display\s*:\s*(flex|grid)\b/.test(style);
+            
+            if (isFlexLayout) {
+                // Still recursively fix nested containers for proper structure
+                for (i = 0, l = children.length; i < l; i += 1) {
+                    child = children[i];
+                    if (isContainer(child)) {
+                        fixContainer(child, root);
+                    }
                 }
+                return container;
             }
-            return container;
+            
+            // For display: block or other display values, don't skip entirely
+            // Only skip the early return for text-align (just text styling)
+            // The normal processing below will handle these correctly
         }
     }
 
