@@ -13,6 +13,7 @@
     "build:squire": "npm run build -workspace tui.editor-editor-2.3.0/libs/squire",
     "build:to-mark": "npm run build -workspace tui.editor-editor-2.3.0/libs/to-mark",
     "build:toastmark": "npm run build -workspace tui.editor-editor-2.3.0/libs/toastmark",
+    "test:serve": "npx --yes live-server@1.2.2 --open=test/index.html --watch=test",
     "lint": "prettier . --fix && eslint . --fix"
   },
   "devDependencies": {

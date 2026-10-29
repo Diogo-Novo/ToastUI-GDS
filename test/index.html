@@ -9,489 +9,134 @@
     <link rel="stylesheet" href="../tui.editor-editor-2.3.0/apps/editor/dist/toastui-editor.css" />
     <link rel="stylesheet" href="./test-styles.css" />
     <link rel="stylesheet" href="./color-plugin.css" />
+    <style>
+      .test-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+        font-family: sans-serif;
+      }
+      #out {
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 8px;
+        font-family: monospace;
+      }
+    </style>
   </head>
   <body>
+    <div class="test-toolbar">
+      <label>Document <select id="doc"></select></label>
+      <label>
+        Load via
+        <select id="mode">
+          <option value="squire">Squire (getSquire().setHTML)</option>
+          <option value="toastui">ToastUI (editor.setHtml)</option>
+        </select>
+      </label>
+      <button id="reload">Reload file</button>
+      <button id="roundtrip">Save → reload</button>
+      <button id="dump">Show output</button>
+      <span id="status"></span>
+    </div>
     <div id="editor"></div>
+    <textarea id="out" rows="12" placeholder="Press 'Show output' to see Squire's getHTML()"></textarea>
     <!-- Editor Dependencies -->
     <script src="../node_modules/codemirror/lib/codemirror.js"></script>
     <!-- Editor -->
     <script src="../tui.editor-editor-2.3.0/apps/editor/dist/cdn/toastui-editor-all.min.js"></script>
     <script src="../tui.editor-editor-2.3.0/plugins/color-syntax/dist/cdn/toastui-editor-plugin-color-syntax.js"></script>
     <script class="code-js">
+      // Test documents live in ./fixtures/<name>.html and are listed in ./fixtures/manifest.json.
+      // This page must be served over http (npm run test:serve); fetch() is blocked on file://.
+      var editor;
+      var params = new URLSearchParams(location.search);
+      var docSelect = document.getElementById('doc');
+      var modeSelect = document.getElementById('mode');
+      var statusEl = document.getElementById('status');
 
-      /**
-       * Sanitize HTML before loading into the editor.
-       * Converts problematic patterns that Squire/wysiwyg editor handles poorly.
-       */
-      function sanitizeHTMLForEditor(html) {
-        // Create a temporary container to parse and manipulate the HTML
-        var temp = document.createElement('div');
-        temp.innerHTML = html;
-        
-        // 1. Convert <span style="display:block"> to <div>
-        // These are commonly used as spacing hacks but Squire converts them to <div><br></div> artifacts
-        var spansWithDisplayBlock = temp.querySelectorAll('span[style*="display:block"], span[style*="display: block"]');
-        for (var i = 0; i < spansWithDisplayBlock.length; i++) {
-          var span = spansWithDisplayBlock[i];
-          var div = document.createElement('div');
-          // Copy all attributes
-          for (var j = 0; j < span.attributes.length; j++) {
-            if (span.attributes[j].name !== 'style') {
-              div.setAttribute(span.attributes[j].name, span.attributes[j].value);
-            }
-          }
-          // Copy computed style minus display:block
-          var computedStyle = window.getComputedStyle(span);
-          var newStyle = '';
-          var style = span.getAttribute('style') || '';
-          // Remove display:block/display: block from style
-          style = style.replace(/display\s*:\s*block\s*;?/gi, '').trim();
-          if (style) {
-            div.setAttribute('style', style);
-          }
-          // Move children
-          while (span.firstChild) {
-            div.appendChild(span.firstChild);
-          }
-          span.parentNode.replaceChild(div, span);
-        }
-        
-        // 2. Remove empty <span> elements (they serve no purpose and get stripped by Squire)
-        var emptySpans = temp.querySelectorAll('span');
-        for (var k = 0; k < emptySpans.length; k++) {
-          var emptySpan = emptySpans[k];
-          if (!emptySpan.textContent.trim() && !emptySpan.querySelector('img, br')) {
-            // Just remove the span, keeping its (empty) content
-            emptySpan.parentNode.removeChild(emptySpan);
-          }
-        }
-        
-        // 3. Normalize <span style="color:blue"> to <span style="color: blue"> (add space after colon)
-        var spansWithColor = temp.querySelectorAll('span[style*="color:blue"], span[style*="color:black"]');
-        for (var m = 0; m < spansWithColor.length; m++) {
-          var span = spansWithColor[m];
-          var style = span.getAttribute('style') || '';
-          style = style.replace(/color\s*:\s*blue/gi, 'color: blue');
-          style = style.replace(/color\s*:\s*black/gi, 'color: black');
-          span.setAttribute('style', style);
-        }
-        
-        return temp.innerHTML;
-      }
-
-      function loadHTML() {
-        const element = document.getElementById('vcl5');
-        window.element = element;
-        const rawHtml = element.textContent;
-        const html = sanitizeHTMLForEditor(rawHtml);
-
-        loadEditor(html);
-      }
-
-      function loadEditor(html){
+      function loadEditor() {
         var plugins = [];
         var colorList = JSON.parse(`[{"color":"#000000","label":"Black text colour"},{"color":"#0000ff","label":"Template text colour"},{"color":"#28A197","label":"A2 user role text colour"},{"color":"#6F72AF","label":"B1 user role text colour"},{"color":"#F47738","label":"B2 user role text colour"},{"color":"#D53880","label":"B3 user role text colour"},{"color":"#D4351C","label":"D user role text colour"}]`);
-        colorSyntaxOptions = {
-                          color: "#000000",
-                          preset: colorList,
-                          useCustomSyntax: false,
-                          restrictedMode: false
-                      };
+        var colorSyntaxOptions = {
+          color: '#000000',
+          preset: colorList,
+          useCustomSyntax: false,
+          restrictedMode: false
+        };
         plugins.push([toastui.Editor.plugin.colorSyntax, colorSyntaxOptions]);
 
-
-        var editor = new toastui.Editor({
+        editor = new toastui.Editor({
           el: document.querySelector('#editor'),
           height: '800px',
           initialEditType: 'wysiwyg',
           plugins: plugins
         });
-
-        editor.setHtml(html,false);
+        window.editor = editor;
       }
-      
+
+      // Keep the current document and mode in the URL so a refresh (or live reload) stays put
+      function updateUrl() {
+        history.replaceState(null, '', '?doc=' + docSelect.value + '&mode=' + modeSelect.value);
+      }
+
+      async function loadDoc() {
+        var name = docSelect.value;
+        // no-store so edits to the fixture always show up, never a cached copy
+        var response = await fetch('./fixtures/' + name + '.html', { cache: 'no-store' });
+
+        if (!response.ok) {
+          statusEl.textContent = 'Could not load fixtures/' + name + '.html (' + response.status + ')';
+          return;
+        }
+
+        var html = await response.text();
+
+        if (modeSelect.value === 'toastui') {
+          editor.setHtml(html, false);
+        } else {
+          editor.getSquire().setHTML(html);
+        }
+        statusEl.textContent = 'Loaded ' + name + ' via ' + modeSelect.value;
+      }
+
+      async function initDocs() {
+        var names = await (await fetch('./fixtures/manifest.json', { cache: 'no-store' })).json();
+
+        docSelect.innerHTML = names.map((name) => '<option>' + name + '</option>').join('');
+        docSelect.value = names.indexOf(params.get('doc')) > -1 ? params.get('doc') : names[0];
+        modeSelect.value = params.get('mode') === 'toastui' ? 'toastui' : 'squire';
+
+        docSelect.onchange = modeSelect.onchange = () => {
+          updateUrl();
+          loadDoc();
+        };
+        loadDoc();
+      }
+
+      document.getElementById('reload').onclick = loadDoc;
+
+      document.getElementById('dump').onclick = () => {
+        document.getElementById('out').value = editor.getSquire().getHTML();
+      };
+
+      // Equivalent to saving and reopening the document
+      document.getElementById('roundtrip').onclick = () => {
+        var squire = editor.getSquire();
+
+        squire.setHTML(squire.getHTML());
+        statusEl.textContent = 'Round-tripped ' + docSelect.value;
+      };
+
       document.addEventListener('DOMContentLoaded', () => {
-        loadHTML();
+        if (location.protocol === 'file:') {
+          statusEl.textContent = 'Open this page via `npm run test:serve`; fixtures cannot be fetched from file://';
+        }
+        loadEditor();
+        initDocs();
       });
-    </script>
-
-    <script id="vcl5" type="text/plain">
-            <div style="font-family: Aptos, Aptos_EmbeddedFont, Aptos_MSFontService, Calibri,Helvetica, sans-serif; font-size: 16px">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start">
-        <div style="text-align: right">
-            <p>
-                <img style="width: 80px" src="data:image/png;base64,REDACTED_ORGANIZATION_LOGO">
-            </p>
-        </div>
-        <div class="cps-letter-basefontsize" style="text-align: right">
-            <p>
-                <span>[Organization Name]</span><br>
-                <span>[Department Name]</span><br>
-                <span>[Address Line 1]</span><br>
-                <span>[Address Line 2]</span><br>
-                <span>[Postcode]</span><br>
-                <span>Telephone: [Phone Number]</span><br>
-                <span><strong>Email: [Email Address]</strong></span>
-            </p>
-        </div>
-    </div>
-
-    <div class="cps-letter-basefontsize" style="text-align: left">
-        <p>
-            <span>Confidential</span><br>
-            <span>[Recipient Name]</span><br>
-            <span><span style="color:black">
-[Address Line 1]<br>[Address Line 2]<br>[Postcode]
-</span>
-<br></span>
-        </p>
-
-        <p style="text-align: center; font-size: 21px">
-            Please let us know if you require this correspondence in an alternative format.
-        </p>
-
-        <p>
-            <span>[Date]</span>
-        </p>
-
-        <p>
-            <b>Our reference:
-                <span>[Reference Number]</span></b><br>
-            Please quote this reference in any future correspondence
-        </p>
-    </div>
-
-    <p>Dear [Recipient Name],</p>
-
-    <p>My name is <span style="color:blue">[Your Name/Title]</span> and I
-        am writing regarding the matter that
-        <span style="color:blue">[you/was]</span> previously raised with us.
-    </p>
-
-    <div data-ai-generated="true">
-        <p>Thank you for bringing this matter to our attention and for providing the details that helped us review the situation.</p>
-    </div>
-
-    <p>
-        Our organisation regularly reviews cases and decisions to ensure they remain appropriate.
-        The person who reviewed this matter is [Reviewer Name]. After careful consideration, a decision has been made to update the classification from the original categorisation to a revised classification that better reflects the current circumstances. This revised classification remains a serious matter that requires attention.
-    </p>
-
-    <p>
-        <b>
-            How the decision was reached
-        </b>
-    </p>
-
-    <p>
-        Our organisation follows established procedures when reviewing matters. We apply the relevant
-        guidelines and codes of practice. When making these decisions, we consider:
-    </p>
-
-    <ul>
-        <li>
-            First, is there sufficient information to support the current position?
-            In other words, does the available evidence justify the conclusion?
-        </li>
-        <li>
-            Second, if there is sufficient information, is it appropriate to proceed
-            with the current approach?
-        </li>
-    </ul>
-
-    <p>
-        The relevant guidelines are available on our website at this address:
-        <a href="[URL to guidelines]" rel="noreferrer" target="_blank" tabindex="0">[URL to guidelines]</a>
-    </p>
-
-    <p>
-        <b>
-            Reason for the decision
-        </b>
-    </p>
-
-    
-
-    <div data-ai-generated="true" data-summary-generated="true">
-        [Summary of the situation and relevant background information]<span style="display:block;"></span>[Explanation of the review process and findings]<span style="display:block;"></span>[Details of any meetings, hearings, or reviews that took place]<span style="display:block;"></span>The matter has now been resolved. The outcome includes:<span style="display:block;"></span><ul>
-<li>[Outcome element 1]</li>
-<li>[Outcome element 2]</li>
-<li>[Outcome element 3]</li>
-</ul><span style="display:block;"></span>[Any ongoing arrangements or next steps]
-    </div>
-
-    <p>
-        <b>
-            Your options
-        </b>
-    </p>
-
-    <p>
-        If you would find it helpful to discuss this further, you are welcome to get in touch with our team by
-        telephone on <a href="tel:[Phone Number]" tabindex="0">[Phone Number]</a>
-        or via email at <a href="mailto:[Email Address]" tabindex="0">[Email Address]</a>
-        <span style="color: blue">
-            [Please note that there may be limits as to how detailed the explanation can be at this stage.]
-            <b>Please note this sentence is also included at the end of the next paragraph (the offer of a meeting
-                with the relevant person). If you are including the next paragraph, this line should only be included once.</b>
-        </span>
-    </p>
-
-    <p>
-        <span style="color: blue">
-            <b>[Conditional paragraph - include if applicable to this case.]</b>
-            [You are also welcome to meet with the relevant person to discuss this matter if you wish. Please contact our
-            team using the contact information below to arrange this meeting.][Please note that there may be limits as to how detailed the explanation can be at this stage.]
-        </span>
-    </p>
-
-    <p>
-        I appreciate that this may have been a difficult time for you, and I hope that this
-        explanation has helped you to understand more about how the decision has been reached.
-    </p>
-
-    <p>
-        <span style="color:blue">[Thank you sentence - please see guidance for examples]</span>
-    </p>
-
-    <p>
-        There are support services available to you, which I have listed below, should you wish to use any of them.
-    </p>
-
-    <p>
-        Yours sincerely,
-    </p>
-
-    <p>
-        <span style="color:blue">[Your Name/Title]</span><br>
-        [Job Title]
-    </p>
-
-    <p>
-        <b>
-            Additional Information
-        </b>
-    </p>
-
-    <p>
-        Please see the information pack that comes with this letter or, if you
-        prefer, you can also access this information and more from our
-        online guide at
-        <a href="[URL to information page]" rel="noreferrer" target="_blank" tabindex="0">[URL to information page]</a>, or through scanning
-        the QR code.
-    </p>
-
-    <p>
-        <img style="width: 100px" src="data:image/png;base64,REDACTED_QR_CODE">
-    </p>
-
-    <p>
-        You can also contact our team who will be able to answer
-        your queries using the following contact details:
-    </p>
-
-    <p>
-        <a href="mailto:[Email Address]" tabindex="0">[Email Address]</a><br>
-        <a href="tel:[Phone Number]" tabindex="0">[Phone Number]</a><br>
-        [Organisation Name], [Address Line], [Postcode]
-    </p>
-
-    <p>
-        <b>
-            Further Support
-        </b>
-    </p>
-
-    <ul class="spaced-list">
-        <li>
-            There are support services available to you. This website may help you
-            find support that is right for you:
-            <a href="[URL to support services]" rel="noreferrer" target="_blank" tabindex="0">[URL to support services]</a>.
-        </li>
-        <li>
-            If you would like to talk to someone not connected to our organisation, you
-            could contact [Support Organisation] who offer free and confidential advice. Their
-            contact number is <a href="tel:[Phone Number]" tabindex="0">[Phone Number]</a>. You can also
-            log onto their website:
-            <a href="[URL to support organisation]" rel="noreferrer" target="_blank" tabindex="0">[URL to support organisation]</a>.
-        </li>
-        <li>
-            For more general, urgent support you can contact your local health
-            service or [Emergency Support Organisation]:
-            <ul>
-                <li>
-                    To find your local health service please visit
-                    <a href="[URL to local health services]" rel="noreferrer" target="_blank" tabindex="0">[URL to local health services]
-                    </a>
-                    and follow the instructions to find the right service.
-                </li>
-                <li>
-                    [Emergency Support Organisation] provide a 24/7 support service on <a href="tel:[Phone Number]" tabindex="0">[Phone Number]</a>
-                    where you can talk through your concerns, worries and troubles. You can also email
-                    them on <a href="mailto:[Email Address]" tabindex="0">[Email Address]</a> or visit the
-                    website for a wide range of support services
-                    <a href="[URL to emergency support]" rel="noreferrer" target="_blank" tabindex="0">[URL to emergency support]</a>.
-                </li>
-            </ul>
-        </li>
-        <li style="color:blue">
-            [Local/Relevant support services to be inserted]
-        </li>
-    </ul>
-
-    <p>
-        <b>Further Information</b>
-    </p>
-
-    <ul class="spaced-list">
-        <li>
-            You have rights regarding this matter. These rights are explained in our
-            Policy for [Affected Parties], which you can find here:
-            <a href="[URL to policy document]" rel="noreferrer" target="_blank" tabindex="0">[URL to policy document]</a>
-        </li>
-        <li>
-            If you want to make a complaint or give feedback, you can do so here:
-            <a href="[URL to complaints page]" rel="noreferrer" target="_blank" tabindex="0">[URL to complaints page]</a>
-        </li>
-        <li>
-            You may be able to get compensation. This
-            link may help you to find out more:
-            <ul>
-                <li>
-                    Claiming Compensation (please note time limits may apply):
-                    <a href="[URL to compensation information]" rel="noreferrer" target="_blank" tabindex="0">[URL to compensation information]</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-
-    <div style="text-align: center">
-        <p>
-            <img style="width: 160px; height: 70px; margin:auto" src="data:image/png;base64,REDACTED_ORGANIZATION_LOGO">
-        </p>
-    </div>
-
-    <p>
-        <span style="color: blue">[Optional section - remove if not applicable to this case or if the correspondence needs to be translated into another language.]</span>
-    </p>
-
-    <p>
-        [Organisation Name] has commissioned [External Organisation] to conduct an evaluation of how
-        [organisation name] engages with [affected parties]. [External Organisation] are an independent
-        consultancy who aim to improve [relevant systems/services] for everyone.
-        As part of this evaluation, [organisation name] would like to hear your views about the
-        communications you have received.
-    </p>
-
-    <p>
-        [Organisation name] would like to invite you to <b>complete a survey to</b> provide your
-        feedback. Taking part in the survey <b>allows your voice to be heard</b> in the
-        evaluation and for [organisation name] to continue to <b>improve [relevant services]</b>.
-    </p>
-
-    <p>
-        It is up to you whether you choose to complete the survey, and participation
-        would be completely anonymous. Your decision to take part, or not, will have
-        no bearing on your case and no one in [organisation name] will have access to your
-        response or know whether you have responded.
-    </p>
-
-    <p>
-        <b>
-            If you would like to share your views, please scan the QR code below,
-            or go to the following link <a href="[Survey URL]" rel="noreferrer" target="_blank" tabindex="0">[Survey URL]</a>
-        </b>
-    </p>
-
-    <img style="width: 100px" src="data:image/png;base64,REDACTED_SURVEY_QR">
-
-    <p>
-        If you would prefer to complete a paper version of the survey, please
-        email [Email Address] with the subject name
-        "[Subject Line]" or call [Organisation] on [Phone Number].
-    </p>
-
-    <p>
-        In addition to the survey, [organisation name] would like to invite you to <b>take part
-            in an interview</b> to discuss your views and experiences of communications
-        with [organisation name].
-    </p>
-
-    <p>
-        Participation in the survey and interview are separate – both opportunities
-        are entirely voluntary and there is no requirement to have completed the
-        survey in order to take part in the interview. Your decision to take part,
-        or not, will have no bearing on your case and no one in [organisation name] will have
-        access to your survey or interview responses or know whether you have
-        participated.
-    </p>
-
-    <p>
-        <b>If you would like to find out more about what the interview would involve,</b>
-        visit the following link <a href="[Information URL]" rel="noreferrer" target="_blank" tabindex="0">[Information URL]</a> or scan the following QR code:
-    </p>
-
-    <img style="width: 100px" src="data:image/png;base64,REDACTED_INTERVIEW_QR">
-
-    <p>
-        <b>Who are [External Organisation]?</b><br>
-        [External Organisation] are an independent consultancy based in [Location].
-        Their work aims to improve [relevant systems/services] for everyone. They work
-        with partners in the [sectors] to create
-        positive change - impacting both policy and practice. For more information,
-        please visit <a href="[Website URL]" rel="noreferrer" target="_blank" tabindex="0">[Website URL]</a>.
-    </p>
-
-    <p>
-        <b>What is the purpose of this survey?</b><br>
-        The aim of this survey is to understand how well [organisation name] is communicating with
-        [affected parties], and what [affected parties] think of the service they receive from [organisation name].
-        To understand this, it is important to hear directly from [affected parties]. The
-        results of this survey will be used to inform how [organisation name] communicates and
-        engages with [affected parties] in future cases.
-    </p>
-
-    <p>
-        <b>Who can participate in the survey?</b><br>
-        You can participate in the survey if you are a [affected party] who has received
-        correspondence from [organisation name] about the decision in your case.
-    </p>
-
-    <p>
-        <b>Can someone support me in completing the survey?</b><br>
-        You may find it useful to ask a friend, support worker, or carer to support you
-        in completing a survey. If you do ask for support, it is important that your
-        answer reflects your personal experience.
-    </p>
-
-    <p>
-        <b>What will happen with the information I provide?</b><br>
-        The information shared in this survey will be used to produce reports for [organisation name] to help [organisation name] understand whether they are communicating with [affected parties]
-        well and what could be improved.
-    </p>
-
-
-    <p>
-        None of the information you provide will be used to identify you in the report.
-        All the information in the report will remain anonymous. Please note, as your
-        response is anonymous, [organisation name] will not be able to delete your answers after
-        you have submitted your survey response. This is because [organisation name] will not be
-        able to identify your response from all the other responses received.
-    </p>
-
-    <p>
-        [Organisation name] will collect, store and securely keep any information you
-        share in line with UK General Data Protection Regulation (UK GDPR) and
-        the Data Protection Act (DPA). For more information about this, and for
-        any requests to exercise your legal rights in relation to your personal
-        data, please contact [organisation name]'s Data Protection Officer (DPO):
-    </p>
-
-    <p>
-        <b>Post: </b>[Organisation Address].<br>
-        <b>Email: </b>[Data Protection Email]<br>
-    </p>
-</div>
     </script>
   </body>
 </html>
